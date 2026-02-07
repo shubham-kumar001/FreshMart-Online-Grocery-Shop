@@ -1,444 +1,627 @@
-// Shopping Cart Module
-const cartModule = (function() {
-    // Cart State
-    let cart = [];
-    let cartItemsCount = 0;
-    let cartSubtotal = 0;
-    let cartTotal = 0;
-    const deliveryFee = 40;
-    const freeDeliveryThreshold = 199;
-    
-    // DOM Elements
-    const cartAction = document.getElementById('cartAction');
-    const cartSidebar = document.getElementById('cartSidebar');
-    const closeCart = document.getElementById('closeCart');
-    const cartBody = document.getElementById('cartBody');
-    const cartFooter = document.getElementById('cartFooter');
-    const emptyCart = document.getElementById('emptyCart');
-    const cartCount = document.getElementById('cartCount');
-    const cartSubtotalEl = document.getElementById('cartSubtotal');
-    const cartDeliveryEl = document.getElementById('cartDelivery');
-    const cartTotalEl = document.getElementById('cartTotal');
-    const savingsMessage = document.getElementById('savingsMessage');
-    const savingsAmount = document.getElementById('savingsAmount');
-    const btnCheckout = document.getElementById('btnCheckout');
-    const btnShopNow = document.getElementById('btnShopNow');
-    
-    // Initialize Cart
-    function init() {
-        loadCartFromStorage();
-        updateCartUI();
-        setupEventListeners();
-    }
-    
-    // Setup Event Listeners
-    function setupEventListeners() {
-        // Cart toggle
-        if (cartAction) {
-            cartAction.addEventListener('click', openCart);
-        }
-        
-        // Close cart
-        if (closeCart) {
-            closeCart.addEventListener('click', closeCartSidebar);
-        }
-        
-        // Shop now button
-        if (btnShopNow) {
-            btnShopNow.addEventListener('click', () => {
-                closeCartSidebar();
-                // Scroll to products section
-                document.querySelector('.products-section').scrollIntoView({ behavior: 'smooth' });
-            });
-        }
-        
-        // Checkout button
-        if (btnCheckout) {
-            btnCheckout.addEventListener('click', proceedToCheckout);
-        }
-        
-        // Close cart when clicking outside
-        document.addEventListener('click', (event) => {
-            if (!cartSidebar.contains(event.target) && !cartAction.contains(event.target)) {
-                closeCartSidebar();
-            }
-        });
-        
-        // Listen for add to cart events from products
-        document.addEventListener('click', function(event) {
-            // Add to cart button
-            if (event.target.classList.contains('btn-add-to-cart') || 
-                event.target.closest('.btn-add-to-cart')) {
-                const button = event.target.classList.contains('btn-add-to-cart') ? 
-                    event.target : event.target.closest('.btn-add-to-cart');
-                const productId = parseInt(button.getAttribute('data-id'));
-                addToCart(productId);
-            }
-            
-            // Quantity buttons
-            if (event.target.classList.contains('quantity-btn')) {
-                const button = event.target;
-                const productId = parseInt(button.getAttribute('data-id'));
-                const isPlus = button.classList.contains('plus');
-                const isMinus = button.classList.contains('minus');
-                
-                if (isPlus) {
-                    updateQuantity(productId, 1);
-                } else if (isMinus) {
-                    updateQuantity(productId, -1);
-                }
-            }
-        });
-    }
-    
-    // Open Cart Sidebar
-    function openCart() {
-        cartSidebar.classList.add('active');
-        document.body.style.overflow = 'hidden';
-        updateCartUI();
-    }
-    
-    // Close Cart Sidebar
-    function closeCartSidebar() {
-        cartSidebar.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-    
-    // Add Product to Cart
-    function addToCart(productId) {
-        // Get all products
-        const allProducts = [
-            ...window.productsModule.products.fruits,
-            ...window.productsModule.products.vegetables,
-            ...window.productsModule.products.dairy,
-            ...window.productsModule.products.beverages,
-            ...window.productsModule.products.snacks
-        ];
-        
-        const product = allProducts.find(p => p.id === productId);
-        
-        if (!product) {
-            showToast('Product not found!', 'error');
-            return;
-        }
-        
-        // Check if product is already in cart
-        const existingItem = cart.find(item => item.id === productId);
-        
-        if (existingItem) {
-            // Check stock
-            if (existingItem.quantity >= product.stock) {
-                showToast(`Only ${product.stock} items available in stock!`, 'error');
-                return;
-            }
-            
-            existingItem.quantity += 1;
-        } else {
-            // Check stock
-            if (product.stock <= 0) {
-                showToast('This product is out of stock!', 'error');
-                return;
-            }
-            
-            cart.push({
-                id: product.id,
-                name: product.name,
-                brand: product.brand,
-                image: product.image,
-                weight: product.weight,
-                price: product.price,
-                originalPrice: product.originalPrice,
-                quantity: 1,
-                maxStock: product.stock
-            });
-        }
-        
-        // Save to localStorage
-        saveCartToStorage();
-        
-        // Update UI
-        updateCartUI();
-        
-        // Show success message
-        showToast(`${product.name} added to cart!`, 'success');
-        
-        // Visual feedback on add to cart button
-        const addButton = document.querySelector(`.btn-add-to-cart[data-id="${productId}"]`);
-        if (addButton) {
-            addButton.classList.add('added');
-            addButton.innerHTML = '<i class="fas fa-check"></i> Added';
-            
-            setTimeout(() => {
-                addButton.classList.remove('added');
-                addButton.innerHTML = '<i class="fas fa-cart-plus"></i> Add';
-            }, 2000);
-        }
-        
-        // Open cart automatically if it's the first item
-        if (cart.length === 1) {
-            openCart();
-        }
-    }
-    
-    // Remove Item from Cart
-    function removeFromCart(productId) {
-        cart = cart.filter(item => item.id !== productId);
-        saveCartToStorage();
-        updateCartUI();
-        showToast('Item removed from cart', 'info');
-    }
-    
-    // Update Item Quantity
-    function updateQuantity(productId, change) {
-        const item = cart.find(item => item.id === productId);
-        if (!item) return;
-        
-        item.quantity += change;
-        
-        // Check stock
-        if (item.quantity > item.maxStock) {
-            item.quantity = item.maxStock;
-            showToast(`Only ${item.maxStock} items available in stock!`, 'error');
-        }
-        
-        if (item.quantity <= 0) {
-            removeFromCart(productId);
-        } else {
-            saveCartToStorage();
-            updateCartUI();
-        }
-    }
-    
-    // Update Cart UI
-    function updateCartUI() {
-        // Calculate totals
-        cartItemsCount = cart.reduce((total, item) => total + item.quantity, 0);
-        cartSubtotal = cart.reduce((total, item) => total + (item.price * item.quantity), 0);
-        
-        // Calculate delivery fee
-        const delivery = cartSubtotal >= freeDeliveryThreshold ? 0 : deliveryFee;
-        cartTotal = cartSubtotal + delivery;
-        
-        // Calculate savings
-        const savings = cart.reduce((total, item) => {
-            if (item.originalPrice) {
-                return total + ((item.originalPrice - item.price) * item.quantity);
-            }
-            return total;
-        }, 0);
-        
-        // Update cart count
-        if (cartCount) {
-            cartCount.textContent = cartItemsCount;
-            cartCount.style.display = cartItemsCount > 0 ? 'flex' : 'none';
-        }
-        
-        // Update cart items display
-        if (cartBody) {
-            cartBody.innerHTML = '';
-            
-            if (cart.length === 0) {
-                emptyCart.style.display = 'block';
-                cartBody.appendChild(emptyCart);
-                cartFooter.style.display = 'none';
-                btnCheckout.disabled = true;
-            } else {
-                emptyCart.style.display = 'none';
-                cartFooter.style.display = 'block';
-                btnCheckout.disabled = false;
-                
-                cart.forEach(item => {
-                    const cartItem = createCartItem(item);
-                    cartBody.appendChild(cartItem);
-                });
-            }
-        }
-        
-        // Update cart summary
-        if (cartSubtotalEl) cartSubtotalEl.textContent = `₹${cartSubtotal}`;
-        if (cartDeliveryEl) cartDeliveryEl.textContent = cartSubtotal >= freeDeliveryThreshold ? 'FREE' : `₹${deliveryFee}`;
-        if (cartTotalEl) cartTotalEl.textContent = `₹${cartTotal}`;
-        if (savingsAmount) savingsAmount.textContent = savings;
-        
-        // Show/hide savings message
-        if (savingsMessage) {
-            if (savings > 0) {
-                savingsMessage.style.display = 'flex';
-            } else {
-                savingsMessage.style.display = 'none';
-            }
-        }
-        
-        // Update quantity indicators on product cards
-        updateProductCardQuantities();
-    }
-    
-    // Create Cart Item HTML
-    function createCartItem(item) {
-        const cartItem = document.createElement('div');
-        cartItem.className = 'cart-item';
-        cartItem.setAttribute('data-id', item.id);
-        
-        cartItem.innerHTML = `
-            <div class="cart-item-image">
-                <img src="${item.image}" alt="${item.name}" loading="lazy">
-            </div>
-            <div class="cart-item-details">
-                <div class="cart-item-name">${item.name}</div>
-                <div class="cart-item-weight">${item.weight} • ${item.brand}</div>
-                <div class="cart-item-price">₹${item.price}</div>
-                <div class="cart-item-actions">
-                    <div class="cart-item-quantity">
-                        <button class="quantity-btn minus" data-id="${item.id}">-</button>
-                        <span class="quantity-value" data-id="${item.id}">${item.quantity}</span>
-                        <button class="quantity-btn plus" data-id="${item.id}">+</button>
-                    </div>
-                    <button class="btn-remove-item" data-id="${item.id}">
-                        <i class="fas fa-trash"></i> Remove
-                    </button>
-                </div>
-            </div>
-        `;
-        
-        // Add event listeners
-        const minusBtn = cartItem.querySelector('.minus');
-        const plusBtn = cartItem.querySelector('.plus');
-        const removeBtn = cartItem.querySelector('.btn-remove-item');
-        
-        minusBtn.addEventListener('click', () => updateQuantity(item.id, -1));
-        plusBtn.addEventListener('click', () => updateQuantity(item.id, 1));
-        removeBtn.addEventListener('click', () => removeFromCart(item.id));
-        
-        return cartItem;
-    }
-    
-    // Update quantity indicators on product cards
-    function updateProductCardQuantities() {
-        // Update quantity values on all product cards
-        document.querySelectorAll('.quantity-value').forEach(el => {
-            const productId = parseInt(el.getAttribute('data-id'));
-            const cartItem = cart.find(item => item.id === productId);
-            
-            if (cartItem) {
-                el.textContent = cartItem.quantity;
-                
-                // Update add to cart button state
-                const addButton = document.querySelector(`.btn-add-to-cart[data-id="${productId}"]`);
-                if (addButton && !addButton.classList.contains('added')) {
-                    addButton.innerHTML = `<i class="fas fa-cart-plus"></i> Added (${cartItem.quantity})`;
-                }
-            } else {
-                el.textContent = '1';
-                
-                // Reset add to cart button
-                const addButton = document.querySelector(`.btn-add-to-cart[data-id="${productId}"]`);
-                if (addButton && !addButton.classList.contains('added')) {
-                    addButton.innerHTML = '<i class="fas fa-cart-plus"></i> Add';
-                }
-            }
-        });
-    }
-    
-    // Proceed to Checkout
-    function proceedToCheckout() {
-        if (cart.length === 0) {
-            showToast('Your cart is empty!', 'error');
-            return;
-        }
-        
-        // Check if user is logged in
-        const isLoggedIn = localStorage.getItem('quickcart_user') !== null;
-        
-        if (!isLoggedIn) {
-            // Show login modal
-            const loginModal = document.getElementById('loginModal');
-            if (loginModal) {
-                closeCartSidebar();
-                loginModal.classList.add('active');
-                showToast('Please login to continue checkout', 'info');
-            }
-            return;
-        }
-        
-        // In a real app, this would redirect to checkout page
-        showToast('Proceeding to checkout...', 'success');
-        
-        // Simulate order placement
-        setTimeout(() => {
-            // Clear cart after successful order
-            clearCart();
-            showToast('Order placed successfully! Thank you for shopping with us.', 'success');
-        }, 2000);
-    }
-    
-    // Clear Cart
-    function clearCart() {
-        cart = [];
-        cartItemsCount = 0;
-        cartSubtotal = 0;
-        cartTotal = 0;
-        
-        saveCartToStorage();
-        updateCartUI();
-    }
-    
-    // Save Cart to localStorage
-    function saveCartToStorage() {
-        localStorage.setItem('quickcart_cart', JSON.stringify(cart));
-    }
-    
-    // Load Cart from localStorage
-    function loadCartFromStorage() {
-        const savedCart = localStorage.getItem('quickcart_cart');
-        if (savedCart) {
-            cart = JSON.parse(savedCart);
-        }
-    }
-    
-    // Get Cart Data
-    function getCart() {
-        return cart;
-    }
-    
-    // Get Cart Summary
-    function getCartSummary() {
-        return {
-            itemsCount: cartItemsCount,
-            subtotal: cartSubtotal,
-            delivery: cartSubtotal >= freeDeliveryThreshold ? 0 : deliveryFee,
-            total: cartTotal
-        };
-    }
-    
-    // Show Toast Notification
-    function showToast(message, type = 'success') {
-        // This function is implemented in app.js
-        if (typeof window.showToast === 'function') {
-            window.showToast(message, type);
-        } else {
-            console.log(`${type}: ${message}`);
-        }
-    }
-    
-    // Public API
-    return {
-        init,
-        addToCart,
-        removeFromCart,
-        updateQuantity,
-        updateCartUI,
-        getCart,
-        getCartSummary,
-        clearCart,
-        openCart,
-        closeCartSidebar
-    };
-})();
+// Enhanced Products Data and Functions for QuickCart Pro
 
-// Initialize cart when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
-    cartModule.init();
-});
+const Products = {
+    // Enhanced category data
+    categories: [
+        {
+            id: 1,
+            name: "Fresh Produce",
+            icon: "🥦",
+            description: "Vegetables & Fruits",
+            image: "https://images.unsplash.com/photo-1540420828642-fca2c5c18abb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1192&q=80",
+            color: "#4CAF50",
+            featured: true
+        },
+        {
+            id: 2,
+            name: "Dairy & Eggs",
+            icon: "🥛",
+            description: "Milk, Cheese, Eggs",
+            image: "https://images.unsplash.com/photo-1550583724-b2692b85b150?ixlib=rb-4.0.3&auto=format&fit=crop&w=1074&q=80",
+            color: "#FF9800",
+            featured: true
+        },
+        {
+            id: 3,
+            name: "Meat & Seafood",
+            icon: "🥩",
+            description: "Fresh Meat & Fish",
+            image: "https://images.unsplash.com/photo-1559314809-2b99056a8c4a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+            color: "#F44336",
+            featured: true
+        },
+        {
+            id: 4,
+            name: "Beverages",
+            icon: "🥤",
+            description: "Juices, Sodas, Water",
+            image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?ixlib=rb-4.0.3&auto=format&fit=crop&w=1257&q=80",
+            color: "#2196F3",
+            featured: true
+        },
+        {
+            id: 5,
+            name: "Bakery",
+            icon: "🍞",
+            description: "Bread & Pastries",
+            image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=1172&q=80",
+            color: "#795548",
+            featured: false
+        },
+        {
+            id: 6,
+            name: "Pantry Staples",
+            icon: "🍚",
+            description: "Rice, Pasta, Oil",
+            image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&auto=format&fit=crop&w=1065&q=80",
+            color: "#607D8B",
+            featured: false
+        },
+        {
+            id: 7,
+            name: "Snacks",
+            icon: "🍫",
+            description: "Chips, Cookies, Candy",
+            image: "https://images.unsplash.com/photo-1574484284002-952d92456975?ixlib=rb-4.0.3&auto=format&fit=crop&w=1167&q=80",
+            color: "#9C27B0",
+            featured: false
+        },
+        {
+            id: 8,
+            name: "Frozen Foods",
+            icon: "❄️",
+            description: "Frozen Meals & Veggies",
+            image: "https://images.unsplash.com/photo-1613243555978-636c48dc653c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+            color: "#03A9F4",
+            featured: false
+        },
+        {
+            id: 9,
+            name: "Organic",
+            icon: "🌿",
+            description: "Organic Products",
+            image: "https://images.unsplash.com/photo-1597362925123-77861d3fbac7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+            color: "#8BC34A",
+            featured: true
+        },
+        {
+            id: 10,
+            name: "Household",
+            icon: "🏠",
+            description: "Cleaning & Essentials",
+            image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1158&q=80",
+            color: "#9E9E9E",
+            featured: false
+        }
+    ],
 
-// Export cart module for use in other modules
-window.cartModule = cartModule;
+    // Enhanced product data with more details
+    products: [
+        // Fresh Produce
+        {
+            id: 101,
+            name: "Organic Bananas",
+            category: "Fresh Produce",
+            subcategory: "Fruits",
+            price: 0.69,
+            originalPrice: 0.79,
+            description: "Fresh organic bananas, perfect for smoothies or snacks. Grown sustainably in Ecuador.",
+            image: "https://images.unsplash.com/photo-1603833665858-e61d17a86224?ixlib=rb-4.0.3&auto=format&fit=crop&w=627&q=80",
+            unit: "per lb",
+            weight: "1 lb",
+            organic: true,
+            featured: true,
+            deal: false,
+            rating: 4.5,
+            reviews: 128,
+            stock: 150,
+            tags: ["organic", "fruit", "healthy"]
+        },
+        {
+            id: 102,
+            name: "Fresh Strawberries",
+            category: "Fresh Produce",
+            subcategory: "Berries",
+            price: 3.99,
+            originalPrice: 4.99,
+            description: "Sweet and juicy California strawberries. Picked at peak ripeness for maximum flavor.",
+            image: "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+            unit: "1 lb container",
+            weight: "1 lb",
+            organic: false,
+            featured: true,
+            deal: true,
+            rating: 4.8,
+            reviews: 89,
+            stock: 75,
+            tags: ["berry", "fresh", "sweet"]
+        },
+        {
+            id: 103,
+            name: "Organic Avocados",
+            category: "Fresh Produce",
+            subcategory: "Vegetables",
+            price: 1.99,
+            originalPrice: 2.49,
+            description: "Creamy Hass avocados, perfect for guacamole, salads, or toast. Organic and sustainably grown.",
+            image: "https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?ixlib=rb-4.0.3&auto=format&fit=crop&w=1074&q=80",
+            unit: "each",
+            weight: "medium",
+            organic: true,
+            featured: true,
+            deal: false,
+            rating: 4.6,
+            reviews: 203,
+            stock: 200,
+            tags: ["organic", "healthy", "superfood"]
+        },
+        {
+            id: 104,
+            name: "Fresh Milk",
+            category: "Dairy & Eggs",
+            subcategory: "Dairy",
+            price: 3.49,
+            originalPrice: null,
+            description: "Whole milk, 1 gallon. From local farms, pasteurized for safety and freshness.",
+            image: "https://images.unsplash.com/photo-1563636619-e9143da7973b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1156&q=80",
+            unit: "1 gallon",
+            weight: "1 gallon",
+            organic: false,
+            featured: false,
+            deal: false,
+            rating: 4.3,
+            reviews: 156,
+            stock: 120,
+            tags: ["dairy", "fresh", "local"]
+        },
+        {
+            id: 105,
+            name: "Organic Eggs",
+            category: "Dairy & Eggs",
+            subcategory: "Eggs",
+            price: 4.99,
+            originalPrice: 5.99,
+            description: "Free-range organic eggs, dozen. From chickens raised on organic feed with access to pasture.",
+            image: "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+            unit: "dozen",
+            weight: "12 eggs",
+            organic: true,
+            featured: true,
+            deal: true,
+            rating: 4.7,
+            reviews: 312,
+            stock: 180,
+            tags: ["organic", "free-range", "protein"]
+        },
+        {
+            id: 106,
+            name: "Cheddar Cheese",
+            category: "Dairy & Eggs",
+            subcategory: "Cheese",
+            price: 4.49,
+            originalPrice: null,
+            description: "Sharp cheddar cheese block. Aged for 6 months for rich, tangy flavor.",
+            image: "https://images.unsplash.com/photo-1566385101042-1a0f0c126a96?ixlib=rb-4.0.3&auto=format&fit=crop&w=1331&q=80",
+            unit: "8 oz",
+            weight: "8 oz",
+            organic: false,
+            featured: false,
+            deal: false,
+            rating: 4.4,
+            reviews: 89,
+            stock: 95,
+            tags: ["cheese", "dairy", "aged"]
+        },
+        {
+            id: 107,
+            name: "Ground Beef",
+            category: "Meat & Seafood",
+            subcategory: "Beef",
+            price: 5.99,
+            originalPrice: 6.99,
+            description: "80/20 lean ground beef. Perfect for burgers, meatballs, or tacos.",
+            image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+            unit: "per lb",
+            weight: "1 lb",
+            organic: false,
+            featured: true,
+            deal: true,
+            rating: 4.5,
+            reviews: 167,
+            stock: 80,
+            tags: ["beef", "protein", "fresh"]
+        },
+        {
+            id: 108,
+            name: "Atlantic Salmon",
+            category: "Meat & Seafood",
+            subcategory: "Seafood",
+            price: 9.99,
+            originalPrice: 12.99,
+            description: "Fresh Atlantic salmon fillets. Wild-caught, rich in omega-3 fatty acids.",
+            image: "https://images.unsplash.com/photo-1599084993091-1cb5c0721cc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+            unit: "per lb",
+            weight: "1 lb",
+            organic: false,
+            featured: true,
+            deal: true,
+            rating: 4.9,
+            reviews: 245,
+            stock: 45,
+            tags: ["seafood", "healthy", "omega-3"]
+        },
+        {
+            id: 109,
+            name: "Boneless Chicken Breast",
+            category: "Meat & Seafood",
+            subcategory: "Poultry",
+            price: 3.99,
+            originalPrice: null,
+            description: "Fresh boneless skinless chicken breast. Raised without antibiotics.",
+            image: "https://images.unsplash.com/photo-1604503468506-9f2c0fcb8e6a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+            unit: "per lb",
+            weight: "1 lb",
+            organic: false,
+            featured: false,
+            deal: false,
+            rating: 4.6,
+            reviews: 189,
+            stock: 150,
+            tags: ["chicken", "protein", "antibiotic-free"]
+        },
+        // Add more products for variety
+        {
+            id: 110,
+            name: "Orange Juice",
+            category: "Beverages",
+            subcategory: "Juices",
+            price: 3.79,
+            originalPrice: 4.29,
+            description: "100% pure orange juice, not from concentrate. No added sugars or preservatives.",
+            image: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?ixlib=rb-4.0.3&auto=format&fit=crop&w=687&q=80",
+            unit: "64 oz",
+            weight: "64 oz",
+            organic: false,
+            featured: false,
+            deal: true,
+            rating: 4.4,
+            reviews: 134,
+            stock: 200,
+            tags: ["juice", "vitamin-c", "fresh"]
+        },
+        {
+            id: 111,
+            name: "Bottled Water",
+            category: "Beverages",
+            subcategory: "Water",
+            price: 4.99,
+            originalPrice: null,
+            description: "Purified drinking water, 24-pack. Great for hydration at home or on the go.",
+            image: "https://images.unsplash.com/photo-1523362628745-0c100150b504?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+            unit: "24-pack",
+            weight: "24 bottles",
+            organic: false,
+            featured: false,
+            deal: false,
+            rating: 4.2,
+            reviews: 78,
+            stock: 300,
+            tags: ["water", "hydration", "essential"]
+        },
+        {
+            id: 112,
+            name: "Artisan Bread",
+            category: "Bakery",
+            subcategory: "Bread",
+            price: 4.49,
+            originalPrice: 4.99,
+            description: "Freshly baked artisan sourdough bread. Made with simple, natural ingredients.",
+            image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=1172&q=80",
+            unit: "loaf",
+            weight: "1 lb",
+            organic: true,
+            featured: true,
+            deal: false,
+            rating: 4.7,
+            reviews: 156,
+            stock: 60,
+            tags: ["bread", "artisan", "sourdough"]
+        },
+        {
+            id: 113,
+            name: "Organic Spinach",
+            category: "Fresh Produce",
+            subcategory: "Leafy Greens",
+            price: 2.99,
+            originalPrice: null,
+            description: "Fresh organic baby spinach. Perfect for salads, smoothies, or sautéing.",
+            image: "https://images.unsplash.com/photo-1576045057995-568f588f82fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+            unit: "5 oz bag",
+            weight: "5 oz",
+            organic: true,
+            featured: false,
+            deal: false,
+            rating: 4.5,
+            reviews: 98,
+            stock: 120,
+            tags: ["organic", "greens", "healthy"]
+        },
+        {
+            id: 114,
+            name: "Greek Yogurt",
+            category: "Dairy & Eggs",
+            subcategory: "Yogurt",
+            price: 1.29,
+            originalPrice: 1.49,
+            description: "Plain non-fat Greek yogurt. High in protein, perfect for breakfast or snacks.",
+            image: "https://images.unsplash.com/photo-1551782450-17144ef8c57c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1169&q=80",
+            unit: "5.3 oz",
+            weight: "5.3 oz",
+            organic: false,
+            featured: false,
+            deal: true,
+            rating: 4.6,
+            reviews: 210,
+            stock: 250,
+            tags: ["yogurt", "protein", "healthy"]
+        },
+        {
+            id: 115,
+            name: "Fresh Tomatoes",
+            category: "Fresh Produce",
+            subcategory: "Vegetables",
+            price: 1.99,
+            originalPrice: null,
+            description: "Vine-ripened tomatoes. Juicy and flavorful, great for salads or cooking.",
+            image: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+            unit: "per lb",
+            weight: "1 lb",
+            organic: false,
+            featured: false,
+            deal: false,
+            rating: 4.3,
+            reviews: 76,
+            stock: 180,
+            tags: ["vegetable", "fresh", "versatile"]
+        },
+        {
+            id: 116,
+            name: "Potato Chips",
+            category: "Snacks",
+            subcategory: "Chips",
+            price: 2.99,
+            originalPrice: 3.49,
+            description: "Classic potato chips. Thinly sliced and perfectly salted for maximum crunch.",
+            image: "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+            unit: "8 oz bag",
+            weight: "8 oz",
+            organic: false,
+            featured: false,
+            deal: true,
+            rating: 4.1,
+            reviews: 145,
+            stock: 300,
+            tags: ["snack", "chips", "crunchy"]
+        },
+        {
+            id: 117,
+            name: "Organic Quinoa",
+            category: "Pantry Staples",
+            subcategory: "Grains",
+            price: 5.99,
+            originalPrice: 6.99,
+            description: "Organic quinoa. High-protein ancient grain, perfect for salads and bowls.",
+            image: "https://images.unsplash.com/photo-1598962084154-7c91a6241a54?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+            unit: "16 oz bag",
+            weight: "16 oz",
+            organic: true,
+            featured: true,
+            deal: true,
+            rating: 4.8,
+            reviews: 189,
+            stock: 90,
+            tags: ["organic", "grain", "protein"]
+        },
+        {
+            id: 118,
+            name: "Extra Virgin Olive Oil",
+            category: "Pantry Staples",
+            subcategory: "Oils",
+            price: 8.99,
+            originalPrice: 10.99,
+            description: "Premium extra virgin olive oil. Cold-pressed for maximum flavor and nutrients.",
+            image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+            unit: "17 oz bottle",
+            weight: "17 oz",
+            organic: true,
+            featured: true,
+            deal: false,
+            rating: 4.9,
+            reviews: 267,
+            stock: 75,
+            tags: ["oil", "healthy", "premium"]
+        },
+        {
+            id: 119,
+            name: "Dark Chocolate",
+            category: "Snacks",
+            subcategory: "Chocolate",
+            price: 3.49,
+            originalPrice: 3.99,
+            description: "70% dark chocolate bar. Rich in antioxidants with a smooth, bittersweet flavor.",
+            image: "https://images.unsplash.com/photo-1575377427642-087cf684f29d?ixlib=rb-4.0.3&auto=format&fit=crop&w=687&q=80",
+            unit: "3.5 oz bar",
+            weight: "3.5 oz",
+            organic: true,
+            featured: false,
+            deal: true,
+            rating: 4.7,
+            reviews: 198,
+            stock: 150,
+            tags: ["chocolate", "dark", "antioxidants"]
+        },
+        {
+            id: 120,
+            name: "Frozen Mixed Berries",
+            category: "Frozen Foods",
+            subcategory: "Frozen Fruits",
+            price: 6.99,
+            originalPrice: 7.99,
+            description: "Frozen mixed berries. Perfect for smoothies, baking, or as a healthy dessert.",
+            image: "https://images.unsplash.com/photo-1577234286642-fc512a5f8f11?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
+            unit: "32 oz bag",
+            weight: "32 oz",
+            organic: false,
+            featured: false,
+            deal: false,
+            rating: 4.4,
+            reviews: 112,
+            stock: 200,
+            tags: ["frozen", "berries", "smoothie"]
+        }
+    ],
+
+    // Enhanced product methods
+    getAllProducts: function() {
+        return this.products;
+    },
+
+    getFeaturedProducts: function() {
+        return this.products.filter(product => product.featured);
+    },
+
+    getDealProducts: function() {
+        return this.products.filter(product => product.deal);
+    },
+
+    getProductsByCategory: function(category) {
+        return this.products.filter(product => product.category === category);
+    },
+
+    getProductById: function(id) {
+        return this.products.find(product => product.id === id);
+    },
+
+    getAllCategories: function() {
+        return this.categories;
+    },
+
+    getFeaturedCategories: function() {
+        return this.categories.filter(category => category.featured);
+    },
+
+    searchProducts: function(query) {
+        if (!query) return [];
+        
+        const searchTerm = query.toLowerCase().trim();
+        return this.products.filter(product => 
+            product.name.toLowerCase().includes(searchTerm) || 
+            product.description.toLowerCase().includes(searchTerm) ||
+            product.category.toLowerCase().includes(searchTerm) ||
+            product.subcategory.toLowerCase().includes(searchTerm) ||
+            product.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+        );
+    },
+
+    filterProducts: function(options) {
+        let filtered = [...this.products];
+        
+        if (options.category) {
+            filtered = filtered.filter(p => p.category === options.category);
+        }
+        
+        if (options.organic) {
+            filtered = filtered.filter(p => p.organic === true);
+        }
+        
+        if (options.minPrice !== undefined) {
+            filtered = filtered.filter(p => p.price >= options.minPrice);
+        }
+        
+        if (options.maxPrice !== undefined) {
+            filtered = filtered.filter(p => p.price <= options.maxPrice);
+        }
+        
+        if (options.sortBy) {
+            switch (options.sortBy) {
+                case 'price-asc':
+                    filtered.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-desc':
+                    filtered.sort((a, b) => b.price - a.price);
+                    break;
+                case 'rating':
+                    filtered.sort((a, b) => b.rating - a.rating);
+                    break;
+                case 'name':
+                    filtered.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+            }
+        }
+        
+        return filtered;
+    },
+
+    getRelatedProducts: function(productId, limit = 4) {
+        const product = this.getProductById(productId);
+        if (!product) return [];
+        
+        return this.products
+            .filter(p => 
+                p.id !== productId && 
+                (p.category === product.category || p.subcategory === product.subcategory)
+            )
+            .slice(0, limit);
+    },
+
+    getTopRatedProducts: function(limit = 6) {
+        return [...this.products]
+            .sort((a, b) => b.rating - a.rating)
+            .slice(0, limit);
+    },
+
+    getNewArrivals: function() {
+        // Simulate new arrivals by selecting some products
+        return this.products.filter(p => [101, 108, 117, 119].includes(p.id));
+    },
+
+    getBestsellers: function() {
+        // Simulate bestsellers by selecting products with high ratings and reviews
+        return this.products
+            .filter(p => p.rating >= 4.5 && p.reviews > 100)
+            .sort((a, b) => b.reviews - a.reviews)
+            .slice(0, 8);
+    },
+
+    // Generate product SKU
+    generateSKU: function(product) {
+        const categoryCode = product.category.substring(0, 3).toUpperCase();
+        const idCode = product.id.toString().padStart(4, '0');
+        return `QC-${categoryCode}-${idCode}`;
+    },
+
+    // Calculate savings percentage
+    calculateSavings: function(product) {
+        if (!product.originalPrice || product.originalPrice <= product.price) {
+            return 0;
+        }
+        return Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
+    },
+
+    // Get product rating stars HTML
+    getRatingStars: function(rating) {
+        const fullStars = Math.floor(rating);
+        const halfStar = rating % 1 >= 0.5;
+        const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
+        
+        let stars = '';
+        for (let i = 0; i < fullStars; i++) stars += '<i class="fas fa-star"></i>';
+        if (halfStar) stars += '<i class="fas fa-star-half-alt"></i>';
+        for (let i = 0; i < emptyStars; i++) stars += '<i class="far fa-star"></i>';
+        
+        return stars;
+    }
+};
+
+// Export Products globally
+window.Products = Products;
