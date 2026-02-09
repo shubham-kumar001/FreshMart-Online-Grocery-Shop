@@ -3,748 +3,631 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QuickCart Pro - Premium Online Grocery Shopping | Fresh Produce Delivered</title>
-    <meta name="description" content="Shop fresh groceries online with QuickCart Pro. Same-day delivery on fresh produce, dairy, meat, pantry staples, and household essentials. Quality guaranteed.">
-    <meta name="keywords" content="grocery delivery, online supermarket, fresh produce, grocery shopping, food delivery">
+    <title>QuickCart - India's Fastest Grocery Delivery | 10-Minute Delivery</title>
+    <meta name="description" content="QuickCart delivers groceries, vegetables, fruits, dairy, snacks, and household items in 10 minutes. Best prices on fresh produce, staples, and daily essentials.">
+    
+    <!-- CSS Files -->
     <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/animations.css">
     <link rel="stylesheet" href="css/responsive.css">
+    <link rel="stylesheet" href="css/animation.css">
+    
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛒</text></svg>">
 </head>
 <body>
-    <!-- Top Announcement Bar -->
-    <div class="announcement-bar">
-        <div class="container">
-            <p><i class="fas fa-shipping-fast"></i> Free delivery on orders over $50 | <span class="highlight">Same-day delivery available</span></p>
-            <div class="announcement-links">
-                <a href="#"><i class="fas fa-store"></i> Store Locator</a>
-                <a href="#"><i class="fas fa-headset"></i> Customer Support</a>
+    <!-- Loading Screen -->
+    <div class="loading-screen" id="loadingScreen">
+        <div class="loader">
+            <div class="cart-loader">
+                <i class="fas fa-shopping-cart"></i>
             </div>
+            <p>Loading QuickCart...</p>
         </div>
     </div>
 
-    <!-- Header & Navigation -->
-    <header class="header">
+    <!-- Top Announcement Bar -->
+    <div class="announcement-bar">
         <div class="container">
-            <div class="header-main">
-                <!-- Logo -->
-                <div class="logo">
-                    <a href="index.html">
-                        <div class="logo-icon">
-                            <i class="fas fa-shopping-basket"></i>
-                        </div>
-                        <div class="logo-text">
-                            <span class="logo-primary">QuickCart</span>
-                            <span class="logo-secondary">Pro</span>
-                        </div>
-                    </a>
-                </div>
-                
-                <!-- Search Bar -->
-                <div class="search-container">
-                    <div class="search-bar">
-                        <div class="search-category">
-                            <span>All Categories</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </div>
-                        <input type="text" id="search-input" placeholder="Search for products, brands, or categories...">
-                        <button id="search-btn" class="search-button">
-                            <i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                    <div class="search-suggestions" id="search-suggestions">
-                        <!-- Search suggestions will appear here -->
-                    </div>
-                </div>
-                
-                <!-- User Actions -->
-                <div class="user-actions">
-                    <div class="action-item delivery-info">
-                        <i class="fas fa-map-marker-alt"></i>
-                        <div class="action-text">
-                            <span class="action-label">Deliver to</span>
-                            <span class="action-value" id="delivery-location">New York, 10001</span>
-                        </div>
-                    </div>
-                    
-                    <div class="action-item account-dropdown" id="account-dropdown-trigger">
-                        <i class="fas fa-user-circle"></i>
-                        <div class="action-text">
-                            <span class="action-label">Hello, Sign in</span>
-                            <span class="action-value">My Account</span>
-                        </div>
-                        <div class="dropdown-menu account-menu" id="account-menu">
-                            <div class="dropdown-header">
-                                <h4>My Account</h4>
-                            </div>
-                            <a href="#" class="dropdown-item" id="login-link">
-                                <i class="fas fa-sign-in-alt"></i>
-                                <span>Sign In / Register</span>
-                            </a>
-                            <div class="dropdown-divider"></div>
-                            <a href="#" class="dropdown-item">
-                                <i class="fas fa-box"></i>
-                                <span>My Orders</span>
-                            </a>
-                            <a href="#" class="dropdown-item">
-                                <i class="fas fa-heart"></i>
-                                <span>My Wishlist</span>
-                            </a>
-                            <a href="#" class="dropdown-item">
-                                <i class="fas fa-user-cog"></i>
-                                <span>Account Settings</span>
-                            </a>
-                            <a href="#" class="dropdown-item" id="logout-link">
-                                <i class="fas fa-sign-out-alt"></i>
-                                <span>Sign Out</span>
-                            </a>
-                        </div>
-                    </div>
-                    
-                    <div class="action-item cart-preview" id="cart-icon">
-                        <div class="cart-icon-container">
-                            <i class="fas fa-shopping-cart"></i>
-                            <span class="cart-count" id="cart-count">0</span>
-                        </div>
-                        <div class="action-text">
-                            <span class="action-label">Total</span>
-                            <span class="action-value" id="cart-total-preview">$0.00</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Mobile Menu Button -->
-                <button class="mobile-menu-btn" id="mobile-menu-btn">
+            <p><i class="fas fa-bolt"></i> <strong>10-MINUTE DELIVERY:</strong> Now available in Mumbai, Delhi, Bangalore, Hyderabad & 20+ cities</p>
+        </div>
+    </div>
+
+    <!-- Main Header -->
+    <header class="main-header">
+        <div class="container">
+            <div class="header-top">
+                <button class="menu-toggle" id="menuToggle">
                     <i class="fas fa-bars"></i>
                 </button>
-            </div>
-            
-            <!-- Main Navigation -->
-            <nav class="main-nav">
-                <ul class="nav-list">
-                    <li class="nav-item mega-dropdown">
-                        <a href="#categories" class="nav-link">
-                            <i class="fas fa-th-large"></i>
-                            <span>Shop by Category</span>
-                            <i class="fas fa-chevron-down"></i>
-                        </a>
-                        <div class="mega-menu" id="categories-menu">
-                            <!-- Mega menu content will be loaded dynamically -->
-                        </div>
-                    </li>
-                    <li class="nav-item"><a href="#deals" class="nav-link"><i class="fas fa-bolt"></i> Today's Deals</a></li>
-                    <li class="nav-item"><a href="#fresh" class="nav-link"><i class="fas fa-leaf"></i> Fresh Produce</a></li>
-                    <li class="nav-item"><a href="#dairy" class="nav-link"><i class="fas fa-cheese"></i> Dairy & Eggs</a></li>
-                    <li class="nav-item"><a href="#meat" class="nav-link"><i class="fas fa-drumstick-bite"></i> Meat & Seafood</a></li>
-                    <li class="nav-item"><a href="#beverages" class="nav-link"><i class="fas fa-wine-bottle"></i> Beverages</a></li>
-                    <li class="nav-item"><a href="#organic" class="nav-link"><i class="fas fa-seedling"></i> Organic</a></li>
-                    <li class="nav-item"><a href="#household" class="nav-link"><i class="fas fa-home"></i> Household</a></li>
-                </ul>
                 
-                <div class="nav-actions">
-                    <a href="#" class="btn-link">
-                        <i class="fas fa-percentage"></i>
-                        Weekly Specials
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-bolt"></i>
+                    </div>
+                    <div class="logo-text">
+                        <h1>QuickCart</h1>
+                        <span class="tagline">Delivered in Minutes</span>
+                    </div>
+                </a>
+
+                <!-- Location Selector -->
+                <div class="location-selector">
+                    <i class="fas fa-map-marker-alt"></i>
+                    <div class="location-info">
+                        <span class="deliver-to">Deliver to</span>
+                        <span class="current-location" id="currentLocation">Select Location</span>
+                    </div>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="search-container">
+                    <div class="search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="searchInput" placeholder="Search for groceries, vegetables, fruits...">
+                        <button class="search-btn" id="searchBtn">Search</button>
+                    </div>
+                    <div class="search-suggestions" id="searchSuggestions"></div>
+                </div>
+
+                <!-- User Actions -->
+                <div class="user-actions">
+                    <a href="#offers" class="action-btn">
+                        <i class="fas fa-tag"></i>
+                        <span>Offers</span>
+                    </a>
+                    <a href="#orders" class="action-btn">
+                        <i class="fas fa-shopping-bag"></i>
+                        <span>Orders</span>
+                    </a>
+                    <button class="action-btn" id="authBtn">
+                        <i class="fas fa-user"></i>
+                        <span>Login</span>
+                    </button>
+                    <button class="cart-btn" id="cartBtn">
+                        <i class="fas fa-shopping-cart"></i>
+                        <span>Cart</span>
+                        <span class="cart-count" id="cartCount">0</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Categories Navigation -->
+            <nav class="categories-nav">
+                <div class="categories-container">
+                    <a href="#groceries" class="category-link active">
+                        <i class="fas fa-shopping-basket"></i>
+                        <span>Groceries & Staples</span>
+                    </a>
+                    <a href="#vegetables" class="category-link">
+                        <i class="fas fa-carrot"></i>
+                        <span>Vegetables & Fruits</span>
+                    </a>
+                    <a href="#dairy" class="category-link">
+                        <i class="fas fa-cheese"></i>
+                        <span>Dairy, Bread & Eggs</span>
+                    </a>
+                    <a href="#meat" class="category-link">
+                        <i class="fas fa-drumstick-bite"></i>
+                        <span>Meat & Fish</span>
+                    </a>
+                    <a href="#snacks" class="category-link">
+                        <i class="fas fa-cookie-bite"></i>
+                        <span>Snacks & Beverages</span>
+                    </a>
+                    <a href="#household" class="category-link">
+                        <i class="fas fa-home"></i>
+                        <span>Household Care</span>
+                    </a>
+                    <a href="#personal-care" class="category-link">
+                        <i class="fas fa-spa"></i>
+                        <span>Personal Care</span>
+                    </a>
+                    <a href="#electronics" class="category-link">
+                        <i class="fas fa-laptop"></i>
+                        <span>Electronics</span>
+                    </a>
+                    <a href="#pharma" class="category-link">
+                        <i class="fas fa-pills"></i>
+                        <span>Pharma & Wellness</span>
                     </a>
                 </div>
             </nav>
         </div>
     </header>
 
-    <!-- Mobile Navigation Menu -->
-    <div class="mobile-nav-overlay" id="mobile-nav-overlay"></div>
-    <div class="mobile-nav" id="mobile-nav">
-        <div class="mobile-nav-header">
-            <div class="logo">
-                <a href="index.html">
-                    <div class="logo-icon">
-                        <i class="fas fa-shopping-basket"></i>
-                    </div>
-                    <div class="logo-text">
-                        <span class="logo-primary">QuickCart</span>
-                        <span class="logo-secondary">Pro</span>
-                    </div>
-                </a>
+    <!-- Mobile Sidebar -->
+    <div class="mobile-sidebar" id="mobileSidebar">
+        <div class="sidebar-header">
+            <div class="user-profile">
+                <div class="user-avatar">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="user-info">
+                    <h3>Welcome to QuickCart</h3>
+                    <p>Sign in to access your account</p>
+                </div>
             </div>
-            <button class="close-mobile-nav" id="close-mobile-nav">
+            <button class="close-sidebar" id="closeSidebar">
                 <i class="fas fa-times"></i>
             </button>
         </div>
         
-        <div class="mobile-search">
-            <input type="text" placeholder="Search products...">
-            <button><i class="fas fa-search"></i></button>
-        </div>
-        
-        <div class="mobile-user-info">
-            <a href="#" class="mobile-user-link" id="mobile-login-link">
-                <i class="fas fa-user-circle"></i>
-                <span>Sign In / Register</span>
+        <div class="sidebar-menu">
+            <a href="index.html" class="menu-item active">
+                <i class="fas fa-home"></i>
+                <span>Home</span>
             </a>
-            <a href="#" class="mobile-user-link">
+            <a href="#categories" class="menu-item">
+                <i class="fas fa-th-large"></i>
+                <span>All Categories</span>
+            </a>
+            <a href="#orders" class="menu-item">
+                <i class="fas fa-shopping-bag"></i>
+                <span>My Orders</span>
+            </a>
+            <a href="#account" class="menu-item">
+                <i class="fas fa-user-cog"></i>
+                <span>My Account</span>
+            </a>
+            <a href="#favorites" class="menu-item">
+                <i class="fas fa-heart"></i>
+                <span>Favorites</span>
+            </a>
+            <a href="#addresses" class="menu-item">
                 <i class="fas fa-map-marker-alt"></i>
-                <span>Delivery Location</span>
+                <span>Saved Addresses</span>
+            </a>
+            <a href="#wallet" class="menu-item">
+                <i class="fas fa-wallet"></i>
+                <span>QuickCart Wallet</span>
+            </a>
+            <a href="#help" class="menu-item">
+                <i class="fas fa-question-circle"></i>
+                <span>Help & Support</span>
             </a>
         </div>
         
-        <div class="mobile-nav-content">
-            <div class="mobile-nav-section">
-                <h3 class="mobile-nav-title">Categories</h3>
-                <ul class="mobile-nav-list">
-                    <li><a href="#categories"><i class="fas fa-th-large"></i> All Categories</a></li>
-                    <li><a href="#deals"><i class="fas fa-bolt"></i> Today's Deals</a></li>
-                    <li><a href="#fresh"><i class="fas fa-leaf"></i> Fresh Produce</a></li>
-                    <li><a href="#dairy"><i class="fas fa-cheese"></i> Dairy & Eggs</a></li>
-                    <li><a href="#meat"><i class="fas fa-drumstick-bite"></i> Meat & Seafood</a></li>
-                    <li><a href="#beverages"><i class="fas fa-wine-bottle"></i> Beverages</a></li>
-                    <li><a href="#organic"><i class="fas fa-seedling"></i> Organic</a></li>
-                    <li><a href="#household"><i class="fas fa-home"></i> Household</a></li>
-                </ul>
-            </div>
-            
-            <div class="mobile-nav-section">
-                <h3 class="mobile-nav-title">My Account</h3>
-                <ul class="mobile-nav-list">
-                    <li><a href="#"><i class="fas fa-box"></i> My Orders</a></li>
-                    <li><a href="#"><i class="fas fa-heart"></i> Wishlist</a></li>
-                    <li><a href="#"><i class="fas fa-user-cog"></i> Account Settings</a></li>
-                    <li><a href="#"><i class="fas fa-history"></i> Order History</a></li>
-                    <li><a href="#"><i class="fas fa-percentage"></i> Weekly Specials</a></li>
-                </ul>
-            </div>
+        <div class="sidebar-footer">
+            <button class="btn-login" id="mobileLogin">
+                <i class="fas fa-sign-in-alt"></i>
+                Sign In / Register
+            </button>
         </div>
     </div>
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
     <!-- Main Content -->
     <main class="main-content">
-        <!-- Hero Section with Slider -->
-        <section class="hero-slider" id="home">
-            <div class="hero-slide active">
-                <div class="container">
-                    <div class="hero-content">
-                        <span class="hero-badge">Limited Time Offer</span>
-                        <h1 class="hero-title">Fresh Organic Produce <span class="highlight">Delivery</span></h1>
-                        <p class="hero-subtitle">Get farm-fresh organic fruits and vegetables delivered to your doorstep. Quality guaranteed or your money back.</p>
-                        <div class="hero-actions">
-                            <a href="#fresh" class="btn btn-primary btn-large">
-                                Shop Fresh Produce
-                                <i class="fas fa-arrow-right"></i>
-                            </a>
-                            <a href="#deals" class="btn btn-outline btn-large">
-                                View Weekly Deals
-                            </a>
-                        </div>
-                        <div class="hero-features">
-                            <div class="feature">
-                                <i class="fas fa-shipping-fast"></i>
-                                <span>Same-Day Delivery</span>
-                            </div>
-                            <div class="feature">
-                                <i class="fas fa-award"></i>
-                                <span>Quality Guarantee</span>
-                            </div>
-                            <div class="feature">
-                                <i class="fas fa-leaf"></i>
-                                <span>100% Organic</span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="hero-image">
-                        <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Fresh Groceries Delivery">
-                    </div>
-                </div>
-            </div>
-            
-            <div class="hero-slide">
-                <div class="container">
-                    <div class="hero-content">
-                        <span class="hero-badge">Summer Sale</span>
-                        <h1 class="hero-title">Up to <span class="highlight">40% OFF</span> on Summer Essentials</h1>
-                        <p class="hero-subtitle">Stock up for summer with amazing discounts on beverages, snacks, and barbecue essentials.</p>
-                        <div class="hero-actions">
-                            <a href="#deals" class="btn btn-primary btn-large">
-                                Shop Summer Sale
-                                <i class="fas fa-fire"></i>
-                            </a>
-                        </div>
-                        <div class="hero-timer">
-                            <p>Sale ends in:</p>
-                            <div class="timer" id="hero-timer">
-                                <div class="timer-unit">
-                                    <span class="timer-value">02</span>
-                                    <span class="timer-label">Days</span>
-                                </div>
-                                <div class="timer-unit">
-                                    <span class="timer-value">12</span>
-                                    <span class="timer-label">Hours</span>
-                                </div>
-                                <div class="timer-unit">
-                                    <span class="timer-value">45</span>
-                                    <span class="timer-label">Minutes</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="hero-image">
-                        <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1170&q=80" alt="Summer Sale">
-                    </div>
-                </div>
-            </div>
-            
-            <div class="slider-controls">
-                <button class="slider-prev"><i class="fas fa-chevron-left"></i></button>
-                <button class="slider-next"><i class="fas fa-chevron-right"></i></button>
-                <div class="slider-dots">
-                    <span class="slider-dot active"></span>
-                    <span class="slider-dot"></span>
-                </div>
-            </div>
-        </section>
-
-        <!-- Service Tiles -->
-        <section class="services">
+        <!-- Hero Banner -->
+        <section class="hero-banner">
             <div class="container">
-                <div class="services-grid">
-                    <div class="service-card">
-                        <div class="service-icon">
-                            <i class="fas fa-shipping-fast"></i>
+                <div class="hero-content">
+                    <h2 class="hero-title">Get <span class="highlight">Groceries Delivered</span> in Just 10 Minutes!</h2>
+                    <p class="hero-subtitle">Fresh produce, daily essentials, snacks & more delivered at lightning speed</p>
+                    <div class="hero-features">
+                        <div class="feature">
+                            <i class="fas fa-bolt"></i>
+                            <span>10-Minute Delivery</span>
                         </div>
-                        <div class="service-content">
-                            <h3>Free Delivery</h3>
-                            <p>Free delivery on orders over $50. Same-day delivery available in select areas.</p>
+                        <div class="feature">
+                            <i class="fas fa-leaf"></i>
+                            <span>Fresh & Quality</span>
                         </div>
-                    </div>
-                    <div class="service-card">
-                        <div class="service-icon">
-                            <i class="fas fa-undo-alt"></i>
+                        <div class="feature">
+                            <i class="fas fa-rupee-sign"></i>
+                            <span>Lowest Prices</span>
                         </div>
-                        <div class="service-content">
-                            <h3>Easy Returns</h3>
-                            <p>Not satisfied? Return any item within 30 days for a full refund.</p>
-                        </div>
-                    </div>
-                    <div class="service-card">
-                        <div class="service-icon">
+                        <div class="feature">
                             <i class="fas fa-shield-alt"></i>
-                        </div>
-                        <div class="service-content">
-                            <h3>Quality Guarantee</h3>
-                            <p>We guarantee the quality and freshness of all our products.</p>
+                            <span>Safe & Secure</span>
                         </div>
                     </div>
-                    <div class="service-card">
-                        <div class="service-icon">
-                            <i class="fas fa-headset"></i>
-                        </div>
-                        <div class="service-content">
-                            <h3>24/7 Support</h3>
-                            <p>Our customer support team is available 24/7 to assist you.</p>
-                        </div>
+                    <div class="hero-buttons">
+                        <a href="#categories" class="btn-primary">
+                            <i class="fas fa-shopping-basket"></i>
+                            Start Shopping
+                        </a>
+                        <a href="#download" class="btn-outline">
+                            <i class="fas fa-mobile-alt"></i>
+                            Download App
+                        </a>
                     </div>
+                </div>
+                <div class="hero-image">
+                    <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Grocery Delivery">
                 </div>
             </div>
         </section>
 
-        <!-- Featured Categories -->
-        <section class="section featured-categories" id="categories">
+        <!-- Categories Section -->
+        <section class="categories-section" id="categories">
             <div class="container">
                 <div class="section-header">
                     <h2 class="section-title">Shop by Category</h2>
-                    <a href="#" class="section-link">View All Categories <i class="fas fa-arrow-right"></i></a>
+                    <a href="#all-categories" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
                 </div>
-                <div class="categories-grid" id="categories-grid">
-                    <!-- Categories loaded dynamically -->
+                <div class="categories-grid" id="categoriesGrid">
+                    <!-- Categories will be loaded here -->
                 </div>
             </div>
         </section>
 
-        <!-- Today's Deals -->
-        <section class="section deals-section" id="deals">
+        <!-- Flash Sale -->
+        <section class="flash-sale">
             <div class="container">
-                <div class="section-header">
-                    <div class="section-header-left">
-                        <h2 class="section-title">
-                            <i class="fas fa-bolt"></i>
-                            Today's Best Deals
-                        </h2>
-                        <div class="deal-timer">
-                            <span class="timer-label">Ends in:</span>
-                            <div class="timer" id="deal-timer">
-                                <span class="timer-part hours">12</span>:
-                                <span class="timer-part minutes">45</span>:
-                                <span class="timer-part seconds">30</span>
-                            </div>
+                <div class="sale-header">
+                    <div class="sale-title">
+                        <i class="fas fa-bolt"></i>
+                        <h2>Flash Sale</h2>
+                    </div>
+                    <div class="sale-timer">
+                        <span>Ends in:</span>
+                        <div class="timer" id="flashTimer">
+                            <span class="hours">02</span>:<span class="minutes">15</span>:<span class="seconds">30</span>
                         </div>
                     </div>
-                    <a href="#" class="section-link">View All Deals <i class="fas fa-arrow-right"></i></a>
                 </div>
-                <div class="deals-grid" id="deals-grid">
-                    <!-- Deals loaded dynamically -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Fresh Produce -->
-        <section class="section fresh-section" id="fresh">
-            <div class="container">
-                <div class="section-header">
-                    <h2 class="section-title">
-                        <i class="fas fa-leaf"></i>
-                        Fresh Produce
-                    </h2>
-                    <a href="#" class="section-link">Shop All Produce <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="products-grid" id="fresh-products">
-                    <!-- Products loaded dynamically -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Weekly Specials Banner -->
-        <section class="weekly-specials">
-            <div class="container">
-                <div class="specials-banner">
-                    <div class="specials-content">
-                        <h2>Weekly Specials</h2>
-                        <p>Save up to 50% on selected items this week only. Limited stock available.</p>
-                        <a href="#" class="btn btn-light">Shop Now</a>
-                    </div>
-                    <div class="specials-image">
-                        <img src="https://images.unsplash.com/photo-1579113800032-c38bd7635818?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Weekly Specials">
-                    </div>
+                <div class="sale-products" id="flashSaleProducts">
+                    <!-- Flash sale products will be loaded here -->
                 </div>
             </div>
         </section>
 
         <!-- Featured Products -->
-        <section class="section featured-products">
+        <section class="featured-products">
             <div class="container">
                 <div class="section-header">
-                    <h2 class="section-title">Featured Products</h2>
-                    <div class="product-filters">
-                        <button class="filter-btn active" data-filter="all">All</button>
-                        <button class="filter-btn" data-filter="bestsellers">Bestsellers</button>
-                        <button class="filter-btn" data-filter="new">New Arrivals</button>
-                        <button class="filter-btn" data-filter="organic">Organic</button>
-                    </div>
+                    <h2 class="section-title">Top Selling Products</h2>
+                    <a href="#all-products" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
                 </div>
-                <div class="products-grid" id="featured-products">
-                    <!-- Products loaded dynamically -->
+                <div class="products-grid" id="featuredProducts">
+                    <!-- Featured products will be loaded here -->
                 </div>
             </div>
         </section>
 
-        <!-- Newsletter Subscription -->
-        <section class="newsletter-section">
+        <!-- Groceries & Staples -->
+        <section class="category-section" id="groceries">
             <div class="container">
-                <div class="newsletter-container">
-                    <div class="newsletter-content">
-                        <h2>Subscribe to Our Newsletter</h2>
-                        <p>Get exclusive deals, new product alerts, and shopping tips delivered to your inbox.</p>
-                        <div class="newsletter-form">
-                            <input type="email" placeholder="Enter your email address">
-                            <button type="submit" class="btn btn-primary">Subscribe</button>
+                <div class="category-header">
+                    <h2 class="section-title"><i class="fas fa-shopping-basket"></i> Groceries & Staples</h2>
+                    <a href="#more-groceries" class="view-all">See All <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="products-grid" id="groceriesProducts">
+                    <!-- Groceries products will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Fresh Vegetables & Fruits -->
+        <section class="category-section fresh-section" id="vegetables">
+            <div class="container">
+                <div class="category-header">
+                    <h2 class="section-title"><i class="fas fa-carrot"></i> Fresh Vegetables & Fruits</h2>
+                    <a href="#more-vegetables" class="view-all">See All <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="products-grid" id="vegetablesProducts">
+                    <!-- Vegetables products will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Dairy, Bread & Eggs -->
+        <section class="category-section dairy-section" id="dairy">
+            <div class="container">
+                <div class="category-header">
+                    <h2 class="section-title"><i class="fas fa-cheese"></i> Dairy, Bread & Eggs</h2>
+                    <a href="#more-dairy" class="view-all">See All <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="products-grid" id="dairyProducts">
+                    <!-- Dairy products will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Snacks & Beverages -->
+        <section class="category-section snacks-section" id="snacks">
+            <div class="container">
+                <div class="category-header">
+                    <h2 class="section-title"><i class="fas fa-cookie-bite"></i> Snacks & Beverages</h2>
+                    <a href="#more-snacks" class="view-all">See All <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="products-grid" id="snacksProducts">
+                    <!-- Snacks products will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Household & Personal Care -->
+        <section class="category-section household-section" id="household">
+            <div class="container">
+                <div class="category-header">
+                    <h2 class="section-title"><i class="fas fa-home"></i> Household & Personal Care</h2>
+                    <a href="#more-household" class="view-all">See All <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="products-grid" id="householdProducts">
+                    <!-- Household products will be loaded here -->
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Choose Us -->
+        <section class="features-section">
+            <div class="container">
+                <h2 class="section-title">Why Choose QuickCart?</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-bolt"></i>
                         </div>
-                        <p class="newsletter-note">By subscribing, you agree to our Privacy Policy and consent to receive updates.</p>
+                        <h3>Super Fast Delivery</h3>
+                        <p>Get your order delivered in just 10 minutes</p>
                     </div>
-                    <div class="newsletter-image">
-                        <img src="https://images.unsplash.com/photo-1585007600263-71228e40c8d1?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80" alt="Newsletter">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <h3>Fresh Guarantee</h3>
+                        <p>100% fresh products with quality check</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-rupee-sign"></i>
+                        </div>
+                        <h3>Best Prices</h3>
+                        <p>Guaranteed lowest prices everyday</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Safe Delivery</h3>
+                        <p>Contactless delivery & safety measures</p>
                     </div>
                 </div>
             </div>
         </section>
 
-        <!-- Cart Sidebar -->
-        <div class="cart-sidebar" id="cart-sidebar">
-            <div class="cart-header">
-                <h3><i class="fas fa-shopping-cart"></i> Shopping Cart</h3>
-                <button class="close-cart" id="close-cart">
-                    <i class="fas fa-times"></i>
-                </button>
-            </div>
-            <div class="cart-body">
-                <div class="cart-items" id="cart-items">
-                    <!-- Cart items loaded dynamically -->
-                </div>
-                <div class="empty-cart" id="empty-cart">
-                    <div class="empty-cart-icon">
-                        <i class="fas fa-shopping-basket"></i>
-                    </div>
-                    <h4>Your cart is empty</h4>
-                    <p>Add items to your cart to proceed to checkout</p>
-                    <a href="#categories" class="btn btn-primary">Start Shopping</a>
-                </div>
-            </div>
-            <div class="cart-footer" id="cart-footer">
-                <div class="cart-summary">
-                    <div class="summary-row">
-                        <span>Subtotal</span>
-                        <span id="cart-subtotal">$0.00</span>
-                    </div>
-                    <div class="summary-row">
-                        <span>Delivery</span>
-                        <span id="cart-delivery">$0.00</span>
-                    </div>
-                    <div class="summary-row total">
-                        <span>Total</span>
-                        <span id="cart-total">$0.00</span>
-                    </div>
-                    <div class="delivery-estimate">
-                        <i class="fas fa-clock"></i>
-                        <span>Estimated delivery: <strong>Today, 4-6 PM</strong></span>
-                    </div>
-                </div>
-                <button class="btn btn-primary btn-block btn-large" id="checkout-btn">
-                    <i class="fas fa-lock"></i>
-                    Proceed to Secure Checkout
-                </button>
-                <div class="payment-methods">
-                    <span>We accept:</span>
-                    <div class="payment-icons">
-                        <i class="fab fa-cc-visa"></i>
-                        <i class="fab fa-cc-mastercard"></i>
-                        <i class="fab fa-cc-amex"></i>
-                        <i class="fab fa-cc-paypal"></i>
-                        <i class="fab fa-cc-apple-pay"></i>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="cart-overlay" id="cart-overlay"></div>
-
-        <!-- Auth Modal -->
-        <div class="auth-modal" id="auth-modal">
-            <div class="auth-container">
-                <div class="auth-header">
-                    <h3>Welcome to QuickCart Pro</h3>
-                    <button class="close-auth" id="close-auth">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                
-                <div class="auth-tabs">
-                    <button class="auth-tab active" data-tab="login">
-                        <i class="fas fa-sign-in-alt"></i>
-                        Sign In
-                    </button>
-                    <button class="auth-tab" data-tab="register">
-                        <i class="fas fa-user-plus"></i>
-                        Create Account
-                    </button>
-                </div>
-                
-                <div class="auth-content">
-                    <form id="login-form" class="auth-form active">
-                        <div class="form-group">
-                            <label for="login-email">Email Address</label>
-                            <input type="email" id="login-email" placeholder="you@example.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="login-password">Password</label>
-                            <input type="password" id="login-password" placeholder="Enter your password" required>
-                            <a href="#" class="forgot-password">Forgot password?</a>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-block">
-                            <i class="fas fa-sign-in-alt"></i>
-                            Sign In
-                        </button>
-                        <div class="auth-divider">
-                            <span>or continue with</span>
-                        </div>
-                        <div class="social-auth">
-                            <button type="button" class="btn btn-social btn-google">
-                                <i class="fab fa-google"></i>
-                                Google
-                            </button>
-                            <button type="button" class="btn btn-social btn-facebook">
-                                <i class="fab fa-facebook-f"></i>
-                                Facebook
-                            </button>
-                        </div>
-                    </form>
-                    
-                    <form id="register-form" class="auth-form">
-                        <div class="form-group">
-                            <label for="register-name">Full Name</label>
-                            <input type="text" id="register-name" placeholder="John Doe" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="register-email">Email Address</label>
-                            <input type="email" id="register-email" placeholder="you@example.com" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="register-password">Password</label>
-                            <input type="password" id="register-password" placeholder="Create a password" required>
-                            <div class="password-strength">
-                                <span class="strength-label">Password strength:</span>
-                                <div class="strength-bar">
-                                    <span class="strength-level"></span>
-                                </div>
+        <!-- Download App -->
+        <section class="download-section">
+            <div class="container">
+                <div class="download-content">
+                    <h2>Get the QuickCart App</h2>
+                    <p>Experience faster shopping, exclusive app-only deals, and easier reordering</p>
+                    <div class="download-buttons">
+                        <a href="#" class="app-store">
+                            <i class="fab fa-apple"></i>
+                            <div>
+                                <span>Download on the</span>
+                                <strong>App Store</strong>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label for="register-confirm-password">Confirm Password</label>
-                            <input type="password" id="register-confirm-password" placeholder="Confirm your password" required>
-                        </div>
-                        <div class="form-group checkbox-group">
-                            <input type="checkbox" id="terms-agreement" required>
-                            <label for="terms-agreement">I agree to the <a href="#">Terms of Service</a> and <a href="#">Privacy Policy</a></label>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-block">
-                            <i class="fas fa-user-plus"></i>
-                            Create Account
-                        </button>
-                    </form>
+                        </a>
+                        <a href="#" class="play-store">
+                            <i class="fab fa-google-play"></i>
+                            <div>
+                                <span>GET IT ON</span>
+                                <strong>Google Play</strong>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="download-image">
+                    <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="QuickCart App">
                 </div>
             </div>
-            <div class="auth-overlay" id="auth-overlay"></div>
-        </div>
-
-        <!-- Quick View Modal -->
-        <div class="quickview-modal" id="quickview-modal">
-            <div class="quickview-container">
-                <!-- Quick view content will be loaded dynamically -->
-            </div>
-            <div class="quickview-overlay" id="quickview-overlay"></div>
-        </div>
+        </section>
     </main>
 
     <!-- Footer -->
-    <footer class="footer">
-        <div class="footer-main">
-            <div class="container">
-                <div class="footer-grid">
-                    <div class="footer-col footer-about">
-                        <div class="footer-logo">
-                            <i class="fas fa-shopping-basket"></i>
-                            <span>QuickCart<span class="pro">Pro</span></span>
-                        </div>
-                        <p class="footer-about-text">Your trusted online grocery store delivering fresh, high-quality products directly to your doorstep since 2015.</p>
-                        <div class="footer-apps">
-                            <h4>Get Our App</h4>
-                            <div class="app-buttons">
-                                <a href="#" class="app-btn">
-                                    <i class="fab fa-apple"></i>
-                                    <div class="app-btn-text">
-                                        <span>Download on the</span>
-                                        <strong>App Store</strong>
-                                    </div>
-                                </a>
-                                <a href="#" class="app-btn">
-                                    <i class="fab fa-google-play"></i>
-                                    <div class="app-btn-text">
-                                        <span>Get it on</span>
-                                        <strong>Google Play</strong>
-                                    </div>
-                                </a>
-                            </div>
+    <footer class="main-footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-bolt"></i>
+                        <div>
+                            <h3>QuickCart</h3>
+                            <p>Delivered in Minutes</p>
                         </div>
                     </div>
-                    
-                    <div class="footer-col">
-                        <h4 class="footer-title">Shop</h4>
-                        <ul class="footer-links">
-                            <li><a href="#fresh">Fresh Produce</a></li>
-                            <li><a href="#dairy">Dairy & Eggs</a></li>
-                            <li><a href="#meat">Meat & Seafood</a></li>
-                            <li><a href="#beverages">Beverages</a></li>
-                            <li><a href="#snacks">Snacks & Candy</a></li>
-                            <li><a href="#household">Household Essentials</a></li>
-                        </ul>
+                    <p class="footer-description">
+                        India's fastest grocery delivery service. Fresh produce, daily essentials, and more delivered to your doorstep.
+                    </p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#"><i class="fab fa-twitter"></i></a>
+                        <a href="#"><i class="fab fa-instagram"></i></a>
+                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
                     </div>
-                    
-                    <div class="footer-col">
-                        <h4 class="footer-title">Customer Service</h4>
-                        <ul class="footer-links">
-                            <li><a href="#">Contact Us</a></li>
-                            <li><a href="#">Help Center</a></li>
-                            <li><a href="#">Shipping Policy</a></li>
-                            <li><a href="#">Returns & Refunds</a></li>
-                            <li><a href="#">FAQ</a></li>
-                            <li><a href="#">Store Locator</a></li>
-                        </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <ul>
+                        <li><a href="#about">About Us</a></li>
+                        <li><a href="#careers">Careers</a></li>
+                        <li><a href="#blog">Blog</a></li>
+                        <li><a href="#press">Press</a></li>
+                        <li><a href="#contact">Contact Us</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Help & Support</h4>
+                    <ul>
+                        <li><a href="#faq">FAQs</a></li>
+                        <li><a href="#shipping">Shipping Policy</a></li>
+                        <li><a href="#returns">Returns & Refunds</a></li>
+                        <li><a href="#privacy">Privacy Policy</a></li>
+                        <li><a href="#terms">Terms of Service</a></li>
+                    </ul>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Contact Info</h4>
+                    <div class="contact-info">
+                        <p><i class="fas fa-map-marker-alt"></i> Mumbai, Maharashtra</p>
+                        <p><i class="fas fa-phone"></i> +91 1800-123-456</p>
+                        <p><i class="fas fa-envelope"></i> support@quickcart.com</p>
                     </div>
-                    
-                    <div class="footer-col">
-                        <h4 class="footer-title">Company</h4>
-                        <ul class="footer-links">
-                            <li><a href="#">About Us</a></li>
-                            <li><a href="#">Careers</a></li>
-                            <li><a href="#">Sustainability</a></li>
-                            <li><a href="#">Press</a></li>
-                            <li><a href="#">Investor Relations</a></li>
-                            <li><a href="#">Affiliate Program</a></li>
-                        </ul>
-                    </div>
-                    
-                    <div class="footer-col footer-contact">
-                        <h4 class="footer-title">Contact Info</h4>
-                        <div class="contact-info">
-                            <div class="contact-item">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <div>
-                                    <strong>Corporate Office</strong>
-                                    <p>123 Grocery Street, Food City, FC 10001</p>
-                                </div>
-                            </div>
-                            <div class="contact-item">
-                                <i class="fas fa-phone"></i>
-                                <div>
-                                    <strong>Customer Support</strong>
-                                    <p>(800) 123-4567</p>
-                                </div>
-                            </div>
-                            <div class="contact-item">
-                                <i class="fas fa-envelope"></i>
-                                <div>
-                                    <strong>Email</strong>
-                                    <p>support@quickcartpro.com</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="footer-social">
-                            <h4>Follow Us</h4>
-                            <div class="social-icons">
-                                <a href="#"><i class="fab fa-facebook-f"></i></a>
-                                <a href="#"><i class="fab fa-twitter"></i></a>
-                                <a href="#"><i class="fab fa-instagram"></i></a>
-                                <a href="#"><i class="fab fa-pinterest"></i></a>
-                                <a href="#"><i class="fab fa-youtube"></i></a>
-                                <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                            </div>
+                    <div class="payment-methods">
+                        <p>We Accept:</p>
+                        <div class="payment-icons">
+                            <i class="fab fa-cc-visa"></i>
+                            <i class="fab fa-cc-mastercard"></i>
+                            <i class="fab fa-cc-amex"></i>
+                            <i class="fab fa-cc-paypal"></i>
+                            <i class="fas fa-university"></i>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="footer-bottom">
-            <div class="container">
-                <div class="footer-bottom-content">
-                    <p>&copy; 2023 QuickCart Pro. All rights reserved.</p>
-                    <div class="footer-legal">
-                        <a href="#">Privacy Policy</a>
-                        <a href="#">Terms of Service</a>
-                        <a href="#">Cookie Policy</a>
-                        <a href="#">Do Not Sell My Info</a>
-                    </div>
-                    <div class="payment-methods-footer">
-                        <i class="fab fa-cc-visa" title="Visa"></i>
-                        <i class="fab fa-cc-mastercard" title="Mastercard"></i>
-                        <i class="fab fa-cc-amex" title="American Express"></i>
-                        <i class="fab fa-cc-discover" title="Discover"></i>
-                        <i class="fab fa-cc-paypal" title="PayPal"></i>
-                        <i class="fab fa-cc-apple-pay" title="Apple Pay"></i>
-                    </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2024 QuickCart. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#privacy">Privacy Policy</a>
+                    <a href="#terms">Terms of Use</a>
+                    <a href="#sitemap">Sitemap</a>
                 </div>
             </div>
         </div>
     </footer>
 
-    <!-- Scripts -->
+    <!-- Shopping Cart -->
+    <div class="shopping-cart" id="shoppingCart">
+        <div class="cart-header">
+            <h3><i class="fas fa-shopping-cart"></i> Your Cart</h3>
+            <button class="close-cart" id="closeCart">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        <div class="cart-body" id="cartBody">
+            <!-- Cart items will be loaded here -->
+        </div>
+        <div class="cart-footer">
+            <div class="cart-totals">
+                <div class="total-row">
+                    <span>Subtotal</span>
+                    <span id="cartSubtotal">₹0</span>
+                </div>
+                <div class="total-row">
+                    <span>Delivery</span>
+                    <span id="deliveryFee">FREE</span>
+                </div>
+                <div class="total-row grand-total">
+                    <span>Total</span>
+                    <span id="cartTotal">₹0</span>
+                </div>
+            </div>
+            <button class="btn-checkout" id="checkoutBtn">
+                <i class="fas fa-lock"></i>
+                Proceed to Checkout
+            </button>
+            <p class="cart-note"><i class="fas fa-tag"></i> You save ₹<span id="cartSavings">0</span> on this order!</p>
+        </div>
+    </div>
+    <div class="cart-overlay" id="cartOverlay"></div>
+
+    <!-- Login/Signup Modal -->
+    <div class="auth-modal" id="authModal">
+        <div class="modal-content">
+            <button class="close-modal" id="closeAuthModal">
+                <i class="fas fa-times"></i>
+            </button>
+            
+            <div class="auth-header">
+                <div class="auth-logo">
+                    <i class="fas fa-bolt"></i>
+                    <span>QuickCart</span>
+                </div>
+                <h2>Welcome Back!</h2>
+                <p>Sign in to your account to continue</p>
+            </div>
+
+            <div class="auth-tabs">
+                <button class="auth-tab active" data-tab="login">Login</button>
+                <button class="auth-tab" data-tab="signup">Sign Up</button>
+            </div>
+
+            <form class="auth-form" id="loginForm">
+                <div class="form-group">
+                    <label for="phoneNumber">
+                        <i class="fas fa-mobile-alt"></i>
+                        Phone Number
+                    </label>
+                    <div class="phone-input">
+                        <select class="country-code">
+                            <option>+91</option>
+                        </select>
+                        <input type="tel" id="phoneNumber" placeholder="Enter 10-digit number" maxlength="10" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-primary btn-block">
+                    <i class="fas fa-paper-plane"></i>
+                    Send OTP
+                </button>
+            </form>
+
+            <div class="otp-section" id="otpSection">
+                <p>Enter OTP sent to <strong id="otpPhoneNumber"></strong></p>
+                <div class="otp-inputs">
+                    <input type="text" maxlength="1" class="otp-digit">
+                    <input type="text" maxlength="1" class="otp-digit">
+                    <input type="text" maxlength="1" class="otp-digit">
+                    <input type="text" maxlength="1" class="otp-digit">
+                    <input type="text" maxlength="1" class="otp-digit">
+                    <input type="text" maxlength="1" class="otp-digit">
+                </div>
+                <button class="btn-primary btn-block" id="verifyOtpBtn">
+                    <i class="fas fa-check"></i>
+                    Verify OTP
+                </button>
+                <p class="resend-otp">
+                    Didn't receive OTP? <a href="#" id="resendOtp">Resend in 30s</a>
+                </p>
+            </div>
+
+            <div class="auth-divider">
+                <span>or continue with</span>
+            </div>
+
+            <div class="social-auth">
+                <button class="social-btn google-btn">
+                    <i class="fab fa-google"></i>
+                    Google
+                </button>
+                <button class="social-btn facebook-btn">
+                    <i class="fab fa-facebook-f"></i>
+                    Facebook
+                </button>
+            </div>
+
+            <div class="auth-footer">
+                <p>By continuing, you agree to our <a href="#terms">Terms</a> and <a href="#privacy">Privacy Policy</a></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Checkout Modal -->
+    <div class="checkout-modal" id="checkoutModal">
+        <div class="checkout-content">
+            <!-- Checkout content will be loaded dynamically -->
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- JavaScript Files -->
     <script src="js/utils.js"></script>
     <script src="js/products.js"></script>
     <script src="js/cart.js"></script>
