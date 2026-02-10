@@ -1,627 +1,899 @@
-// Enhanced Products Data and Functions for QuickCart Pro
+// ===== PRODUCTS MODULE =====
 
-const Products = {
-    // Enhanced category data
-    categories: [
+const productsModule = (() => {
+    // Products Data
+    const products = [
+        // Groceries & Staples
         {
             id: 1,
-            name: "Fresh Produce",
-            icon: "🥦",
-            description: "Vegetables & Fruits",
-            image: "https://images.unsplash.com/photo-1540420828642-fca2c5c18abb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1192&q=80",
-            color: "#4CAF50",
-            featured: true
+            name: "Basmati Rice",
+            description: "Premium quality basmati rice, perfect for biryani",
+            price: 450,
+            originalPrice: 520,
+            discount: 13,
+            category: "groceries",
+            subCategory: "rice",
+            image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "5 kg",
+            brand: "India Gate",
+            rating: 4.5,
+            deliveryTime: "10 min",
+            isFeatured: true,
+            isDeal: false,
+            tags: ["staples", "rice", "indian"]
         },
         {
             id: 2,
-            name: "Dairy & Eggs",
-            icon: "🥛",
-            description: "Milk, Cheese, Eggs",
-            image: "https://images.unsplash.com/photo-1550583724-b2692b85b150?ixlib=rb-4.0.3&auto=format&fit=crop&w=1074&q=80",
-            color: "#FF9800",
-            featured: true
+            name: "Fortune Sunflower Oil",
+            description: "Refined sunflower oil for healthy cooking",
+            price: 210,
+            originalPrice: 240,
+            discount: 12,
+            category: "groceries",
+            subCategory: "oil",
+            image: "https://images.unsplash.com/photo-1533050487297-09b450131914?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "1 L",
+            brand: "Fortune",
+            rating: 4.3,
+            deliveryTime: "10 min",
+            isFeatured: false,
+            isDeal: true,
+            tags: ["oil", "cooking", "healthy"]
         },
         {
             id: 3,
-            name: "Meat & Seafood",
-            icon: "🥩",
-            description: "Fresh Meat & Fish",
-            image: "https://images.unsplash.com/photo-1559314809-2b99056a8c4a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
-            color: "#F44336",
-            featured: true
+            name: "Aashirvaad Atta",
+            description: "Whole wheat flour for healthy rotis",
+            price: 280,
+            originalPrice: 310,
+            discount: 10,
+            category: "groceries",
+            subCategory: "flour",
+            image: "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "5 kg",
+            brand: "Aashirvaad",
+            rating: 4.6,
+            deliveryTime: "10 min",
+            isFeatured: true,
+            isDeal: false,
+            tags: ["atta", "flour", "wheat"]
         },
         {
             id: 4,
-            name: "Beverages",
-            icon: "🥤",
-            description: "Juices, Sodas, Water",
-            image: "https://images.unsplash.com/photo-1551024709-8f23befc6f87?ixlib=rb-4.0.3&auto=format&fit=crop&w=1257&q=80",
-            color: "#2196F3",
-            featured: true
+            name: "Tata Salt",
+            description: "Iodized salt for daily cooking",
+            price: 25,
+            originalPrice: 28,
+            discount: 11,
+            category: "groceries",
+            subCategory: "salt",
+            image: "https://images.unsplash.com/photo-1584735175315-9d5df23860e6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "1 kg",
+            brand: "Tata",
+            rating: 4.7,
+            deliveryTime: "10 min",
+            isFeatured: false,
+            isDeal: false,
+            tags: ["salt", "iodized", "essential"]
         },
         {
             id: 5,
-            name: "Bakery",
-            icon: "🍞",
-            description: "Bread & Pastries",
-            image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=1172&q=80",
-            color: "#795548",
-            featured: false
+            name: "MDH Garam Masala",
+            description: "Authentic Indian spice blend",
+            price: 85,
+            originalPrice: 95,
+            discount: 11,
+            category: "groceries",
+            subCategory: "spices",
+            image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "100 g",
+            brand: "MDH",
+            rating: 4.4,
+            deliveryTime: "10 min",
+            isFeatured: false,
+            isDeal: true,
+            tags: ["spices", "masala", "indian"]
         },
+
+        // Vegetables & Fruits
         {
             id: 6,
-            name: "Pantry Staples",
-            icon: "🍚",
-            description: "Rice, Pasta, Oil",
-            image: "https://images.unsplash.com/photo-1565958011703-44f9829ba187?ixlib=rb-4.0.3&auto=format&fit=crop&w=1065&q=80",
-            color: "#607D8B",
-            featured: false
+            name: "Fresh Tomatoes",
+            description: "Farm fresh tomatoes, perfect for curries",
+            price: 30,
+            originalPrice: 35,
+            discount: 14,
+            category: "vegetables",
+            subCategory: "vegetables",
+            image: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "1 kg",
+            brand: "Farm Fresh",
+            rating: 4.5,
+            deliveryTime: "10 min",
+            isFeatured: true,
+            isDeal: false,
+            tags: ["vegetables", "fresh", "tomato"]
         },
         {
             id: 7,
-            name: "Snacks",
-            icon: "🍫",
-            description: "Chips, Cookies, Candy",
-            image: "https://images.unsplash.com/photo-1574484284002-952d92456975?ixlib=rb-4.0.3&auto=format&fit=crop&w=1167&q=80",
-            color: "#9C27B0",
-            featured: false
+            name: "Potatoes",
+            description: "Fresh potatoes for all Indian dishes",
+            price: 35,
+            originalPrice: 40,
+            discount: 13,
+            category: "vegetables",
+            subCategory: "vegetables",
+            image: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "1 kg",
+            brand: "Premium",
+            rating: 4.4,
+            deliveryTime: "10 min",
+            isFeatured: false,
+            isDeal: false,
+            tags: ["vegetables", "potato", "staple"]
         },
         {
             id: 8,
-            name: "Frozen Foods",
-            icon: "❄️",
-            description: "Frozen Meals & Veggies",
-            image: "https://images.unsplash.com/photo-1613243555978-636c48dc653c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
-            color: "#03A9F4",
-            featured: false
+            name: "Fresh Apples",
+            description: "Crispy red apples, rich in antioxidants",
+            price: 150,
+            originalPrice: 180,
+            discount: 17,
+            category: "vegetables",
+            subCategory: "fruits",
+            image: "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "1 kg",
+            brand: "Washington",
+            rating: 4.7,
+            deliveryTime: "10 min",
+            isFeatured: true,
+            isDeal: true,
+            tags: ["fruits", "apple", "fresh"]
         },
         {
             id: 9,
-            name: "Organic",
-            icon: "🌿",
-            description: "Organic Products",
-            image: "https://images.unsplash.com/photo-1597362925123-77861d3fbac7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
-            color: "#8BC34A",
-            featured: true
+            name: "Bananas",
+            description: "Fresh yellow bananas, naturally ripe",
+            price: 50,
+            originalPrice: 60,
+            discount: 17,
+            category: "vegetables",
+            subCategory: "fruits",
+            image: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "1 dozen",
+            brand: "Farm Fresh",
+            rating: 4.5,
+            deliveryTime: "10 min",
+            isFeatured: false,
+            isDeal: false,
+            tags: ["fruits", "banana", "healthy"]
         },
         {
             id: 10,
-            name: "Household",
-            icon: "🏠",
-            description: "Cleaning & Essentials",
-            image: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?ixlib=rb-4.0.3&auto=format&fit=crop&w=1158&q=80",
-            color: "#9E9E9E",
-            featured: false
-        }
-    ],
-
-    // Enhanced product data with more details
-    products: [
-        // Fresh Produce
-        {
-            id: 101,
-            name: "Organic Bananas",
-            category: "Fresh Produce",
-            subcategory: "Fruits",
-            price: 0.69,
-            originalPrice: 0.79,
-            description: "Fresh organic bananas, perfect for smoothies or snacks. Grown sustainably in Ecuador.",
-            image: "https://images.unsplash.com/photo-1603833665858-e61d17a86224?ixlib=rb-4.0.3&auto=format&fit=crop&w=627&q=80",
-            unit: "per lb",
-            weight: "1 lb",
-            organic: true,
-            featured: true,
-            deal: false,
-            rating: 4.5,
-            reviews: 128,
-            stock: 150,
-            tags: ["organic", "fruit", "healthy"]
-        },
-        {
-            id: 102,
-            name: "Fresh Strawberries",
-            category: "Fresh Produce",
-            subcategory: "Berries",
-            price: 3.99,
-            originalPrice: 4.99,
-            description: "Sweet and juicy California strawberries. Picked at peak ripeness for maximum flavor.",
-            image: "https://images.unsplash.com/photo-1464965911861-746a04b4bca6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
-            unit: "1 lb container",
-            weight: "1 lb",
-            organic: false,
-            featured: true,
-            deal: true,
-            rating: 4.8,
-            reviews: 89,
-            stock: 75,
-            tags: ["berry", "fresh", "sweet"]
-        },
-        {
-            id: 103,
-            name: "Organic Avocados",
-            category: "Fresh Produce",
-            subcategory: "Vegetables",
-            price: 1.99,
-            originalPrice: 2.49,
-            description: "Creamy Hass avocados, perfect for guacamole, salads, or toast. Organic and sustainably grown.",
-            image: "https://images.unsplash.com/photo-1523049673857-eb18f1d7b578?ixlib=rb-4.0.3&auto=format&fit=crop&w=1074&q=80",
-            unit: "each",
-            weight: "medium",
-            organic: true,
-            featured: true,
-            deal: false,
-            rating: 4.6,
-            reviews: 203,
-            stock: 200,
-            tags: ["organic", "healthy", "superfood"]
-        },
-        {
-            id: 104,
-            name: "Fresh Milk",
-            category: "Dairy & Eggs",
-            subcategory: "Dairy",
-            price: 3.49,
-            originalPrice: null,
-            description: "Whole milk, 1 gallon. From local farms, pasteurized for safety and freshness.",
-            image: "https://images.unsplash.com/photo-1563636619-e9143da7973b?ixlib=rb-4.0.3&auto=format&fit=crop&w=1156&q=80",
-            unit: "1 gallon",
-            weight: "1 gallon",
-            organic: false,
-            featured: false,
-            deal: false,
+            name: "Carrots",
+            description: "Fresh carrots, rich in vitamins",
+            price: 40,
+            originalPrice: 45,
+            discount: 11,
+            category: "vegetables",
+            subCategory: "vegetables",
+            image: "https://images.unsplash.com/photo-1598170845058-78131a90f4bf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "500 g",
+            brand: "Premium",
             rating: 4.3,
-            reviews: 156,
-            stock: 120,
-            tags: ["dairy", "fresh", "local"]
+            deliveryTime: "10 min",
+            isFeatured: false,
+            isDeal: true,
+            tags: ["vegetables", "carrot", "healthy"]
         },
+
+        // Dairy, Bread & Eggs
         {
-            id: 105,
-            name: "Organic Eggs",
-            category: "Dairy & Eggs",
-            subcategory: "Eggs",
-            price: 4.99,
-            originalPrice: 5.99,
-            description: "Free-range organic eggs, dozen. From chickens raised on organic feed with access to pasture.",
-            image: "https://images.unsplash.com/photo-1582722872445-44dc5f7e3c8f?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
-            unit: "dozen",
-            weight: "12 eggs",
-            organic: true,
-            featured: true,
-            deal: true,
-            rating: 4.7,
-            reviews: 312,
-            stock: 180,
-            tags: ["organic", "free-range", "protein"]
-        },
-        {
-            id: 106,
-            name: "Cheddar Cheese",
-            category: "Dairy & Eggs",
-            subcategory: "Cheese",
-            price: 4.49,
-            originalPrice: null,
-            description: "Sharp cheddar cheese block. Aged for 6 months for rich, tangy flavor.",
-            image: "https://images.unsplash.com/photo-1566385101042-1a0f0c126a96?ixlib=rb-4.0.3&auto=format&fit=crop&w=1331&q=80",
-            unit: "8 oz",
-            weight: "8 oz",
-            organic: false,
-            featured: false,
-            deal: false,
-            rating: 4.4,
-            reviews: 89,
-            stock: 95,
-            tags: ["cheese", "dairy", "aged"]
-        },
-        {
-            id: 107,
-            name: "Ground Beef",
-            category: "Meat & Seafood",
-            subcategory: "Beef",
-            price: 5.99,
-            originalPrice: 6.99,
-            description: "80/20 lean ground beef. Perfect for burgers, meatballs, or tacos.",
-            image: "https://images.unsplash.com/photo-1546833999-b9f581a1996d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
-            unit: "per lb",
-            weight: "1 lb",
-            organic: false,
-            featured: true,
-            deal: true,
-            rating: 4.5,
-            reviews: 167,
-            stock: 80,
-            tags: ["beef", "protein", "fresh"]
-        },
-        {
-            id: 108,
-            name: "Atlantic Salmon",
-            category: "Meat & Seafood",
-            subcategory: "Seafood",
-            price: 9.99,
-            originalPrice: 12.99,
-            description: "Fresh Atlantic salmon fillets. Wild-caught, rich in omega-3 fatty acids.",
-            image: "https://images.unsplash.com/photo-1599084993091-1cb5c0721cc6?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
-            unit: "per lb",
-            weight: "1 lb",
-            organic: false,
-            featured: true,
-            deal: true,
-            rating: 4.9,
-            reviews: 245,
-            stock: 45,
-            tags: ["seafood", "healthy", "omega-3"]
-        },
-        {
-            id: 109,
-            name: "Boneless Chicken Breast",
-            category: "Meat & Seafood",
-            subcategory: "Poultry",
-            price: 3.99,
-            originalPrice: null,
-            description: "Fresh boneless skinless chicken breast. Raised without antibiotics.",
-            image: "https://images.unsplash.com/photo-1604503468506-9f2c0fcb8e6a?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
-            unit: "per lb",
-            weight: "1 lb",
-            organic: false,
-            featured: false,
-            deal: false,
+            id: 11,
+            name: "Amul Gold Milk",
+            description: "Full cream milk, pasteurized",
+            price: 32,
+            originalPrice: 34,
+            discount: 6,
+            category: "dairy",
+            subCategory: "milk",
+            image: "https://images.unsplash.com/photo-1563636619-e9143da7973b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "500 ml",
+            brand: "Amul",
             rating: 4.6,
-            reviews: 189,
-            stock: 150,
-            tags: ["chicken", "protein", "antibiotic-free"]
-        },
-        // Add more products for variety
-        {
-            id: 110,
-            name: "Orange Juice",
-            category: "Beverages",
-            subcategory: "Juices",
-            price: 3.79,
-            originalPrice: 4.29,
-            description: "100% pure orange juice, not from concentrate. No added sugars or preservatives.",
-            image: "https://images.unsplash.com/photo-1600271886742-f049cd451bba?ixlib=rb-4.0.3&auto=format&fit=crop&w=687&q=80",
-            unit: "64 oz",
-            weight: "64 oz",
-            organic: false,
-            featured: false,
-            deal: true,
-            rating: 4.4,
-            reviews: 134,
-            stock: 200,
-            tags: ["juice", "vitamin-c", "fresh"]
+            deliveryTime: "10 min",
+            isFeatured: true,
+            isDeal: false,
+            tags: ["dairy", "milk", "amul"]
         },
         {
-            id: 111,
-            name: "Bottled Water",
-            category: "Beverages",
-            subcategory: "Water",
-            price: 4.99,
-            originalPrice: null,
-            description: "Purified drinking water, 24-pack. Great for hydration at home or on the go.",
-            image: "https://images.unsplash.com/photo-1523362628745-0c100150b504?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
-            unit: "24-pack",
-            weight: "24 bottles",
-            organic: false,
-            featured: false,
-            deal: false,
-            rating: 4.2,
-            reviews: 78,
-            stock: 300,
-            tags: ["water", "hydration", "essential"]
-        },
-        {
-            id: 112,
-            name: "Artisan Bread",
-            category: "Bakery",
-            subcategory: "Bread",
-            price: 4.49,
-            originalPrice: 4.99,
-            description: "Freshly baked artisan sourdough bread. Made with simple, natural ingredients.",
-            image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?ixlib=rb-4.0.3&auto=format&fit=crop&w=1172&q=80",
-            unit: "loaf",
-            weight: "1 lb",
-            organic: true,
-            featured: true,
-            deal: false,
-            rating: 4.7,
-            reviews: 156,
-            stock: 60,
-            tags: ["bread", "artisan", "sourdough"]
-        },
-        {
-            id: 113,
-            name: "Organic Spinach",
-            category: "Fresh Produce",
-            subcategory: "Leafy Greens",
-            price: 2.99,
-            originalPrice: null,
-            description: "Fresh organic baby spinach. Perfect for salads, smoothies, or sautéing.",
-            image: "https://images.unsplash.com/photo-1576045057995-568f588f82fb?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
-            unit: "5 oz bag",
-            weight: "5 oz",
-            organic: true,
-            featured: false,
-            deal: false,
+            id: 12,
+            name: "Fresh Eggs",
+            description: "Farm fresh brown eggs",
+            price: 60,
+            originalPrice: 65,
+            discount: 8,
+            category: "dairy",
+            subCategory: "eggs",
+            image: "https://images.unsplash.com/photo-1562043231-4b0c897c3aa3?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "6 pieces",
+            brand: "Farm Fresh",
             rating: 4.5,
-            reviews: 98,
-            stock: 120,
-            tags: ["organic", "greens", "healthy"]
+            deliveryTime: "10 min",
+            isFeatured: false,
+            isDeal: true,
+            tags: ["dairy", "eggs", "protein"]
         },
         {
-            id: 114,
-            name: "Greek Yogurt",
-            category: "Dairy & Eggs",
-            subcategory: "Yogurt",
-            price: 1.29,
-            originalPrice: 1.49,
-            description: "Plain non-fat Greek yogurt. High in protein, perfect for breakfast or snacks.",
-            image: "https://images.unsplash.com/photo-1551782450-17144ef8c57c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1169&q=80",
-            unit: "5.3 oz",
-            weight: "5.3 oz",
-            organic: false,
-            featured: false,
-            deal: true,
-            rating: 4.6,
-            reviews: 210,
-            stock: 250,
-            tags: ["yogurt", "protein", "healthy"]
+            id: 13,
+            name: "Amul Butter",
+            description: "Pure butter made from fresh cream",
+            price: 50,
+            originalPrice: 55,
+            discount: 9,
+            category: "dairy",
+            subCategory: "butter",
+            image: "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "100 g",
+            brand: "Amul",
+            rating: 4.7,
+            deliveryTime: "10 min",
+            isFeatured: false,
+            isDeal: false,
+            tags: ["dairy", "butter", "amul"]
         },
         {
-            id: 115,
-            name: "Fresh Tomatoes",
-            category: "Fresh Produce",
-            subcategory: "Vegetables",
-            price: 1.99,
-            originalPrice: null,
-            description: "Vine-ripened tomatoes. Juicy and flavorful, great for salads or cooking.",
-            image: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
-            unit: "per lb",
-            weight: "1 lb",
-            organic: false,
-            featured: false,
-            deal: false,
+            id: 14,
+            name: "Britannia Bread",
+            description: "Fresh whole wheat bread",
+            price: 35,
+            originalPrice: 40,
+            discount: 13,
+            category: "dairy",
+            subCategory: "bread",
+            image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "400 g",
+            brand: "Britannia",
             rating: 4.3,
-            reviews: 76,
-            stock: 180,
-            tags: ["vegetable", "fresh", "versatile"]
+            deliveryTime: "10 min",
+            isFeatured: true,
+            isDeal: false,
+            tags: ["dairy", "bread", "britannia"]
         },
         {
-            id: 116,
-            name: "Potato Chips",
-            category: "Snacks",
-            subcategory: "Chips",
-            price: 2.99,
-            originalPrice: 3.49,
-            description: "Classic potato chips. Thinly sliced and perfectly salted for maximum crunch.",
-            image: "https://images.unsplash.com/photo-1578500494198-246f612d3b3d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
-            unit: "8 oz bag",
-            weight: "8 oz",
-            organic: false,
-            featured: false,
-            deal: true,
-            rating: 4.1,
-            reviews: 145,
-            stock: 300,
-            tags: ["snack", "chips", "crunchy"]
-        },
-        {
-            id: 117,
-            name: "Organic Quinoa",
-            category: "Pantry Staples",
-            subcategory: "Grains",
-            price: 5.99,
-            originalPrice: 6.99,
-            description: "Organic quinoa. High-protein ancient grain, perfect for salads and bowls.",
-            image: "https://images.unsplash.com/photo-1598962084154-7c91a6241a54?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
-            unit: "16 oz bag",
-            weight: "16 oz",
-            organic: true,
-            featured: true,
-            deal: true,
-            rating: 4.8,
-            reviews: 189,
-            stock: 90,
-            tags: ["organic", "grain", "protein"]
-        },
-        {
-            id: 118,
-            name: "Extra Virgin Olive Oil",
-            category: "Pantry Staples",
-            subcategory: "Oils",
-            price: 8.99,
-            originalPrice: 10.99,
-            description: "Premium extra virgin olive oil. Cold-pressed for maximum flavor and nutrients.",
-            image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
-            unit: "17 oz bottle",
-            weight: "17 oz",
-            organic: true,
-            featured: true,
-            deal: false,
-            rating: 4.9,
-            reviews: 267,
-            stock: 75,
-            tags: ["oil", "healthy", "premium"]
-        },
-        {
-            id: 119,
-            name: "Dark Chocolate",
-            category: "Snacks",
-            subcategory: "Chocolate",
-            price: 3.49,
-            originalPrice: 3.99,
-            description: "70% dark chocolate bar. Rich in antioxidants with a smooth, bittersweet flavor.",
-            image: "https://images.unsplash.com/photo-1575377427642-087cf684f29d?ixlib=rb-4.0.3&auto=format&fit=crop&w=687&q=80",
-            unit: "3.5 oz bar",
-            weight: "3.5 oz",
-            organic: true,
-            featured: false,
-            deal: true,
-            rating: 4.7,
-            reviews: 198,
-            stock: 150,
-            tags: ["chocolate", "dark", "antioxidants"]
-        },
-        {
-            id: 120,
-            name: "Frozen Mixed Berries",
-            category: "Frozen Foods",
-            subcategory: "Frozen Fruits",
-            price: 6.99,
-            originalPrice: 7.99,
-            description: "Frozen mixed berries. Perfect for smoothies, baking, or as a healthy dessert.",
-            image: "https://images.unsplash.com/photo-1577234286642-fc512a5f8f11?ixlib=rb-4.0.3&auto=format&fit=crop&w=1170&q=80",
-            unit: "32 oz bag",
-            weight: "32 oz",
-            organic: false,
-            featured: false,
-            deal: false,
+            id: 15,
+            name: "Amul Cheese Slices",
+            description: "Processed cheese slices",
+            price: 45,
+            originalPrice: 50,
+            discount: 10,
+            category: "dairy",
+            subCategory: "cheese",
+            image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "100 g",
+            brand: "Amul",
             rating: 4.4,
-            reviews: 112,
-            stock: 200,
-            tags: ["frozen", "berries", "smoothie"]
+            deliveryTime: "10 min",
+            isFeatured: false,
+            isDeal: true,
+            tags: ["dairy", "cheese", "amul"]
+        },
+
+        // Snacks & Beverages
+        {
+            id: 16,
+            name: "Lays Potato Chips",
+            description: "Classic salted potato chips",
+            price: 20,
+            originalPrice: 25,
+            discount: 20,
+            category: "snacks",
+            subCategory: "chips",
+            image: "https://images.unsplash.com/photo-1566478989037-eec170784d0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "50 g",
+            brand: "Lays",
+            rating: 4.4,
+            deliveryTime: "10 min",
+            isFeatured: true,
+            isDeal: false,
+            tags: ["snacks", "chips", "lays"]
+        },
+        {
+            id: 17,
+            name: "Coca Cola",
+            description: "Refreshing carbonated drink",
+            price: 40,
+            originalPrice: 45,
+            discount: 11,
+            category: "snacks",
+            subCategory: "beverages",
+            image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "750 ml",
+            brand: "Coca Cola",
+            rating: 4.5,
+            deliveryTime: "10 min",
+            isFeatured: false,
+            isDeal: true,
+            tags: ["beverages", "soft drink", "cola"]
+        },
+        {
+            id: 18,
+            name: "Britannia Good Day Cookies",
+            description: "Butter cookies with cashew",
+            price: 35,
+            originalPrice: 40,
+            discount: 13,
+            category: "snacks",
+            subCategory: "biscuits",
+            image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "100 g",
+            brand: "Britannia",
+            rating: 4.6,
+            deliveryTime: "10 min",
+            isFeatured: false,
+            isDeal: false,
+            tags: ["snacks", "cookies", "britannia"]
+        },
+        {
+            id: 19,
+            name: "Maggi Noodles",
+            description: "2-minute masala noodles",
+            price: 15,
+            originalPrice: 20,
+            discount: 25,
+            category: "snacks",
+            subCategory: "noodles",
+            image: "https://images.unsplash.com/photo-1612927601601-6638404737ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "70 g",
+            brand: "Nestle",
+            rating: 4.8,
+            deliveryTime: "10 min",
+            isFeatured: true,
+            isDeal: true,
+            tags: ["snacks", "noodles", "maggi"]
+        },
+        {
+            id: 20,
+            name: "Parle-G Biscuits",
+            description: "Glucose biscuits, perfect with tea",
+            price: 10,
+            originalPrice: 12,
+            discount: 17,
+            category: "snacks",
+            subCategory: "biscuits",
+            image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "100 g",
+            brand: "Parle",
+            rating: 4.7,
+            deliveryTime: "10 min",
+            isFeatured: false,
+            isDeal: false,
+            tags: ["snacks", "biscuits", "parle"]
+        },
+
+        // Household Care
+        {
+            id: 21,
+            name: "Surf Excel Detergent",
+            description: "Matic front load detergent powder",
+            price: 150,
+            originalPrice: 170,
+            discount: 12,
+            category: "household",
+            subCategory: "detergent",
+            image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "1 kg",
+            brand: "Surf Excel",
+            rating: 4.4,
+            deliveryTime: "10 min",
+            isFeatured: true,
+            isDeal: false,
+            tags: ["household", "detergent", "cleaning"]
+        },
+        {
+            id: 22,
+            name: "Domex Floor Cleaner",
+            description: "Multipurpose floor cleaner",
+            price: 180,
+            originalPrice: 200,
+            discount: 10,
+            category: "household",
+            subCategory: "cleaner",
+            image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "1 L",
+            brand: "Domex",
+            rating: 4.3,
+            deliveryTime: "10 min",
+            isFeatured: false,
+            isDeal: true,
+            tags: ["household", "cleaner", "floor"]
+        },
+        {
+            id: 23,
+            name: "Vim Dishwash Gel",
+            description: "Lemon powered dishwashing gel",
+            price: 85,
+            originalPrice: 95,
+            discount: 11,
+            category: "household",
+            subCategory: "dishwash",
+            image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "500 ml",
+            brand: "Vim",
+            rating: 4.5,
+            deliveryTime: "10 min",
+            isFeatured: false,
+            isDeal: false,
+            tags: ["household", "dishwash", "cleaning"]
+        },
+        {
+            id: 24,
+            name: "Harpic Toilet Cleaner",
+            description: "Powerful toilet cleaner",
+            price: 120,
+            originalPrice: 135,
+            discount: 11,
+            category: "household",
+            subCategory: "cleaner",
+            image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "1 L",
+            brand: "Harpic",
+            rating: 4.4,
+            deliveryTime: "10 min",
+            isFeatured: true,
+            isDeal: false,
+            tags: ["household", "cleaner", "toilet"]
+        },
+        {
+            id: 25,
+            name: "Good Knight Mosquito Repellent",
+            description: "Fast action mosquito repellent",
+            price: 45,
+            originalPrice: 50,
+            discount: 10,
+            category: "household",
+            subCategory: "repellent",
+            image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "1 unit",
+            brand: "Good Knight",
+            rating: 4.6,
+            deliveryTime: "10 min",
+            isFeatured: false,
+            isDeal: true,
+            tags: ["household", "repellent", "mosquito"]
+        },
+
+        // Featured Deals
+        {
+            id: 26,
+            name: "Dairy Milk Silk",
+            description: "Premium chocolate bar",
+            price: 90,
+            originalPrice: 120,
+            discount: 25,
+            category: "snacks",
+            subCategory: "chocolate",
+            image: "https://images.unsplash.com/photo-1570913199992-91d07c140e7a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "150 g",
+            brand: "Cadbury",
+            rating: 4.7,
+            deliveryTime: "10 min",
+            isFeatured: false,
+            isDeal: true,
+            tags: ["snacks", "chocolate", "cadbury"]
+        },
+        {
+            id: 27,
+            name: "Tata Tea Gold",
+            description: "Premium tea leaves",
+            price: 120,
+            originalPrice: 150,
+            discount: 20,
+            category: "groceries",
+            subCategory: "tea",
+            image: "https://images.unsplash.com/photo-1561047029-3000c68339ca?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "250 g",
+            brand: "Tata",
+            rating: 4.4,
+            deliveryTime: "10 min",
+            isFeatured: false,
+            isDeal: true,
+            tags: ["groceries", "tea", "tata"]
+        },
+        {
+            id: 28,
+            name: "Nivea Body Lotion",
+            description: "Moisturizing body lotion",
+            price: 200,
+            originalPrice: 250,
+            discount: 20,
+            category: "personal-care",
+            subCategory: "lotion",
+            image: "https://images.unsplash.com/photo-1522338242990-8ea4c8c8bcc2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "200 ml",
+            brand: "Nivea",
+            rating: 4.5,
+            deliveryTime: "10 min",
+            isFeatured: false,
+            isDeal: true,
+            tags: ["personal-care", "lotion", "nivea"]
+        },
+        {
+            id: 29,
+            name: "Dettol Hand Sanitizer",
+            description: "Alcohol based hand sanitizer",
+            price: 60,
+            originalPrice: 80,
+            discount: 25,
+            category: "personal-care",
+            subCategory: "sanitizer",
+            image: "https://images.unsplash.com/photo-1583947581924-860bda6a26df?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "200 ml",
+            brand: "Dettol",
+            rating: 4.6,
+            deliveryTime: "10 min",
+            isFeatured: false,
+            isDeal: true,
+            tags: ["personal-care", "sanitizer", "dettol"]
+        },
+        {
+            id: 30,
+            name: "Kurkure Masala Munch",
+            description: "Spicy corn snacks",
+            price: 20,
+            originalPrice: 25,
+            discount: 20,
+            category: "snacks",
+            subCategory: "namkeen",
+            image: "https://images.unsplash.com/photo-1566478989037-eec170784d0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
+            unit: "50 g",
+            brand: "Kurkure",
+            rating: 4.3,
+            deliveryTime: "10 min",
+            isFeatured: false,
+            isDeal: true,
+            tags: ["snacks", "namkeen", "kurkure"]
         }
-    ],
+    ];
 
-    // Enhanced product methods
-    getAllProducts: function() {
-        return this.products;
-    },
+    // Categories Data
+    const categories = [
+        {
+            id: 1,
+            name: "Groceries & Staples",
+            icon: "fas fa-shopping-basket",
+            description: "Rice, Dal, Oil, Masala & more",
+            productCount: 50,
+            color: "#00B894"
+        },
+        {
+            id: 2,
+            name: "Vegetables & Fruits",
+            icon: "fas fa-carrot",
+            description: "Fresh produce, organic options",
+            productCount: 45,
+            color: "#E17055"
+        },
+        {
+            id: 3,
+            name: "Dairy, Bread & Eggs",
+            icon: "fas fa-cheese",
+            description: "Milk, Eggs, Butter, Bread",
+            productCount: 35,
+            color: "#FDCB6E"
+        },
+        {
+            id: 4,
+            name: "Meat & Fish",
+            icon: "fas fa-drumstick-bite",
+            description: "Chicken, Mutton, Fish, Seafood",
+            productCount: 25,
+            color: "#D63031"
+        },
+        {
+            id: 5,
+            name: "Snacks & Beverages",
+            icon: "fas fa-cookie-bite",
+            description: "Chips, Drinks, Biscuits, Chocolates",
+            productCount: 40,
+            color: "#6C5CE7"
+        },
+        {
+            id: 6,
+            name: "Household Care",
+            icon: "fas fa-home",
+            description: "Cleaning, Detergents, Tools",
+            productCount: 38,
+            color: "#0984E3"
+        },
+        {
+            id: 7,
+            name: "Personal Care",
+            icon: "fas fa-spa",
+            description: "Shampoo, Soap, Cosmetics",
+            productCount: 42,
+            color: "#FD79A8"
+        },
+        {
+            id: 8,
+            name: "Electronics",
+            icon: "fas fa-laptop",
+            description: "Earphones, Chargers, Appliances",
+            productCount: 22,
+            color: "#636E72"
+        },
+        {
+            id: 9,
+            name: "Pharma & Wellness",
+            icon: "fas fa-pills",
+            description: "Medicines, Supplements, Devices",
+            productCount: 30,
+            color: "#00B894"
+        },
+        {
+            id: 10,
+            name: "Baby Care",
+            icon: "fas fa-baby",
+            description: "Diapers, Baby Food, Wipes",
+            productCount: 20,
+            color: "#A29BFE"
+        },
+        {
+            id: 11,
+            name: "Pet Care",
+            icon: "fas fa-paw",
+            description: "Pet Food, Toys, Accessories",
+            productCount: 18,
+            color: "#E17055"
+        },
+        {
+            id: 12,
+            name: "Home & Office",
+            icon: "fas fa-building",
+            description: "Stationery, Decor, Storage",
+            productCount: 28,
+            color: "#FDCB6E"
+        }
+    ];
 
-    getFeaturedProducts: function() {
-        return this.products.filter(product => product.featured);
-    },
+    // State
+    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
-    getDealProducts: function() {
-        return this.products.filter(product => product.deal);
-    },
+    // Public Methods
+    const init = () => {
+        console.log('Products module initialized');
+        loadCategories();
+        loadProducts();
+    };
 
-    getProductsByCategory: function(category) {
-        return this.products.filter(product => product.category === category);
-    },
+    const loadCategories = () => {
+        const categoriesGrid = $('#categoriesGrid');
+        if (!categoriesGrid) return;
 
-    getProductById: function(id) {
-        return this.products.find(product => product.id === id);
-    },
-
-    getAllCategories: function() {
-        return this.categories;
-    },
-
-    getFeaturedCategories: function() {
-        return this.categories.filter(category => category.featured);
-    },
-
-    searchProducts: function(query) {
-        if (!query) return [];
+        categoriesGrid.innerHTML = '';
         
-        const searchTerm = query.toLowerCase().trim();
-        return this.products.filter(product => 
-            product.name.toLowerCase().includes(searchTerm) || 
+        categories.forEach((category, index) => {
+            const categoryCard = createCategoryCard(category, index);
+            categoriesGrid.appendChild(categoryCard);
+        });
+    };
+
+    const createCategoryCard = (category, index) => {
+        const card = utils.createElement('a', 'category-card stagger-item');
+        card.href = `#${category.name.toLowerCase().replace(/ /g, '-')}`;
+        card.style.animationDelay = `${index * 0.1}s`;
+        
+        card.innerHTML = `
+            <div class="category-icon" style="background-color: ${category.color}20; color: ${category.color}">
+                <i class="${category.icon}"></i>
+            </div>
+            <h3>${category.name}</h3>
+            <p>${category.description}</p>
+            <span class="product-count">${category.productCount} products</span>
+        `;
+        
+        card.addEventListener('click', (e) => {
+            e.preventDefault();
+            filterProductsByCategory(category.name);
+            utils.scrollTo(document.getElementById(category.name.toLowerCase().replace(/ /g, '-')));
+        });
+        
+        return card;
+    };
+
+    const loadProducts = () => {
+        loadFlashSaleProducts();
+        loadFeaturedProducts();
+        loadCategoryProducts('groceries', 'groceriesProducts');
+        loadCategoryProducts('vegetables', 'vegetablesProducts');
+        loadCategoryProducts('dairy', 'dairyProducts');
+        loadCategoryProducts('snacks', 'snacksProducts');
+        loadCategoryProducts('household', 'householdProducts');
+    };
+
+    const loadFlashSaleProducts = () => {
+        const container = $('#flashSaleProducts');
+        if (!container) return;
+        
+        const flashProducts = products.filter(p => p.isDeal).slice(0, 4);
+        container.innerHTML = '';
+        
+        flashProducts.forEach((product, index) => {
+            const productCard = createProductCard(product, true, index);
+            container.appendChild(productCard);
+        });
+    };
+
+    const loadFeaturedProducts = () => {
+        const container = $('#featuredProducts');
+        if (!container) return;
+        
+        const featuredProducts = products.filter(p => p.isFeatured).slice(0, 8);
+        container.innerHTML = '';
+        
+        featuredProducts.forEach((product, index) => {
+            const productCard = createProductCard(product, false, index);
+            container.appendChild(productCard);
+        });
+    };
+
+    const loadCategoryProducts = (category, elementId) => {
+        const container = $(`#${elementId}`);
+        if (!container) return;
+        
+        const categoryProducts = products
+            .filter(p => p.category === category)
+            .slice(0, 4);
+        
+        container.innerHTML = '';
+        
+        categoryProducts.forEach((product, index) => {
+            const productCard = createProductCard(product, false, index);
+            container.appendChild(productCard);
+        });
+    };
+
+    const createProductCard = (product, isDeal = false, index = 0) => {
+        const card = utils.createElement('div', `product-card stagger-item`);
+        card.style.animationDelay = `${index * 0.1}s`;
+        card.dataset.id = product.id;
+        
+        const discountPercentage = product.originalPrice ? 
+            Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) : 
+            product.discount;
+        
+        card.innerHTML = `
+            ${discountPercentage > 0 ? `<div class="product-badge">${discountPercentage}% OFF</div>` : ''}
+            <div class="product-image">
+                <img src="${product.image}" alt="${product.name}" loading="lazy">
+            </div>
+            <div class="product-content">
+                <h3 class="product-title">${product.name}</h3>
+                <p class="product-description">${product.description}</p>
+                <div class="product-price">
+                    <div>
+                        <span class="price-current">${utils.formatCurrency(product.price)}</span>
+                        ${product.originalPrice ? `<span class="price-original">${utils.formatCurrency(product.originalPrice)}</span>` : ''}
+                    </div>
+                    ${discountPercentage > 0 ? `<span class="price-discount">${discountPercentage}% OFF</span>` : ''}
+                </div>
+                <p class="product-unit">${product.unit}</p>
+                <div class="product-actions">
+                    <button class="btn-add-cart" data-id="${product.id}">
+                        <i class="fas fa-cart-plus"></i>
+                        Add to Cart
+                    </button>
+                    <button class="btn-favorite ${isFavorite(product.id) ? 'active' : ''}" data-id="${product.id}">
+                        <i class="fas fa-heart"></i>
+                    </button>
+                </div>
+            </div>
+        `;
+        
+        // Add event listeners
+        const addCartBtn = card.querySelector('.btn-add-cart');
+        const favoriteBtn = card.querySelector('.btn-favorite');
+        
+        addCartBtn.addEventListener('click', () => {
+            window.addToCart(product.id, 1);
+            utils.showNotification(`${product.name} added to cart!`, 'success');
+            utils.animate(addCartBtn, 'animate-cart-add');
+        });
+        
+        favoriteBtn.addEventListener('click', () => {
+            toggleFavorite(product.id);
+            const isFav = isFavorite(product.id);
+            utils.toggleClass(favoriteBtn, 'active');
+            utils.showNotification(
+                isFav ? 'Added to favorites!' : 'Removed from favorites',
+                isFav ? 'success' : 'info'
+            );
+            utils.animate(favoriteBtn, 'animate-heart-beat');
+        });
+        
+        return card;
+    };
+
+    const getProductById = (id) => {
+        return products.find(product => product.id === id);
+    };
+
+    const getProductsByCategory = (category) => {
+        return products.filter(product => product.category === category);
+    };
+
+    const searchProducts = (query) => {
+        const searchTerm = query.toLowerCase();
+        return products.filter(product =>
+            product.name.toLowerCase().includes(searchTerm) ||
             product.description.toLowerCase().includes(searchTerm) ||
             product.category.toLowerCase().includes(searchTerm) ||
-            product.subcategory.toLowerCase().includes(searchTerm) ||
+            product.brand.toLowerCase().includes(searchTerm) ||
             product.tags.some(tag => tag.toLowerCase().includes(searchTerm))
         );
-    },
+    };
 
-    filterProducts: function(options) {
-        let filtered = [...this.products];
-        
-        if (options.category) {
-            filtered = filtered.filter(p => p.category === options.category);
+    const filterProductsByCategory = (category) => {
+        const categoryProducts = getProductsByCategory(category.toLowerCase());
+        // In a real app, this would update the products grid
+        console.log(`Filtering by category: ${category}`, categoryProducts);
+        return categoryProducts;
+    };
+
+    const getFeaturedProducts = () => {
+        return products.filter(product => product.isFeatured);
+    };
+
+    const getDealProducts = () => {
+        return products.filter(product => product.isDeal);
+    };
+
+    const toggleFavorite = (productId) => {
+        const index = favorites.indexOf(productId);
+        if (index === -1) {
+            favorites.push(productId);
+        } else {
+            favorites.splice(index, 1);
         }
-        
-        if (options.organic) {
-            filtered = filtered.filter(p => p.organic === true);
-        }
-        
-        if (options.minPrice !== undefined) {
-            filtered = filtered.filter(p => p.price >= options.minPrice);
-        }
-        
-        if (options.maxPrice !== undefined) {
-            filtered = filtered.filter(p => p.price <= options.maxPrice);
-        }
-        
-        if (options.sortBy) {
-            switch (options.sortBy) {
-                case 'price-asc':
-                    filtered.sort((a, b) => a.price - b.price);
-                    break;
-                case 'price-desc':
-                    filtered.sort((a, b) => b.price - a.price);
-                    break;
-                case 'rating':
-                    filtered.sort((a, b) => b.rating - a.rating);
-                    break;
-                case 'name':
-                    filtered.sort((a, b) => a.name.localeCompare(b.name));
-                    break;
-            }
-        }
-        
-        return filtered;
-    },
+        utils.storage.set('favorites', favorites);
+        return index === -1; // Returns true if added, false if removed
+    };
 
-    getRelatedProducts: function(productId, limit = 4) {
-        const product = this.getProductById(productId);
-        if (!product) return [];
-        
-        return this.products
-            .filter(p => 
-                p.id !== productId && 
-                (p.category === product.category || p.subcategory === product.subcategory)
-            )
-            .slice(0, limit);
-    },
+    const isFavorite = (productId) => {
+        return favorites.includes(productId);
+    };
 
-    getTopRatedProducts: function(limit = 6) {
-        return [...this.products]
-            .sort((a, b) => b.rating - a.rating)
-            .slice(0, limit);
-    },
+    const getFavorites = () => {
+        return favorites.map(id => getProductById(id)).filter(Boolean);
+    };
 
-    getNewArrivals: function() {
-        // Simulate new arrivals by selecting some products
-        return this.products.filter(p => [101, 108, 117, 119].includes(p.id));
-    },
+    const getAllProducts = () => {
+        return products;
+    };
 
-    getBestsellers: function() {
-        // Simulate bestsellers by selecting products with high ratings and reviews
-        return this.products
-            .filter(p => p.rating >= 4.5 && p.reviews > 100)
-            .sort((a, b) => b.reviews - a.reviews)
-            .slice(0, 8);
-    },
+    const getAllCategories = () => {
+        return categories;
+    };
 
-    // Generate product SKU
-    generateSKU: function(product) {
-        const categoryCode = product.category.substring(0, 3).toUpperCase();
-        const idCode = product.id.toString().padStart(4, '0');
-        return `QC-${categoryCode}-${idCode}`;
-    },
+    // Initialize
+    document.addEventListener('DOMContentLoaded', init);
 
-    // Calculate savings percentage
-    calculateSavings: function(product) {
-        if (!product.originalPrice || product.originalPrice <= product.price) {
-            return 0;
-        }
-        return Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100);
-    },
+    // Public API
+    return {
+        init,
+        getProductById,
+        getProductsByCategory,
+        searchProducts,
+        filterProductsByCategory,
+        getFeaturedProducts,
+        getDealProducts,
+        toggleFavorite,
+        isFavorite,
+        getFavorites,
+        getAllProducts,
+        getAllCategories
+    };
+})();
 
-    // Get product rating stars HTML
-    getRatingStars: function(rating) {
-        const fullStars = Math.floor(rating);
-        const halfStar = rating % 1 >= 0.5;
-        const emptyStars = 5 - fullStars - (halfStar ? 1 : 0);
-        
-        let stars = '';
-        for (let i = 0; i < fullStars; i++) stars += '<i class="fas fa-star"></i>';
-        if (halfStar) stars += '<i class="fas fa-star-half-alt"></i>';
-        for (let i = 0; i < emptyStars; i++) stars += '<i class="far fa-star"></i>';
-        
-        return stars;
-    }
-};
-
-// Export Products globally
-window.Products = Products;
+// Export to global scope
+window.productsModule = productsModule;
