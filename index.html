@@ -1,638 +1,685 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-IN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QuickCart - India's Fastest Grocery Delivery | 10-Minute Delivery</title>
-    <meta name="description" content="QuickCart delivers groceries, vegetables, fruits, dairy, snacks, and household items in 10 minutes. Best prices on fresh produce, staples, and daily essentials.">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
+    <meta name="description" content="QuickCart - India's Fastest 10-Minute Grocery Delivery App. Order fruits, vegetables, dairy, snacks & more. Free delivery in Mumbai, Delhi, Bangalore.">
+    <meta name="keywords" content="grocery delivery india, online kirana, blinkit clone, zepto clone, 10 minute delivery, amul, tata, bigbasket">
+    <meta name="author" content="QuickCart India">
+    <meta name="theme-color" content="#FF9933">
     
-    <!-- CSS Files -->
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/responsive.css">
-    <link rel="stylesheet" href="css/animation.css">
-    
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <title>QuickCart - 10 Min Grocery Delivery | India's #1 Kirana App</title>
     
     <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🛒</text></svg>">
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/logo.png">
+    
+    <!-- CSS Files -->
+    <link rel="stylesheet" href="css/animation.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/responsive.css">
+    
+    <!-- Google Fonts - Poppins (Indian friendly) -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <!-- Font Awesome 6 (Indian version) -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <!-- Swiper JS for carousels -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 </head>
 <body>
-    <!-- Loading Screen -->
-    <div class="loading-screen" id="loadingScreen">
-        <div class="loader">
-            <div class="cart-loader">
-                <i class="fas fa-shopping-cart"></i>
+    <!-- ⚡ QUICKCART INDIA - ULTRA REALISTIC GROCERY PLATFORM ⚡ -->
+    <!-- ⏱️ 10-MINUTE DELIVERY | 🇮🇳 100% INDIAN PRODUCTS | 📍 50+ CITIES -->
+    
+    <!-- 🚀 LOADING SCREEN (INDIAN STYLE) -->
+    <div id="loading-screen" class="loading-screen">
+        <div class="loading-content">
+            <div class="loading-logo">
+                <span class="fa-stack fa-2x">
+                    <i class="fas fa-circle fa-stack-2x" style="color: #FF9933;"></i>
+                    <i class="fas fa-bolt fa-stack-1x fa-inverse"></i>
+                </span>
+                <h2>Quick<span style="color: #138808;">Cart</span></h2>
             </div>
-            <p>Loading QuickCart...</p>
+            <div class="loading-spinner">
+                <div class="spinner"></div>
+            </div>
+            <p class="loading-tagline">Ghar Baithe, 10 Minute Mein! 🛵💨</p>
+            <p class="loading-location">Detecting your location...</p>
         </div>
     </div>
 
-    <!-- Top Announcement Bar -->
-    <div class="announcement-bar">
-        <div class="container">
-            <p><i class="fas fa-bolt"></i> <strong>10-MINUTE DELIVERY:</strong> Now available in Mumbai, Delhi, Bangalore, Hyderabad & 20+ cities</p>
-        </div>
-    </div>
-
-    <!-- Main Header -->
-    <header class="main-header">
-        <div class="container">
-            <div class="header-top">
-                <button class="menu-toggle" id="menuToggle">
-                    <i class="fas fa-bars"></i>
-                </button>
-                
-                <a href="index.html" class="logo">
-                    <div class="logo-icon">
-                        <i class="fas fa-bolt"></i>
-                    </div>
-                    <div class="logo-text">
-                        <h1>QuickCart</h1>
-                        <span class="tagline">Delivered in Minutes</span>
-                    </div>
-                </a>
-
-                <!-- Location Selector -->
-                <div class="location-selector">
-                    <i class="fas fa-map-marker-alt"></i>
-                    <div class="location-info">
-                        <span class="deliver-to">Deliver to</span>
-                        <span class="current-location" id="currentLocation">Select Location</span>
-                    </div>
-                    <i class="fas fa-chevron-down"></i>
-                </div>
-
-                <!-- Search Bar -->
-                <div class="search-container">
-                    <div class="search-box">
-                        <i class="fas fa-search"></i>
-                        <input type="text" id="searchInput" placeholder="Search for groceries, vegetables, fruits...">
-                        <button class="search-btn" id="searchBtn">Search</button>
-                    </div>
-                    <div class="search-suggestions" id="searchSuggestions"></div>
-                </div>
-
-                <!-- User Actions -->
-                <div class="user-actions">
-                    <a href="#offers" class="action-btn">
-                        <i class="fas fa-tag"></i>
-                        <span>Offers</span>
-                    </a>
-                    <a href="#orders" class="action-btn">
-                        <i class="fas fa-shopping-bag"></i>
-                        <span>Orders</span>
-                    </a>
-                    <button class="action-btn" id="authBtn">
-                        <i class="fas fa-user"></i>
-                        <span>Login</span>
-                    </button>
-                    <button class="cart-btn" id="cartBtn">
-                        <i class="fas fa-shopping-cart"></i>
-                        <span>Cart</span>
-                        <span class="cart-count" id="cartCount">0</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Categories Navigation -->
-            <nav class="categories-nav">
-                <div class="categories-container">
-                    <a href="#groceries" class="category-link active">
-                        <i class="fas fa-shopping-basket"></i>
-                        <span>Groceries & Staples</span>
-                    </a>
-                    <a href="#vegetables" class="category-link">
-                        <i class="fas fa-carrot"></i>
-                        <span>Vegetables & Fruits</span>
-                    </a>
-                    <a href="#dairy" class="category-link">
-                        <i class="fas fa-cheese"></i>
-                        <span>Dairy, Bread & Eggs</span>
-                    </a>
-                    <a href="#meat" class="category-link">
-                        <i class="fas fa-drumstick-bite"></i>
-                        <span>Meat & Fish</span>
-                    </a>
-                    <a href="#snacks" class="category-link">
-                        <i class="fas fa-cookie-bite"></i>
-                        <span>Snacks & Beverages</span>
-                    </a>
-                    <a href="#household" class="category-link">
-                        <i class="fas fa-home"></i>
-                        <span>Household Care</span>
-                    </a>
-                    <a href="#personal-care" class="category-link">
-                        <i class="fas fa-spa"></i>
-                        <span>Personal Care</span>
-                    </a>
-                    <a href="#electronics" class="category-link">
-                        <i class="fas fa-laptop"></i>
-                        <span>Electronics</span>
-                    </a>
-                    <a href="#pharma" class="category-link">
-                        <i class="fas fa-pills"></i>
-                        <span>Pharma & Wellness</span>
-                    </a>
-                </div>
-            </nav>
-        </div>
-    </header>
-
-    <!-- Mobile Sidebar -->
-    <div class="mobile-sidebar" id="mobileSidebar">
-        <div class="sidebar-header">
-            <div class="user-profile">
-                <div class="user-avatar">
-                    <i class="fas fa-user-circle"></i>
-                </div>
-                <div class="user-info">
-                    <h3>Welcome to QuickCart</h3>
-                    <p>Sign in to access your account</p>
-                </div>
-            </div>
-            <button class="close-sidebar" id="closeSidebar">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
+    <!-- 🏠 MAIN APP WRAPPER -->
+    <div id="app" class="app-wrapper" style="display: none;">
         
-        <div class="sidebar-menu">
-            <a href="index.html" class="menu-item active">
+        <!-- 📍 LOCATION BAR (FIXED TOP) - BLINKIT STYLE -->
+        <header class="location-header">
+            <div class="location-container">
+                <div class="location-left">
+                    <i class="fas fa-map-marker-alt" style="color: #FF9933;"></i>
+                    <div class="location-details">
+                        <span class="delivery-label">Delivery in <span class="delivery-time">10</span> min</span>
+                        <div class="address-selector" onclick="QuickCart.location.showSelector()">
+                            <span id="current-address">Andheri West, Mumbai - 400053</span>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <span class="pincode-badge" id="current-pincode">400053</span>
+                    </div>
+                </div>
+                <div class="location-right">
+                    <button class="icon-btn" onclick="QuickCart.auth.showProfile()">
+                        <i class="far fa-user-circle"></i>
+                    </button>
+                    <button class="icon-btn" onclick="QuickCart.wishlist.show()">
+                        <i class="far fa-heart"></i>
+                        <span class="badge" id="wishlist-count">0</span>
+                    </button>
+                </div>
+            </div>
+        </header>
+
+        <!-- 🔍 SEARCH BAR (STICKY) -->
+        <div class="search-section">
+            <div class="search-container">
+                <div class="search-wrapper">
+                    <i class="fas fa-search"></i>
+                    <input type="text" id="search-input" placeholder='Search "Amul Milk", "Tata Salt", "Maggi"...' autocomplete="off">
+                    <button class="voice-search" onclick="QuickCart.search.voiceSearch()">
+                        <i class="fas fa-microphone"></i>
+                    </button>
+                </div>
+                <button class="filter-btn" onclick="QuickCart.filter.toggle()">
+                    <i class="fas fa-sliders-h"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- 📱 MAIN CONTENT (SCROLLABLE) -->
+        <main class="main-content">
+            
+            <!-- 🎯 CATEGORY PILLS - INDIAN STYLE -->
+            <section class="categories-section">
+                <div class="categories-header">
+                    <h3>Browse Categories</h3>
+                    <a href="#" onclick="QuickCart.categories.viewAll()">View All <i class="fas fa-arrow-right"></i></a>
+                </div>
+                <div class="categories-slider">
+                    <div class="category-pill" onclick="QuickCart.category.load('vegetables')">
+                        <div class="category-icon" style="background: #E8F5E9;">
+                            <i class="fas fa-carrot" style="color: #2E7D32;"></i>
+                        </div>
+                        <span>Sabzi Mandi</span>
+                    </div>
+                    <div class="category-pill" onclick="QuickCart.category.load('dairy')">
+                        <div class="category-icon" style="background: #FFF3E0;">
+                            <i class="fas fa-jug" style="color: #FF6F00;"></i>
+                        </div>
+                        <span>Doodh, Anda</span>
+                    </div>
+                    <div class="category-pill" onclick="QuickCart.category.load('staples')">
+                        <div class="category-icon" style="background: #F3E5F5;">
+                            <i class="fas fa-seedling" style="color: #6A1B9A;"></i>
+                        </div>
+                        <span>Kiryana</span>
+                    </div>
+                    <div class="category-pill" onclick="QuickCart.category.load('snacks')">
+                        <div class="category-icon" style="background: #FFEBEE;">
+                            <i class="fas fa-cookie-bite" style="color: #C2185B;"></i>
+                        </div>
+                        <span>Namkeen</span>
+                    </div>
+                    <div class="category-pill" onclick="QuickCart.category.load('beverages')">
+                        <div class="category-icon" style="background: #E1F5FE;">
+                            <i class="fas fa-wine-bottle" style="color: #0277BD;"></i>
+                        </div>
+                        <span>Cold Drinks</span>
+                    </div>
+                    <div class="category-pill" onclick="QuickCart.category.load('nonveg')">
+                        <div class="category-icon" style="background: #FBE9E7;">
+                            <i class="fas fa-drumstick-bite" style="color: #BF360C;"></i>
+                        </div>
+                        <span>Chicken & Fish</span>
+                    </div>
+                    <div class="category-pill" onclick="QuickCart.category.load('cleaning')">
+                        <div class="category-icon" style="background: #E0F7FA;">
+                            <i class="fas fa-soap" style="color: #00695C;"></i>
+                        </div>
+                        <span>Cleaning</span>
+                    </div>
+                    <div class="category-pill" onclick="QuickCart.category.load('personal')">
+                        <div class="category-icon" style="background: #FCE4EC;">
+                            <i class="fas fa-shower" style="color: #880E4F;"></i>
+                        </div>
+                        <span>Personal Care</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ⚡ FLASH SALE - LIMITED TIME OFFER -->
+            <section class="flash-sale">
+                <div class="flash-header">
+                    <div class="flash-title">
+                        <i class="fas fa-bolt" style="color: #FF6B6B;"></i>
+                        <h3>Flash Sale</h3>
+                    </div>
+                    <div class="timer-container">
+                        <span>Ends in: </span>
+                        <div class="timer" id="flash-timer">10:23:45</div>
+                    </div>
+                    <a href="#" onclick="QuickCart.flashSale.viewAll()">View All</a>
+                </div>
+                <div class="swiper flashSwiper">
+                    <div class="swiper-wrapper" id="flash-products">
+                        <!-- Flash products loaded via JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- 🏆 BRAND STORE - AMUL, TATA, FORTUNE -->
+            <section class="brand-store">
+                <h3>Top Brands <span style="color: #FF9933;">🇮🇳</span></h3>
+                <div class="brands-grid">
+                    <div class="brand-card" onclick="QuickCart.brand.load('amul')">
+                        <img src="https://images.unsplash.com/photo-1621868002587-9cb6e3ee5b6b?w=200" alt="Amul" loading="lazy">
+                        <span>Amul</span>
+                        <small>Up to 30% off</small>
+                    </div>
+                    <div class="brand-card" onclick="QuickCart.brand.load('tata')">
+                        <img src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=200" alt="Tata" loading="lazy">
+                        <span>Tata</span>
+                        <small>20% off</small>
+                    </div>
+                    <div class="brand-card" onclick="QuickCart.brand.load('fortune')">
+                        <img src="https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=200" alt="Fortune" loading="lazy">
+                        <span>Fortune</span>
+                        <small>25% off</small>
+                    </div>
+                    <div class="brand-card" onclick="QuickCart.brand.load('aashirvaad')">
+                        <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=200" alt="Aashirvaad" loading="lazy">
+                        <span>Aashirvaad</span>
+                        <small>15% off</small>
+                    </div>
+                    <div class="brand-card" onclick="QuickCart.brand.load('britannia')">
+                        <img src="https://images.unsplash.com/photo-1587240971770-d47beeaae5fe?w=200" alt="Britannia" loading="lazy">
+                        <span>Britannia</span>
+                        <small>Buy 1 Get 1</small>
+                    </div>
+                    <div class="brand-card" onclick="QuickCart.brand.load('parle')">
+                        <img src="https://images.unsplash.com/photo-1590080874088-eecbb95f6c1b?w=200" alt="Parle" loading="lazy">
+                        <span>Parle</span>
+                        <small>₹10 starting</small>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 🥬 VEGETABLES SECTION - SABZI MANDI -->
+            <section class="product-section">
+                <div class="section-header">
+                    <div>
+                        <h3>Sabzi Mandi <span style="font-size: 14px; color: #666;">(Fresh from farm)</span></h3>
+                        <p class="section-subtitle">सब्जी मंडी - ताज़ी सब्जियाँ</p>
+                    </div>
+                    <a href="#" onclick="QuickCart.category.load('vegetables')">See All <i class="fas fa-chevron-right"></i></a>
+                </div>
+                <div class="product-grid" id="vegetables-grid">
+                    <!-- Vegetables loaded via JS -->
+                </div>
+            </section>
+
+            <!-- 🥛 DAIRY, BREAD & EGGS - DOODH, ANDA, BREAD -->
+            <section class="product-section">
+                <div class="section-header">
+                    <div>
+                        <h3>Dairy, Bread & Eggs <span style="font-size: 14px; color: #666;">(Doodh, Anda, Bread)</span></h3>
+                        <p class="section-subtitle">दूध, अंडा, ब्रेड - फ्रेश</p>
+                    </div>
+                    <a href="#" onclick="QuickCart.category.load('dairy')">See All <i class="fas fa-chevron-right"></i></a>
+                </div>
+                <div class="product-grid" id="dairy-grid">
+                    <!-- Dairy products loaded via JS -->
+                </div>
+            </section>
+
+            <!-- 🍚 GROCERIES & STAPLES - KIRYANA -->
+            <section class="product-section">
+                <div class="section-header">
+                    <div>
+                        <h3>Kiryana Store <span style="font-size: 14px; color: #666;">(Rice, Atta, Dal)</span></h3>
+                        <p class="section-subtitle">किराना स्टोर - 50+ items</p>
+                    </div>
+                    <a href="#" onclick="QuickCart.category.load('staples')">See All <i class="fas fa-chevron-right"></i></a>
+                </div>
+                <div class="product-grid" id="staples-grid">
+                    <!-- Staples loaded via JS -->
+                </div>
+            </section>
+
+            <!-- 🍗 CHICKEN, MEAT & FISH - NON-VEG -->
+            <section class="product-section">
+                <div class="section-header">
+                    <div>
+                        <h3>Chicken & Fish <span style="font-size: 14px; color: #666;">(Freshly Cut)</span></h3>
+                        <p class="section-subtitle">चिकन, मटन, मछली - फ्रेश</p>
+                    </div>
+                    <a href="#" onclick="QuickCart.category.load('nonveg')">See All <i class="fas fa-chevron-right"></i></a>
+                </div>
+                <div class="product-grid" id="nonveg-grid">
+                    <!-- Non-veg products loaded via JS -->
+                </div>
+            </section>
+
+            <!-- 🍪 SNACKS & MUNCHIES - NAMKEEN -->
+            <section class="product-section">
+                <div class="section-header">
+                    <div>
+                        <h3>Namkeen & Snacks <span style="font-size: 14px; color: #666;">(Cravings?)</span></h3>
+                        <p class="section-subtitle">नमकीन, चिप्स, मैगी</p>
+                    </div>
+                    <a href="#" onclick="QuickCart.category.load('snacks')">See All <i class="fas fa-chevron-right"></i></a>
+                </div>
+                <div class="product-grid" id="snacks-grid">
+                    <!-- Snacks loaded via JS -->
+                </div>
+            </section>
+
+            <!-- 🥤 BEVERAGES - COLD DRINKS & JUICES -->
+            <section class="product-section">
+                <div class="section-header">
+                    <div>
+                        <h3>Cold Drinks & Juices</h3>
+                        <p class="section-subtitle">कोक, पेप्सी, स्प्राइट</p>
+                    </div>
+                    <a href="#" onclick="QuickCart.category.load('beverages')">See All <i class="fas fa-chevron-right"></i></a>
+                </div>
+                <div class="product-grid" id="beverages-grid">
+                    <!-- Beverages loaded via JS -->
+                </div>
+            </section>
+
+            <!-- 🧹 CLEANING ESSENTIALS -->
+            <section class="product-section">
+                <div class="section-header">
+                    <div>
+                        <h3>Cleaning Essentials</h3>
+                        <p class="section-subtitle">सर्फ, विम, हार्पिक</p>
+                    </div>
+                    <a href="#" onclick="QuickCart.category.load('cleaning')">See All <i class="fas fa-chevron-right"></i></a>
+                </div>
+                <div class="product-grid" id="cleaning-grid">
+                    <!-- Cleaning products loaded via JS -->
+                </div>
+            </section>
+        </main>
+
+        <!-- 🛒 BOTTOM NAVIGATION (INDIAN APP STYLE) -->
+        <nav class="bottom-nav">
+            <div class="nav-item active" onclick="QuickCart.navigation.go('home')">
                 <i class="fas fa-home"></i>
                 <span>Home</span>
-            </a>
-            <a href="#categories" class="menu-item">
-                <i class="fas fa-th-large"></i>
-                <span>All Categories</span>
-            </a>
-            <a href="#orders" class="menu-item">
-                <i class="fas fa-shopping-bag"></i>
-                <span>My Orders</span>
-            </a>
-            <a href="#account" class="menu-item">
-                <i class="fas fa-user-cog"></i>
-                <span>My Account</span>
-            </a>
-            <a href="#favorites" class="menu-item">
-                <i class="fas fa-heart"></i>
-                <span>Favorites</span>
-            </a>
-            <a href="#addresses" class="menu-item">
-                <i class="fas fa-map-marker-alt"></i>
-                <span>Saved Addresses</span>
-            </a>
-            <a href="#wallet" class="menu-item">
-                <i class="fas fa-wallet"></i>
-                <span>QuickCart Wallet</span>
-            </a>
-            <a href="#help" class="menu-item">
-                <i class="fas fa-question-circle"></i>
-                <span>Help & Support</span>
-            </a>
-        </div>
-        
-        <div class="sidebar-footer">
-            <button class="btn-login" id="mobileLogin">
-                <i class="fas fa-sign-in-alt"></i>
-                Sign In / Register
-            </button>
+            </div>
+            <div class="nav-item" onclick="QuickCart.navigation.go('categories')">
+                <i class="fas fa-th"></i>
+                <span>Categories</span>
+            </div>
+            <div class="nav-item cart-nav" onclick="QuickCart.navigation.go('cart')">
+                <i class="fas fa-shopping-cart"></i>
+                <span>Cart</span>
+                <span class="cart-count" id="cart-total-count">0</span>
+            </div>
+            <div class="nav-item" onclick="QuickCart.navigation.go('orders')">
+                <i class="fas fa-clipboard-list"></i>
+                <span>Orders</span>
+            </div>
+            <div class="nav-item" onclick="QuickCart.navigation.go('account')">
+                <i class="fas fa-user"></i>
+                <span>Account</span>
+            </div>
+        </nav>
+
+        <!-- 🎫 COUPON BAR - FLOATING OFFER -->
+        <div class="coupon-float" id="couponFloat">
+            <i class="fas fa-tag"></i>
+            <span>FLASH50 - ₹50 off on ₹399+</span>
+            <button onclick="QuickCart.coupons.apply('FLASH50')">Apply</button>
+            <i class="fas fa-times close-coupon" onclick="document.getElementById('couponFloat').style.display='none'"></i>
         </div>
     </div>
-    <div class="sidebar-overlay" id="sidebarOverlay"></div>
 
-    <!-- Main Content -->
-    <main class="main-content">
-        <!-- Hero Banner -->
-        <section class="hero-banner">
-            <div class="container">
-                <div class="hero-content">
-                    <h2 class="hero-title">Get <span class="highlight">Groceries Delivered</span> in Just 10 Minutes!</h2>
-                    <p class="hero-subtitle">Fresh produce, daily essentials, snacks & more delivered at lightning speed</p>
-                    <div class="hero-features">
-                        <div class="feature">
-                            <i class="fas fa-bolt"></i>
-                            <span>10-Minute Delivery</span>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-leaf"></i>
-                            <span>Fresh & Quality</span>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-rupee-sign"></i>
-                            <span>Lowest Prices</span>
-                        </div>
-                        <div class="feature">
-                            <i class="fas fa-shield-alt"></i>
-                            <span>Safe & Secure</span>
-                        </div>
-                    </div>
-                    <div class="hero-buttons">
-                        <a href="#categories" class="btn-primary">
-                            <i class="fas fa-shopping-basket"></i>
-                            Start Shopping
-                        </a>
-                        <a href="#download" class="btn-outline">
-                            <i class="fas fa-mobile-alt"></i>
-                            Download App
-                        </a>
-                    </div>
-                </div>
-                <div class="hero-image">
-                    <img src="https://images.unsplash.com/photo-1556909114-f6e7ad7d3136?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="Grocery Delivery">
-                </div>
-            </div>
-        </section>
-
-        <!-- Categories Section -->
-        <section class="categories-section" id="categories">
-            <div class="container">
-                <div class="section-header">
-                    <h2 class="section-title">Shop by Category</h2>
-                    <a href="#all-categories" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="categories-grid" id="categoriesGrid">
-                    <!-- Categories will be loaded here -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Flash Sale -->
-        <section class="flash-sale">
-            <div class="container">
-                <div class="sale-header">
-                    <div class="sale-title">
-                        <i class="fas fa-bolt"></i>
-                        <h2>Flash Sale</h2>
-                    </div>
-                    <div class="sale-timer">
-                        <span>Ends in:</span>
-                        <div class="timer" id="flashTimer">
-                            <span class="hours">02</span>:<span class="minutes">15</span>:<span class="seconds">30</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="sale-products" id="flashSaleProducts">
-                    <!-- Flash sale products will be loaded here -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Featured Products -->
-        <section class="featured-products">
-            <div class="container">
-                <div class="section-header">
-                    <h2 class="section-title">Top Selling Products</h2>
-                    <a href="#all-products" class="view-all">View All <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="products-grid" id="featuredProducts">
-                    <!-- Featured products will be loaded here -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Groceries & Staples -->
-        <section class="category-section" id="groceries">
-            <div class="container">
-                <div class="category-header">
-                    <h2 class="section-title"><i class="fas fa-shopping-basket"></i> Groceries & Staples</h2>
-                    <a href="#more-groceries" class="view-all">See All <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="products-grid" id="groceriesProducts">
-                    <!-- Groceries products will be loaded here -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Fresh Vegetables & Fruits -->
-        <section class="category-section fresh-section" id="vegetables">
-            <div class="container">
-                <div class="category-header">
-                    <h2 class="section-title"><i class="fas fa-carrot"></i> Fresh Vegetables & Fruits</h2>
-                    <a href="#more-vegetables" class="view-all">See All <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="products-grid" id="vegetablesProducts">
-                    <!-- Vegetables products will be loaded here -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Dairy, Bread & Eggs -->
-        <section class="category-section dairy-section" id="dairy">
-            <div class="container">
-                <div class="category-header">
-                    <h2 class="section-title"><i class="fas fa-cheese"></i> Dairy, Bread & Eggs</h2>
-                    <a href="#more-dairy" class="view-all">See All <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="products-grid" id="dairyProducts">
-                    <!-- Dairy products will be loaded here -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Snacks & Beverages -->
-        <section class="category-section snacks-section" id="snacks">
-            <div class="container">
-                <div class="category-header">
-                    <h2 class="section-title"><i class="fas fa-cookie-bite"></i> Snacks & Beverages</h2>
-                    <a href="#more-snacks" class="view-all">See All <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="products-grid" id="snacksProducts">
-                    <!-- Snacks products will be loaded here -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Household & Personal Care -->
-        <section class="category-section household-section" id="household">
-            <div class="container">
-                <div class="category-header">
-                    <h2 class="section-title"><i class="fas fa-home"></i> Household & Personal Care</h2>
-                    <a href="#more-household" class="view-all">See All <i class="fas fa-arrow-right"></i></a>
-                </div>
-                <div class="products-grid" id="householdProducts">
-                    <!-- Household products will be loaded here -->
-                </div>
-            </div>
-        </section>
-
-        <!-- Why Choose Us -->
-        <section class="features-section">
-            <div class="container">
-                <h2 class="section-title">Why Choose QuickCart?</h2>
-                <div class="features-grid">
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-bolt"></i>
-                        </div>
-                        <h3>Super Fast Delivery</h3>
-                        <p>Get your order delivered in just 10 minutes</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-leaf"></i>
-                        </div>
-                        <h3>Fresh Guarantee</h3>
-                        <p>100% fresh products with quality check</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-rupee-sign"></i>
-                        </div>
-                        <h3>Best Prices</h3>
-                        <p>Guaranteed lowest prices everyday</p>
-                    </div>
-                    <div class="feature-card">
-                        <div class="feature-icon">
-                            <i class="fas fa-shield-alt"></i>
-                        </div>
-                        <h3>Safe Delivery</h3>
-                        <p>Contactless delivery & safety measures</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Download App -->
-        <section class="download-section">
-            <div class="container">
-                <div class="download-content">
-                    <h2>Get the QuickCart App</h2>
-                    <p>Experience faster shopping, exclusive app-only deals, and easier reordering</p>
-                    <div class="download-buttons">
-                        <a href="#" class="app-store">
-                            <i class="fab fa-apple"></i>
-                            <div>
-                                <span>Download on the</span>
-                                <strong>App Store</strong>
-                            </div>
-                        </a>
-                        <a href="#" class="play-store">
-                            <i class="fab fa-google-play"></i>
-                            <div>
-                                <span>GET IT ON</span>
-                                <strong>Google Play</strong>
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="download-image">
-                    <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80" alt="QuickCart App">
-                </div>
-            </div>
-        </section>
-    </main>
-
-    <!-- Footer -->
-    <footer class="main-footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <div class="footer-logo">
-                        <i class="fas fa-bolt"></i>
-                        <div>
-                            <h3>QuickCart</h3>
-                            <p>Delivered in Minutes</p>
-                        </div>
-                    </div>
-                    <p class="footer-description">
-                        India's fastest grocery delivery service. Fresh produce, daily essentials, and more delivered to your doorstep.
-                    </p>
-                    <div class="social-links">
-                        <a href="#"><i class="fab fa-facebook-f"></i></a>
-                        <a href="#"><i class="fab fa-twitter"></i></a>
-                        <a href="#"><i class="fab fa-instagram"></i></a>
-                        <a href="#"><i class="fab fa-linkedin-in"></i></a>
-                    </div>
-                </div>
-
-                <div class="footer-section">
-                    <h4>Quick Links</h4>
-                    <ul>
-                        <li><a href="#about">About Us</a></li>
-                        <li><a href="#careers">Careers</a></li>
-                        <li><a href="#blog">Blog</a></li>
-                        <li><a href="#press">Press</a></li>
-                        <li><a href="#contact">Contact Us</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-section">
-                    <h4>Help & Support</h4>
-                    <ul>
-                        <li><a href="#faq">FAQs</a></li>
-                        <li><a href="#shipping">Shipping Policy</a></li>
-                        <li><a href="#returns">Returns & Refunds</a></li>
-                        <li><a href="#privacy">Privacy Policy</a></li>
-                        <li><a href="#terms">Terms of Service</a></li>
-                    </ul>
-                </div>
-
-                <div class="footer-section">
-                    <h4>Contact Info</h4>
-                    <div class="contact-info">
-                        <p><i class="fas fa-map-marker-alt"></i> Mumbai, Maharashtra</p>
-                        <p><i class="fas fa-phone"></i> +91 1800-123-456</p>
-                        <p><i class="fas fa-envelope"></i> support@quickcart.com</p>
-                    </div>
-                    <div class="payment-methods">
-                        <p>We Accept:</p>
-                        <div class="payment-icons">
-                            <i class="fab fa-cc-visa"></i>
-                            <i class="fab fa-cc-mastercard"></i>
-                            <i class="fab fa-cc-amex"></i>
-                            <i class="fab fa-cc-paypal"></i>
-                            <i class="fas fa-university"></i>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="footer-bottom">
-                <p>&copy; 2024 QuickCart. All rights reserved.</p>
-                <div class="footer-links">
-                    <a href="#privacy">Privacy Policy</a>
-                    <a href="#terms">Terms of Use</a>
-                    <a href="#sitemap">Sitemap</a>
-                </div>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Shopping Cart -->
-    <div class="shopping-cart" id="shoppingCart">
-        <div class="cart-header">
-            <h3><i class="fas fa-shopping-cart"></i> Your Cart</h3>
-            <button class="close-cart" id="closeCart">
-                <i class="fas fa-times"></i>
-            </button>
-        </div>
-        <div class="cart-body" id="cartBody">
-            <!-- Cart items will be loaded here -->
-        </div>
-        <div class="cart-footer">
-            <div class="cart-totals">
-                <div class="total-row">
-                    <span>Subtotal</span>
-                    <span id="cartSubtotal">₹0</span>
-                </div>
-                <div class="total-row">
-                    <span>Delivery</span>
-                    <span id="deliveryFee">FREE</span>
-                </div>
-                <div class="total-row grand-total">
-                    <span>Total</span>
-                    <span id="cartTotal">₹0</span>
-                </div>
-            </div>
-            <button class="btn-checkout" id="checkoutBtn">
-                <i class="fas fa-lock"></i>
-                Proceed to Checkout
-            </button>
-            <p class="cart-note"><i class="fas fa-tag"></i> You save ₹<span id="cartSavings">0</span> on this order!</p>
-        </div>
-    </div>
-    <div class="cart-overlay" id="cartOverlay"></div>
-
-    <!-- Login/Signup Modal -->
-    <div class="auth-modal" id="authModal">
+    <!-- 🔐 OTP LOGIN MODAL (BLINKIT/ZEPTO STYLE) -->
+    <div id="login-modal" class="modal">
         <div class="modal-content">
-            <button class="close-modal" id="closeAuthModal">
-                <i class="fas fa-times"></i>
-            </button>
-            
-            <div class="auth-header">
-                <div class="auth-logo">
-                    <i class="fas fa-bolt"></i>
-                    <span>QuickCart</span>
+            <div class="modal-header">
+                <h2>Login / Sign Up</h2>
+                <i class="fas fa-times" onclick="QuickCart.auth.closeModal()"></i>
+            </div>
+            <div class="modal-body">
+                <div class="login-illustration">
+                    <i class="fas fa-mobile-alt fa-3x" style="color: #FF9933;"></i>
+                    <p>Get OTP on your mobile</p>
                 </div>
-                <h2>Welcome Back!</h2>
-                <p>Sign in to your account to continue</p>
-            </div>
-
-            <div class="auth-tabs">
-                <button class="auth-tab active" data-tab="login">Login</button>
-                <button class="auth-tab" data-tab="signup">Sign Up</button>
-            </div>
-
-            <form class="auth-form" id="loginForm">
-                <div class="form-group">
-                    <label for="phoneNumber">
-                        <i class="fas fa-mobile-alt"></i>
-                        Phone Number
-                    </label>
+                <div class="input-group">
+                    <label>Mobile Number</label>
                     <div class="phone-input">
-                        <select class="country-code">
-                            <option>+91</option>
-                        </select>
-                        <input type="tel" id="phoneNumber" placeholder="Enter 10-digit number" maxlength="10" required>
+                        <span class="country-code">+91</span>
+                        <input type="tel" id="mobile-number" placeholder="98765 43210" maxlength="10" pattern="[0-9]{10}">
                     </div>
                 </div>
-
-                <button type="submit" class="btn-primary btn-block">
-                    <i class="fas fa-paper-plane"></i>
-                    Send OTP
+                <button class="btn-primary" id="send-otp-btn" onclick="QuickCart.auth.sendOTP()">
+                    Send OTP <i class="fas fa-arrow-right"></i>
                 </button>
-            </form>
-
-            <div class="otp-section" id="otpSection">
-                <p>Enter OTP sent to <strong id="otpPhoneNumber"></strong></p>
-                <div class="otp-inputs">
-                    <input type="text" maxlength="1" class="otp-digit">
-                    <input type="text" maxlength="1" class="otp-digit">
-                    <input type="text" maxlength="1" class="otp-digit">
-                    <input type="text" maxlength="1" class="otp-digit">
-                    <input type="text" maxlength="1" class="otp-digit">
-                    <input type="text" maxlength="1" class="otp-digit">
-                </div>
-                <button class="btn-primary btn-block" id="verifyOtpBtn">
-                    <i class="fas fa-check"></i>
-                    Verify OTP
-                </button>
-                <p class="resend-otp">
-                    Didn't receive OTP? <a href="#" id="resendOtp">Resend in 30s</a>
+                <p class="terms-text">
+                    By continuing, you agree to our <a href="#">Terms</a> & <a href="#">Privacy</a>
                 </p>
             </div>
+        </div>
+    </div>
 
-            <div class="auth-divider">
-                <span>or continue with</span>
+    <!-- 🔢 OTP VERIFICATION MODAL -->
+    <div id="otp-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Verify OTP</h2>
+                <i class="fas fa-times" onclick="QuickCart.auth.closeModal()"></i>
             </div>
-
-            <div class="social-auth">
-                <button class="social-btn google-btn">
-                    <i class="fab fa-google"></i>
-                    Google
+            <div class="modal-body">
+                <p class="otp-sent-text">OTP sent to +91 <span id="verified-number"></span></p>
+                <div class="otp-inputs">
+                    <input type="text" maxlength="1" class="otp-box" oninput="QuickCart.auth.moveToNext(this, 'otp2')" id="otp1">
+                    <input type="text" maxlength="1" class="otp-box" oninput="QuickCart.auth.moveToNext(this, 'otp3')" id="otp2">
+                    <input type="text" maxlength="1" class="otp-box" oninput="QuickCart.auth.moveToNext(this, 'otp4')" id="otp3">
+                    <input type="text" maxlength="1" class="otp-box" oninput="QuickCart.auth.moveToNext(this, 'otp5')" id="otp4">
+                    <input type="text" maxlength="1" class="otp-box" oninput="QuickCart.auth.moveToNext(this, 'otp6')" id="otp5">
+                    <input type="text" maxlength="1" class="otp-box" oninput="QuickCart.auth.verifyOTP()" id="otp6">
+                </div>
+                <button class="btn-primary" id="verify-otp-btn" onclick="QuickCart.auth.verifyOTP()">
+                    Verify & Continue
                 </button>
-                <button class="social-btn facebook-btn">
-                    <i class="fab fa-facebook-f"></i>
-                    Facebook
-                </button>
-            </div>
-
-            <div class="auth-footer">
-                <p>By continuing, you agree to our <a href="#terms">Terms</a> and <a href="#privacy">Privacy Policy</a></p>
+                <div class="resend-otp">
+                    <span id="timer-text">Resend in <span id="timer">30</span>s</span>
+                    <button id="resend-btn" disabled onclick="QuickCart.auth.resendOTP()">Resend OTP</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- Checkout Modal -->
-    <div class="checkout-modal" id="checkoutModal">
-        <div class="checkout-content">
-            <!-- Checkout content will be loaded dynamically -->
+    <!-- 📍 LOCATION SELECTOR MODAL -->
+    <div id="location-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Choose your location</h2>
+                <i class="fas fa-times" onclick="QuickCart.location.closeModal()"></i>
+            </div>
+            <div class="modal-body">
+                <button class="btn-outline" onclick="QuickCart.location.detectCurrent()">
+                    <i class="fas fa-location-dot"></i> Detect current location
+                </button>
+                <div class="saved-addresses">
+                    <h4>Saved Addresses</h4>
+                    <div class="address-card" onclick="QuickCart.location.select('Home')">
+                        <i class="fas fa-home"></i>
+                        <div>
+                            <strong>Home</strong>
+                            <p>301, Green Park, Andheri West, Mumbai - 400053</p>
+                        </div>
+                    </div>
+                    <div class="address-card" onclick="QuickCart.location.select('Work')">
+                        <i class="fas fa-briefcase"></i>
+                        <div>
+                            <strong>Work</strong>
+                            <p>WeWork, Powai, Mumbai - 400076</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="pincode-check">
+                    <h4>Check pincode</h4>
+                    <div class="pincode-input">
+                        <input type="text" id="pincode-input" placeholder="Enter pincode" maxlength="6">
+                        <button onclick="QuickCart.location.checkPincode()">Check</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Toast Notification -->
-    <div class="toast-container" id="toastContainer"></div>
+    <!-- 🛒 CART SIDEBAR (RIGHT SIDE DRAWER) -->
+    <div id="cart-drawer" class="cart-drawer">
+        <div class="cart-header">
+            <div>
+                <h2>My Cart</h2>
+                <span id="cart-item-count">0</span> items
+            </div>
+            <i class="fas fa-times" onclick="QuickCart.cart.close()"></i>
+        </div>
+        <div class="cart-items" id="cart-items-list">
+            <!-- Cart items loaded via JS -->
+        </div>
+        <div class="cart-savings">
+            <i class="fas fa-tag"></i>
+            <span>You saved ₹<span id="cart-savings">0</span> on this order!</span>
+        </div>
+        <div class="cart-bill">
+            <div class="bill-row">
+                <span>Subtotal</span>
+                <span>₹<span id="cart-subtotal">0</span></span>
+            </div>
+            <div class="bill-row">
+                <span>Delivery Fee</span>
+                <span id="delivery-fee">₹29</span>
+            </div>
+            <div class="bill-row platform-fee">
+                <span>Platform Fee</span>
+                <span><strike>₹5</strike> <span style="color: #138808;">Free</span></span>
+            </div>
+            <div class="bill-row total">
+                <span>Total</span>
+                <span>₹<span id="cart-total">0</span></span>
+            </div>
+        </div>
+        <button class="btn-checkout" onclick="QuickCart.checkout.proceed()">
+            Proceed to Checkout <i class="fas fa-arrow-right"></i>
+        </button>
+    </div>
+
+    <!-- 💳 CHECKOUT MODAL -->
+    <div id="checkout-modal" class="modal checkout-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Checkout</h2>
+                <i class="fas fa-times" onclick="QuickCart.checkout.close()"></i>
+            </div>
+            <div class="modal-body">
+                <div class="checkout-section">
+                    <h4>Delivery Address</h4>
+                    <div class="address-selector-checkout">
+                        <div class="selected-address">
+                            <i class="fas fa-home"></i>
+                            <div>
+                                <p><strong>Home</strong> - 301, Green Park, Andheri West, Mumbai - 400053</p>
+                                <span class="delivery-time-slot">10-15 min delivery</span>
+                            </div>
+                        </div>
+                        <button onclick="QuickCart.location.change()">Change</button>
+                    </div>
+                </div>
+
+                <div class="checkout-section">
+                    <h4>Payment Method</h4>
+                    <div class="payment-options">
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="upi" checked>
+                            <i class="fas fa-qrcode"></i>
+                            <span>UPI</span>
+                            <span class="payment-badge">Google Pay, PhonePe, Paytm</span>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="card">
+                            <i class="fas fa-credit-card"></i>
+                            <span>Credit/Debit Card</span>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="wallet">
+                            <i class="fas fa-wallet"></i>
+                            <span>QuickCart Wallet</span>
+                            <span class="balance">₹500</span>
+                        </label>
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="cod">
+                            <i class="fas fa-money-bill"></i>
+                            <span>Cash on Delivery</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="checkout-section">
+                    <h4>Apply Coupon</h4>
+                    <div class="coupon-input">
+                        <input type="text" id="coupon-code" placeholder="Enter coupon code">
+                        <button onclick="QuickCart.coupons.applyCheckout()">Apply</button>
+                    </div>
+                    <div class="available-coupons">
+                        <div class="coupon-chip" onclick="QuickCart.coupons.select('WELCOME10')">
+                            <span>WELCOME10</span>
+                            <small>10% off</small>
+                        </div>
+                        <div class="coupon-chip" onclick="QuickCart.coupons.select('SAVE20')">
+                            <span>SAVE20</span>
+                            <small>20% off</small>
+                        </div>
+                        <div class="coupon-chip" onclick="QuickCart.coupons.select('FREEDEL')">
+                            <span>FREEDEL</span>
+                            <small>Free delivery</small>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="order-summary">
+                    <h4>Order Summary</h4>
+                    <div class="summary-items" id="order-summary-items">
+                        <!-- Summary items -->
+                    </div>
+                    <div class="summary-total">
+                        <span>Total Payable</span>
+                        <span class="total-amount">₹<span id="payable-amount">0</span></span>
+                    </div>
+                </div>
+
+                <button class="btn-place-order" onclick="QuickCart.checkout.placeOrder()">
+                    Place Order <i class="fas fa-check-circle"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 🎉 ORDER CONFIRMATION MODAL -->
+    <div id="order-confirmation-modal" class="modal">
+        <div class="modal-content confirmation-content">
+            <div class="confirmation-icon">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <h2>Order Placed Successfully!</h2>
+            <p class="order-id">Order #<span id="confirmation-order-id">ORD123456</span></p>
+            <div class="delivery-estimate">
+                <i class="fas fa-bolt"></i>
+                <span>Delivering in 10 minutes</span>
+            </div>
+            <div class="delivery-partner">
+                <img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=100" alt="Delivery Partner">
+                <div>
+                    <p>Rahul Sharma is on the way</p>
+                    <span>⚡ 3 min away</span>
+                </div>
+            </div>
+            <button onclick="QuickCart.order.track()" class="btn-track">
+                Track Order
+            </button>
+            <button onclick="QuickCart.modal.close()" class="btn-continue">
+                Continue Shopping
+            </button>
+        </div>
+    </div>
+
+    <!-- ⏱️ DELIVERY TRACKING MODAL -->
+    <div id="tracking-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Track Order</h2>
+                <i class="fas fa-times" onclick="QuickCart.tracking.close()"></i>
+            </div>
+            <div class="modal-body">
+                <div class="tracking-status">
+                    <div class="status-item completed">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <p>Order Placed</p>
+                            <span>10:23 AM</span>
+                        </div>
+                    </div>
+                    <div class="status-item completed">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <p>Packed by Store</p>
+                            <span>10:25 AM</span>
+                        </div>
+                    </div>
+                    <div class="status-item completed">
+                        <i class="fas fa-check-circle"></i>
+                        <div>
+                            <p>Delivery Partner Assigned</p>
+                            <span>10:27 AM</span>
+                        </div>
+                    </div>
+                    <div class="status-item active">
+                        <i class="fas fa-spinner fa-pulse"></i>
+                        <div>
+                            <p>On the Way</p>
+                            <span>10:29 AM</span>
+                        </div>
+                    </div>
+                    <div class="status-item pending">
+                        <i class="far fa-circle"></i>
+                        <div>
+                            <p>Delivered</p>
+                            <span>ETA: 4 min</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="delivery-map">
+                    <img src="https://images.unsplash.com/photo-1569336415962-a4bd9f69c07b?w=400" alt="Delivery Map">
+                </div>
+
+                <div class="delivery-partner-info">
+                    <img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=100" alt="Partner">
+                    <div>
+                        <h4>Rahul Sharma</h4>
+                        <div class="partner-stats">
+                            <span><i class="fas fa-star"></i> 4.8</span>
+                            <span><i class="fas fa-motorcycle"></i> 1250 deliveries</span>
+                        </div>
+                    </div>
+                    <button class="btn-call">
+                        <i class="fas fa-phone"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <!-- JavaScript Files -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
     <script src="js/utils.js"></script>
     <script src="js/products.js"></script>
     <script src="js/cart.js"></script>
     <script src="js/auth.js"></script>
     <script src="js/checkout.js"></script>
     <script src="js/app.js"></script>
+    
+    <script>
+        // Initialize the app when DOM is ready
+        document.addEventListener('DOMContentLoaded', function() {
+            QuickCart.init();
+        });
+    </script>
 </body>
 </html>
