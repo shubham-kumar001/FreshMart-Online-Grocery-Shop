@@ -1,312 +1,467 @@
-// ===== MAIN APPLICATION =====
+/**
+ * QUICKCART INDIA - MAIN APPLICATION
+ * 🇮🇳 Complete Grocery Delivery Platform
+ * ⚡ Blinkit/Zepto Style 10-Minute Delivery
+ */
 
-document.addEventListener('DOMContentLoaded', function() {
-    // Initialize loading screen
-    setTimeout(() => {
-        const loadingScreen = $('#loadingScreen');
-        if (loadingScreen) {
-            utils.addClass(loadingScreen, 'fade-out');
-            setTimeout(() => {
-                if (loadingScreen.parentNode) {
-                    loadingScreen.parentNode.removeChild(loadingScreen);
-                }
-            }, 300);
-        }
-    }, 1000);
+const QuickCart = window.QuickCart || {};
+
+QuickCart = {
+    // App version
+    version: '1.0.0',
+    
+    // App state
+    state: {
+        initialized: false,
+        currentLocation: null,
+        currentCategory: 'home',
+        searchQuery: '',
+        flashSaleTimer: null
+    },
+    
+    // Initialize app
+    init: function() {
+        console.log('🚀 QuickCart India v' + this.version + ' initializing...');
+        
+        // Initialize modules
+        this.initModules();
+        
+        // Load initial data
+        this.loadInitialData();
+        
+        // Set up event listeners
+        this.setupEventListeners();
+        
+        // Start flash sale timer
+        this.startFlashSaleTimer();
+        
+        // Set initialized flag
+        this.state.initialized = true;
+        
+        console.log('✅ QuickCart India initialized successfully!');
+    },
     
     // Initialize all modules
-    initializeApp();
-});
-
-const initializeApp = () => {
-    console.log('QuickCart - Initializing Application');
-    
-    // Initialize modules
-    window.productsModule.init();
-    window.cartModule.init();
-    window.authModule.init();
-    window.checkoutModule.init();
-    
-    // Setup UI interactions
-    setupUI();
-    
-    // Start timers
-    startFlashSaleTimer();
-    
-    // Setup scroll animations
-    setupScrollAnimations();
-    
-    console.log('QuickCart - Application Initialized');
-};
-
-const setupUI = () => {
-    // Mobile menu toggle
-    const menuToggle = $('#menuToggle');
-    const mobileSidebar = $('#mobileSidebar');
-    const sidebarOverlay = $('#sidebarOverlay');
-    const closeSidebar = $('#closeSidebar');
-    
-    if (menuToggle && mobileSidebar) {
-        menuToggle.addEventListener('click', () => {
-            utils.addClass(mobileSidebar, 'open');
-            utils.addClass(sidebarOverlay, 'show');
-            document.body.style.overflow = 'hidden';
-        });
-    }
-    
-    if (closeSidebar && mobileSidebar && sidebarOverlay) {
-        closeSidebar.addEventListener('click', closeMobileMenu);
-    }
-    
-    if (sidebarOverlay) {
-        sidebarOverlay.addEventListener('click', closeMobileMenu);
-    }
-    
-    // Shopping cart toggle
-    const cartBtn = $('#cartBtn');
-    const shoppingCart = $('#shoppingCart');
-    const cartOverlay = $('#cartOverlay');
-    const closeCartBtn = $('#closeCart');
-    
-    if (cartBtn && shoppingCart && cartOverlay) {
-        cartBtn.addEventListener('click', () => {
-            window.cartModule.openCart();
-        });
-    }
-    
-    if (closeCartBtn && shoppingCart && cartOverlay) {
-        closeCartBtn.addEventListener('click', () => {
-            window.cartModule.closeCart();
-        });
-    }
-    
-    if (cartOverlay) {
-        cartOverlay.addEventListener('click', () => {
-            window.cartModule.closeCart();
-        });
-    }
-    
-    // Search functionality
-    const searchInput = $('#searchInput');
-    const searchBtn = $('#searchBtn');
-    const searchSuggestions = $('#searchSuggestions');
-    
-    if (searchInput && searchSuggestions) {
-        // Search on input
-        searchInput.addEventListener('input', utils.debounce(() => {
-            const query = searchInput.value.trim();
-            if (query.length > 2) {
-                showSearchSuggestions(query);
-            } else {
-                hideSearchSuggestions();
-            }
-        }, 300));
+    initModules: function() {
+        // Initialize utils first
+        if (QuickCart.utils) {
+            // Utils already loaded
+        }
         
-        // Show suggestions on focus
-        searchInput.addEventListener('focus', () => {
-            const query = searchInput.value.trim();
-            if (query.length > 2) {
-                showSearchSuggestions(query);
+        // Initialize products
+        if (QuickCart.products) {
+            // Products already loaded
+        }
+        
+        // Initialize auth
+        if (QuickCart.auth) {
+            QuickCart.auth.init();
+        }
+        
+        // Initialize cart
+        if (QuickCart.cart) {
+            QuickCart.cart.init();
+        }
+        
+        // Initialize checkout
+        if (QuickCart.checkout) {
+            // Checkout ready
+        }
+    },
+    
+    // Load initial data
+    loadInitialData: function() {
+        this.loadVegetables();
+        this.loadDairy();
+        this.loadStaples();
+        this.loadNonVeg();
+        this.loadSnacks();
+        this.loadBeverages();
+        this.loadFlashSaleProducts();
+    },
+    
+    // Load vegetables into grid
+    loadVegetables: function() {
+        const grid = document.getElementById('vegetables-grid');
+        if (!grid) return;
+        
+        const products = QuickCart.products.vegetables.slice(0, 4);
+        grid.innerHTML = this.renderProductGrid(products);
+    },
+    
+    // Load dairy products
+    loadDairy: function() {
+        const grid = document.getElementById('dairy-grid');
+        if (!grid) return;
+        
+        const products = QuickCart.products.dairy.slice(0, 4);
+        grid.innerHTML = this.renderProductGrid(products);
+    },
+    
+    // Load staples
+    loadStaples: function() {
+        const grid = document.getElementById('staples-grid');
+        if (!grid) return;
+        
+        const products = QuickCart.products.staples.slice(0, 4);
+        grid.innerHTML = this.renderProductGrid(products);
+    },
+    
+    // Load non-veg products
+    loadNonVeg: function() {
+        const grid = document.getElementById('nonveg-grid');
+        if (!grid) return;
+        
+        const products = QuickCart.products.nonveg.slice(0, 4);
+        grid.innerHTML = this.renderProductGrid(products);
+    },
+    
+    // Load snacks
+    loadSnacks: function() {
+        const grid = document.getElementById('snacks-grid');
+        if (!grid) return;
+        
+        const products = QuickCart.products.snacks.slice(0, 4);
+        grid.innerHTML = this.renderProductGrid(products);
+    },
+    
+    // Load beverages
+    loadBeverages: function() {
+        const grid = document.getElementById('beverages-grid');
+        if (!grid) return;
+        
+        const products = QuickCart.products.beverages.slice(0, 4);
+        grid.innerHTML = this.renderProductGrid(products);
+    },
+    
+    // Load flash sale products
+    loadFlashSaleProducts: function() {
+        const container = document.getElementById('flash-products');
+        if (!container) return;
+        
+        const products = QuickCart.products.getDiscounted(20).slice(0, 6);
+        
+        let html = '';
+        products.forEach(product => {
+            html += `
+                <div class="swiper-slide">
+                    <div class="product-card" onclick="QuickCart.product.show('${product.id}')">
+                        <div class="product-image">
+                            <img src="${product.image}" alt="${product.name}" loading="lazy">
+                            <span class="product-badge">${product.discount}% OFF</span>
+                        </div>
+                        <div class="product-info">
+                            <p class="product-brand">${product.brand}</p>
+                            <p class="product-name">${product.name}</p>
+                            <p class="product-weight">${product.weight}</p>
+                            <div class="product-rating">
+                                <span class="rating-stars">★★★★</span>
+                                <span class="rating-count">${product.rating}</span>
+                            </div>
+                            <div class="product-price">
+                                <span class="current-price">₹${product.price}</span>
+                                <span class="original-price">₹${product.originalPrice}</span>
+                                <span class="discount">${product.discount}% off</span>
+                            </div>
+                            <button class="product-add-btn" onclick="event.stopPropagation(); QuickCart.cart.addItem('${product.id}')">
+                                <i class="fas fa-plus"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        container.innerHTML = html;
+        
+        // Initialize Swiper after content is loaded
+        setTimeout(() => {
+            if (typeof Swiper !== 'undefined') {
+                new Swiper('.flashSwiper', {
+                    slidesPerView: 2.2,
+                    spaceBetween: 12,
+                    freeMode: true,
+                    pagination: false
+                });
+            }
+        }, 100);
+    },
+    
+    // Render product grid
+    renderProductGrid: function(products) {
+        if (!products || products.length === 0) {
+            return '<p style="text-align: center; color: var(--gray-500);">No products available</p>';
+        }
+        
+        let html = '';
+        products.forEach(product => {
+            html += `
+                <div class="product-card" onclick="QuickCart.product.show('${product.id}')">
+                    <div class="product-image">
+                        <img src="${product.image}" alt="${product.name}" loading="lazy">
+                        ${product.discount > 0 ? `<span class="product-badge">${product.discount}% OFF</span>` : ''}
+                        <button class="product-wishlist" onclick="event.stopPropagation(); QuickCart.wishlist.toggle('${product.id}')">
+                            <i class="far fa-heart"></i>
+                        </button>
+                    </div>
+                    <div class="product-info">
+                        <p class="product-brand">${product.brand}</p>
+                        <p class="product-name">${product.name}</p>
+                        <p class="product-weight">${product.weight}</p>
+                        <div class="product-rating">
+                            <span class="rating-stars">★★★★</span>
+                            <span class="rating-count">${product.rating}</span>
+                        </div>
+                        <div class="product-price">
+                            <span class="current-price">₹${product.price}</span>
+                            ${product.originalPrice > product.price ? 
+                                `<span class="original-price">₹${product.originalPrice}</span>
+                                 <span class="discount">${product.discount}% off</span>` : 
+                                ''
+                            }
+                        </div>
+                        <button class="product-add-btn" onclick="event.stopPropagation(); QuickCart.cart.addItem('${product.id}')">
+                            <i class="fas fa-plus"></i> Add
+                        </button>
+                    </div>
+                </div>
+            `;
+        });
+        
+        return html;
+    },
+    
+    // Setup event listeners
+    setupEventListeners: function() {
+        // Search input with debounce
+        const searchInput = document.getElementById('search-input');
+        if (searchInput) {
+            const debouncedSearch = QuickCart.utils.debounce(this.handleSearch.bind(this), 500);
+            searchInput.addEventListener('input', debouncedSearch);
+        }
+        
+        // Close modals on outside click
+        window.addEventListener('click', function(event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.classList.remove('show');
             }
         });
         
-        // Hide suggestions on blur
-        document.addEventListener('click', (e) => {
-            if (!e.target.closest('.search-container')) {
-                hideSearchSuggestions();
-            }
+        // Handle back button (mobile)
+        window.addEventListener('popstate', function() {
+            QuickCart.cart.close();
         });
-    }
+    },
     
-    if (searchBtn) {
-        searchBtn.addEventListener('click', performSearch);
-    }
+    // Handle search
+    handleSearch: function(event) {
+        const query = event.target.value.trim();
+        this.state.searchQuery = query;
+        
+        if (query.length > 2) {
+            const results = QuickCart.products.search(query);
+            this.showSearchResults(results);
+        }
+    },
     
-    // Location selector
-    const locationSelector = $('#currentLocation');
-    if (locationSelector) {
-        locationSelector.addEventListener('click', showLocationModal);
-    }
+    // Show search results
+    showSearchResults: function(results) {
+        // Implement search results display
+        console.log('Search results:', results.length);
+    },
+    
+    // Start flash sale timer
+    startFlashSaleTimer: function() {
+        const timerEl = document.getElementById('flash-timer');
+        if (!timerEl) return;
+        
+        // Set end time to 10 hours from now
+        const endTime = new Date();
+        endTime.setHours(endTime.getHours() + 10);
+        
+        this.state.flashSaleTimer = setInterval(() => {
+            const now = new Date();
+            const diff = endTime - now;
+            
+            if (diff <= 0) {
+                clearInterval(this.state.flashSaleTimer);
+                timerEl.textContent = '00:00:00';
+                return;
+            }
+            
+            const hours = Math.floor(diff / (1000 * 60 * 60));
+            const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+            
+            timerEl.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+        }, 1000);
+    },
+    
+    // Product view
+    product: {
+        show: function(productId) {
+            const product = QuickCart.products.getById(productId);
+            if (product) {
+                // Show product details modal
+                QuickCart.utils.showNotification(product.name, 'info');
+            }
+        }
+    },
     
     // Category navigation
-    setupCategoryNavigation();
-    
-    // Product interactions
-    setupProductInteractions();
-};
-
-const closeMobileMenu = () => {
-    const mobileSidebar = $('#mobileSidebar');
-    const sidebarOverlay = $('#sidebarOverlay');
-    
-    if (mobileSidebar && sidebarOverlay) {
-        utils.removeClass(mobileSidebar, 'open');
-        utils.removeClass(sidebarOverlay, 'show');
-        document.body.style.overflow = 'auto';
-    }
-};
-
-const showSearchSuggestions = (query) => {
-    const searchSuggestions = $('#searchSuggestions');
-    if (!searchSuggestions) return;
-    
-    const products = window.productsModule.searchProducts(query).slice(0, 5);
-    
-    if (products.length === 0) {
-        hideSearchSuggestions();
-        return;
-    }
-    
-    searchSuggestions.innerHTML = products.map(product => `
-        <div class="suggestion-item" data-id="${product.id}">
-            <img src="${product.image}" alt="${product.name}" class="suggestion-image">
-            <div class="suggestion-info">
-                <h4>${product.name}</h4>
-                <p>${utils.formatCurrency(product.price)} • ${product.unit}</p>
-            </div>
-        </div>
-    `).join('');
-    
-    utils.addClass(searchSuggestions, 'show');
-    
-    // Add click handlers
-    $$('.suggestion-item').forEach(item => {
-        item.addEventListener('click', function() {
-            const productId = parseInt(this.dataset.id);
-            const product = window.productsModule.getProductById(productId);
-            if (product) {
-                window.addToCart(productId, 1);
-                utils.showNotification(`${product.name} added to cart!`, 'success');
-                hideSearchSuggestions();
-                searchInput.value = '';
-            }
-        });
-    });
-};
-
-const hideSearchSuggestions = () => {
-    const searchSuggestions = $('#searchSuggestions');
-    if (searchSuggestions) {
-        utils.removeClass(searchSuggestions, 'show');
-    }
-};
-
-const performSearch = () => {
-    const searchInput = $('#searchInput');
-    const query = searchInput.value.trim();
-    
-    if (!query) {
-        utils.showNotification('Please enter a search term', 'warning');
-        return;
-    }
-    
-    // In a real app, this would navigate to search results page
-    const results = window.productsModule.searchProducts(query);
-    
-    if (results.length > 0) {
-        utils.showNotification(`Found ${results.length} products for "${query}"`, 'success');
-    } else {
-        utils.showNotification(`No products found for "${query}"`, 'info');
-    }
-    
-    searchInput.blur();
-    hideSearchSuggestions();
-};
-
-const showLocationModal = () => {
-    utils.showNotification('Location selection coming soon!', 'info');
-};
-
-const setupCategoryNavigation = () => {
-    const categoryLinks = $$('.category-link');
-    const currentCategory = window.location.hash.replace('#', '');
-    
-    categoryLinks.forEach(link => {
-        const href = link.getAttribute('href').replace('#', '');
-        
-        if (href === currentCategory) {
-            utils.addClass(link, 'active');
+    category: {
+        load: function(categoryId) {
+            QuickCart.utils.showNotification(`Loading ${categoryId}...`, 'info');
+            // Implement category view
         }
+    },
+    
+    // Brand navigation
+    brand: {
+        load: function(brandName) {
+            const products = QuickCart.products.getByBrand(brandName);
+            QuickCart.utils.showNotification(`${brandName} - ${products.length} products`, 'info');
+        }
+    },
+    
+    // Wishlist
+    wishlist: {
+        items: [],
         
-        link.addEventListener('click', function(e) {
-            e.preventDefault();
+        toggle: function(productId) {
+            const index = this.items.indexOf(productId);
+            if (index === -1) {
+                this.items.push(productId);
+                QuickCart.utils.showNotification('Added to wishlist', 'success');
+            } else {
+                this.items.splice(index, 1);
+                QuickCart.utils.showNotification('Removed from wishlist', 'info');
+            }
+            
+            // Update count
+            document.getElementById('wishlist-count').textContent = this.items.length;
+        },
+        
+        show: function() {
+            QuickCart.utils.showNotification(`Wishlist: ${this.items.length} items`, 'info');
+        }
+    },
+    
+    // Location management
+    location: {
+        showSelector: function() {
+            document.getElementById('location-modal').classList.add('show');
+        },
+        
+        closeModal: function() {
+            document.getElementById('location-modal').classList.remove('show');
+        },
+        
+        select: function(addressType) {
+            QuickCart.utils.showNotification(`Selected: ${addressType}`, 'success');
+            this.closeModal();
+        },
+        
+        detectCurrent: function() {
+            QuickCart.utils.showNotification('Detecting location...', 'info');
+            
+            setTimeout(() => {
+                document.getElementById('current-address').textContent = 'Andheri West, Mumbai - 400053';
+                document.getElementById('current-pincode').textContent = '400053';
+                this.closeModal();
+                QuickCart.utils.showNotification('Location updated!', 'success');
+            }, 1500);
+        },
+        
+        checkPincode: function() {
+            const pincode = document.getElementById('pincode-input').value;
+            
+            if (QuickCart.utils.validatePincode(pincode)) {
+                if (QuickCart.utils.isPincodeServiceable(pincode)) {
+                    QuickCart.utils.showNotification('Pincode serviceable! 10-min delivery', 'success');
+                } else {
+                    QuickCart.utils.showNotification('Currently not serviceable', 'error');
+                }
+            } else {
+                QuickCart.utils.showNotification('Invalid pincode', 'error');
+            }
+        }
+    },
+    
+    // Coupons
+    coupons: {
+        apply: function(code) {
+            if (QuickCart.checkout) {
+                QuickCart.checkout.applyCoupon(code);
+                document.getElementById('couponFloat').style.display = 'none';
+            }
+        },
+        
+        applyCheckout: function() {
+            if (QuickCart.checkout) {
+                QuickCart.checkout.applyCheckoutCoupon();
+            }
+        },
+        
+        select: function(code) {
+            if (QuickCart.checkout) {
+                QuickCart.checkout.selectCoupon(code);
+            }
+        }
+    },
+    
+    // Navigation
+    navigation: {
+        go: function(page) {
+            QuickCart.utils.showNotification(`Loading ${page}...`, 'info');
             
             // Update active state
-            categoryLinks.forEach(l => utils.removeClass(l, 'active'));
-            utils.addClass(this, 'active');
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
             
-            // Scroll to category
-            const targetId = this.getAttribute('href').replace('#', '');
-            const targetElement = $(`#${targetId}`);
-            if (targetElement) {
-                utils.scrollTo(targetElement);
-            }
-        });
-    });
-};
-
-const setupProductInteractions = () => {
-    // Product card interactions are handled in products.js
-    // This function can be extended for additional product interactions
-};
-
-const startFlashSaleTimer = () => {
-    const timerElement = $('#flashTimer');
-    if (!timerElement) return;
-    
-    const hoursElement = timerElement.querySelector('.hours');
-    const minutesElement = timerElement.querySelector('.minutes');
-    const secondsElement = timerElement.querySelector('.seconds');
-    
-    if (!hoursElement || !minutesElement || !secondsElement) return;
-    
-    // Set timer for 2 hours from now
-    let timeLeft = 2 * 60 * 60; // 2 hours in seconds
-    
-    function updateTimer() {
-        if (timeLeft <= 0) {
-            clearInterval(timerInterval);
-            hoursElement.textContent = '00';
-            minutesElement.textContent = '00';
-            secondsElement.textContent = '00';
-            return;
+            event.currentTarget.classList.add('active');
         }
-        
-        const hours = Math.floor(timeLeft / 3600);
-        const minutes = Math.floor((timeLeft % 3600) / 60);
-        const seconds = timeLeft % 60;
-        
-        hoursElement.textContent = hours.toString().padStart(2, '0');
-        minutesElement.textContent = minutes.toString().padStart(2, '0');
-        secondsElement.textContent = seconds.toString().padStart(2, '0');
-        
-        timeLeft--;
-    }
+    },
     
-    updateTimer();
-    const timerInterval = setInterval(updateTimer, 1000);
-};
-
-const setupScrollAnimations = () => {
-    const animatedElements = $$('.reveal-on-scroll');
+    // Filter
+    filter: {
+        toggle: function() {
+            QuickCart.utils.showNotification('Filters coming soon!', 'info');
+        }
+    },
     
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                utils.addClass(entry.target, 'visible');
-                observer.unobserve(entry.target);
+    // Order tracking
+    tracking: {
+        close: function() {
+            document.getElementById('tracking-modal').classList.remove('show');
+        }
+    },
+    
+    // Order management
+    order: {
+        track: function() {
+            if (QuickCart.checkout) {
+                QuickCart.checkout.track();
             }
-        });
-    }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    });
+        }
+    },
     
-    animatedElements.forEach(element => {
-        observer.observe(element);
-    });
+    // Modal management
+    modal: {
+        close: function() {
+            document.querySelectorAll('.modal.show').forEach(modal => {
+                modal.classList.remove('show');
+            });
+        }
+    }
 };
 
-// Export global functions
-window.initializeApp = initializeApp;
-window.closeMobileMenu = closeMobileMenu;
+// Initialize app when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    window.QuickCart = QuickCart;
+    QuickCart.init();
+});
+
+// Export
+window.QuickCart = QuickCart;
