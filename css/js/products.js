@@ -1,899 +1,1625 @@
-// ===== PRODUCTS MODULE =====
+/**
+ * QUICKCART INDIA - PRODUCTS DATABASE
+ * 🇮🇳 100+ Indian Products with Real Pricing, Units, Brands
+ * ⚡ Complete Kiryana Store Inventory
+ */
 
-const productsModule = (() => {
-    // Products Data
-    const products = [
-        // Groceries & Staples
+const QuickCart = window.QuickCart || {};
+
+QuickCart.products = {
+    // Product categories
+    categories: {
+        vegetables: {
+            id: 'vegetables',
+            name: 'Sabzi Mandi',
+            hindi: 'सब्जी मंडी',
+            icon: 'carrot',
+            count: 25
+        },
+        dairy: {
+            id: 'dairy',
+            name: 'Dairy, Bread & Eggs',
+            hindi: 'दूध, अंडा, ब्रेड',
+            icon: 'jug',
+            count: 20
+        },
+        staples: {
+            id: 'staples',
+            name: 'Kiryana Store',
+            hindi: 'किराना स्टोर',
+            icon: 'seedling',
+            count: 35
+        },
+        nonveg: {
+            id: 'nonveg',
+            name: 'Chicken & Fish',
+            hindi: 'चिकन और मछली',
+            icon: 'drumstick-bite',
+            count: 15
+        },
+        snacks: {
+            id: 'snacks',
+            name: 'Namkeen & Snacks',
+            hindi: 'नमकीन और स्नैक्स',
+            icon: 'cookie-bite',
+            count: 30
+        },
+        beverages: {
+            id: 'beverages',
+            name: 'Cold Drinks & Juices',
+            hindi: 'कोल्ड ड्रिंक्स',
+            icon: 'wine-bottle',
+            count: 25
+        },
+        tea: {
+            id: 'tea',
+            name: 'Tea & Coffee',
+            hindi: 'चाय और कॉफी',
+            icon: 'mug-hot',
+            count: 20
+        },
+        biscuits: {
+            id: 'biscuits',
+            name: 'Bakery & Biscuits',
+            hindi: 'बेकरी और बिस्कुट',
+            icon: 'cookie',
+            count: 25
+        },
+        sweets: {
+            id: 'sweets',
+            name: 'Sweet Tooth',
+            hindi: 'मिठाई',
+            icon: 'candy-cane',
+            count: 20
+        },
+        cleaning: {
+            id: 'cleaning',
+            name: 'Cleaning Essentials',
+            hindi: 'सफाई के सामान',
+            icon: 'soap',
+            count: 30
+        },
+        personal: {
+            id: 'personal',
+            name: 'Personal Care',
+            hindi: 'पर्सनल केयर',
+            icon: 'shower',
+            count: 40
+        },
+        beauty: {
+            id: 'beauty',
+            name: 'Beauty & Cosmetics',
+            hindi: 'ब्यूटी',
+            icon: 'spa',
+            count: 25
+        },
+        pharma: {
+            id: 'pharma',
+            name: 'Pharma & Wellness',
+            hindi: 'दवाईयाँ',
+            icon: 'pills',
+            count: 30
+        },
+        electronics: {
+            id: 'electronics',
+            name: 'Electronics',
+            hindi: 'इलेक्ट्रॉनिक्स',
+            icon: 'headphones',
+            count: 20
+        },
+        baby: {
+            id: 'baby',
+            name: 'Baby Care',
+            hindi: 'बेबी केयर',
+            icon: 'baby',
+            count: 25
+        },
+        pet: {
+            id: 'pet',
+            name: 'Pet Care',
+            hindi: 'पेट केयर',
+            icon: 'paw',
+            count: 20
+        }
+    },
+
+    // 🥬 VEGETABLES & FRUITS - Sabzi Mandi
+    vegetables: [
         {
-            id: 1,
-            name: "Basmati Rice",
-            description: "Premium quality basmati rice, perfect for biryani",
-            price: 450,
-            originalPrice: 520,
-            discount: 13,
-            category: "groceries",
-            subCategory: "rice",
-            image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "5 kg",
-            brand: "India Gate",
+            id: 'veg001',
+            name: 'Aloo (Potato)',
+            hindi: 'आलू',
+            brand: 'Farm Fresh',
+            category: 'vegetables',
+            subcategory: 'root',
+            price: 35,
+            originalPrice: 45,
+            discount: 22,
+            unit: 'kg',
+            weight: '1 kg',
+            packSize: '1kg',
             rating: 4.5,
-            deliveryTime: "10 min",
-            isFeatured: true,
-            isDeal: false,
-            tags: ["staples", "rice", "indian"]
+            reviews: 1245,
+            inStock: true,
+            isBestSeller: true,
+            isOrganic: false,
+            image: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=400',
+            description: 'Fresh Pune Aloo, ideal for sabzi, fries',
+            origin: 'Pune, Maharashtra',
+            deliveryTime: '10 min',
+            tags: ['vegetarian', 'gluten-free']
         },
         {
-            id: 2,
-            name: "Fortune Sunflower Oil",
-            description: "Refined sunflower oil for healthy cooking",
-            price: 210,
-            originalPrice: 240,
-            discount: 12,
-            category: "groceries",
-            subCategory: "oil",
-            image: "https://images.unsplash.com/photo-1533050487297-09b450131914?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "1 L",
-            brand: "Fortune",
-            rating: 4.3,
-            deliveryTime: "10 min",
-            isFeatured: false,
-            isDeal: true,
-            tags: ["oil", "cooking", "healthy"]
-        },
-        {
-            id: 3,
-            name: "Aashirvaad Atta",
-            description: "Whole wheat flour for healthy rotis",
-            price: 280,
-            originalPrice: 310,
-            discount: 10,
-            category: "groceries",
-            subCategory: "flour",
-            image: "https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "5 kg",
-            brand: "Aashirvaad",
-            rating: 4.6,
-            deliveryTime: "10 min",
-            isFeatured: true,
-            isDeal: false,
-            tags: ["atta", "flour", "wheat"]
-        },
-        {
-            id: 4,
-            name: "Tata Salt",
-            description: "Iodized salt for daily cooking",
-            price: 25,
-            originalPrice: 28,
-            discount: 11,
-            category: "groceries",
-            subCategory: "salt",
-            image: "https://images.unsplash.com/photo-1584735175315-9d5df23860e6?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "1 kg",
-            brand: "Tata",
-            rating: 4.7,
-            deliveryTime: "10 min",
-            isFeatured: false,
-            isDeal: false,
-            tags: ["salt", "iodized", "essential"]
-        },
-        {
-            id: 5,
-            name: "MDH Garam Masala",
-            description: "Authentic Indian spice blend",
-            price: 85,
-            originalPrice: 95,
-            discount: 11,
-            category: "groceries",
-            subCategory: "spices",
-            image: "https://images.unsplash.com/photo-1586201375761-83865001e31c?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "100 g",
-            brand: "MDH",
+            id: 'veg002',
+            name: 'Pyaz (Onion)',
+            hindi: 'प्याज',
+            brand: 'Farm Fresh',
+            category: 'vegetables',
+            subcategory: 'root',
+            price: 40,
+            originalPrice: 50,
+            discount: 20,
+            unit: 'kg',
+            weight: '1 kg',
+            packSize: '1kg',
             rating: 4.4,
-            deliveryTime: "10 min",
-            isFeatured: false,
-            isDeal: true,
-            tags: ["spices", "masala", "indian"]
+            reviews: 987,
+            inStock: true,
+            isBestSeller: true,
+            image: 'https://images.unsplash.com/photo-1508747703725-71977763f4a5?w=400',
+            description: 'Nasik Red Onion, pungent and fresh',
+            origin: 'Nasik, Maharashtra',
+            deliveryTime: '10 min'
         },
-
-        // Vegetables & Fruits
         {
-            id: 6,
-            name: "Fresh Tomatoes",
-            description: "Farm fresh tomatoes, perfect for curries",
+            id: 'veg003',
+            name: 'Tamatar (Tomato)',
+            hindi: 'टमाटर',
+            brand: 'Farm Fresh',
+            category: 'vegetables',
+            subcategory: 'fruit',
+            price: 30,
+            originalPrice: 40,
+            discount: 25,
+            unit: 'kg',
+            weight: '1 kg',
+            packSize: '1kg',
+            rating: 4.3,
+            reviews: 756,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=400',
+            description: 'Farm fresh tomatoes, perfect for cooking',
+            origin: 'Kolar, Karnataka',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'veg004',
+            name: 'Gajar (Carrot)',
+            hindi: 'गाजर',
+            brand: 'Organic India',
+            category: 'vegetables',
+            subcategory: 'root',
+            price: 45,
+            originalPrice: 60,
+            discount: 25,
+            unit: 'kg',
+            weight: '500g',
+            packSize: '500g',
+            rating: 4.6,
+            reviews: 543,
+            inStock: true,
+            isOrganic: true,
+            image: 'https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=400',
+            description: 'Organic carrots, rich in beta-carotene',
+            origin: 'Ooty, Tamil Nadu',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'veg005',
+            name: 'Baingan (Brinjal)',
+            hindi: 'बैंगन',
+            brand: 'Farm Fresh',
+            category: 'vegetables',
+            subcategory: 'fruit',
             price: 30,
             originalPrice: 35,
             discount: 14,
-            category: "vegetables",
-            subCategory: "vegetables",
-            image: "https://images.unsplash.com/photo-1592924357228-91a4daadcfea?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "1 kg",
-            brand: "Farm Fresh",
+            unit: 'kg',
+            weight: '500g',
+            packSize: '500g',
+            rating: 4.2,
+            reviews: 321,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1615484477770-c069f0919d4c?w=400',
+            description: 'Purple long brinjal, perfect for bharta',
+            origin: 'Karnal, Haryana',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'veg006',
+            name: 'Mirchi (Green Chilli)',
+            hindi: 'हरी मिर्च',
+            brand: 'Farm Fresh',
+            category: 'vegetables',
+            subcategory: 'spice',
+            price: 25,
+            originalPrice: 30,
+            discount: 17,
+            unit: '100g',
+            weight: '100g',
+            packSize: '100g',
+            rating: 4.7,
+            reviews: 892,
+            inStock: true,
+            isBestSeller: true,
+            image: 'https://images.unsplash.com/photo-1583771374034-0ec0cdd44b85?w=400',
+            description: 'Spicy green chillies, add heat to your food',
+            origin: 'Guntur, Andhra Pradesh',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'veg007',
+            name: 'Nimbu (Lemon)',
+            hindi: 'नींबू',
+            brand: 'Farm Fresh',
+            category: 'vegetables',
+            subcategory: 'fruit',
+            price: 20,
+            originalPrice: 25,
+            discount: 20,
+            unit: '6pcs',
+            weight: '6 pieces',
+            packSize: '6pcs',
             rating: 4.5,
-            deliveryTime: "10 min",
-            isFeatured: true,
-            isDeal: false,
-            tags: ["vegetables", "fresh", "tomato"]
+            reviews: 654,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1587330979470-3595ac045ab0?w=400',
+            description: 'Fresh juicy lemons, vitamin C rich',
+            origin: 'Nagpur, Maharashtra',
+            deliveryTime: '10 min'
         },
         {
-            id: 7,
-            name: "Potatoes",
-            description: "Fresh potatoes for all Indian dishes",
-            price: 35,
-            originalPrice: 40,
-            discount: 13,
-            category: "vegetables",
-            subCategory: "vegetables",
-            image: "https://images.unsplash.com/photo-1518977676601-b53f82aba655?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "1 kg",
-            brand: "Premium",
-            rating: 4.4,
-            deliveryTime: "10 min",
-            isFeatured: false,
-            isDeal: false,
-            tags: ["vegetables", "potato", "staple"]
-        },
-        {
-            id: 8,
-            name: "Fresh Apples",
-            description: "Crispy red apples, rich in antioxidants",
+            id: 'veg008',
+            name: 'Seb (Apple)',
+            hindi: 'सेब',
+            brand: 'Farm Fresh',
+            category: 'vegetables',
+            subcategory: 'fruit',
             price: 150,
             originalPrice: 180,
             discount: 17,
-            category: "vegetables",
-            subCategory: "fruits",
-            image: "https://images.unsplash.com/photo-1568702846914-96b305d2aaeb?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "1 kg",
-            brand: "Washington",
-            rating: 4.7,
-            deliveryTime: "10 min",
-            isFeatured: true,
-            isDeal: true,
-            tags: ["fruits", "apple", "fresh"]
+            unit: 'kg',
+            weight: '1 kg',
+            packSize: '1kg',
+            rating: 4.4,
+            reviews: 1123,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1567306226416-28f0efdc88ce?w=400',
+            description: 'Washington Red Apples, sweet and crunchy',
+            origin: 'Washington, USA',
+            deliveryTime: '10 min'
         },
         {
-            id: 9,
-            name: "Bananas",
-            description: "Fresh yellow bananas, naturally ripe",
+            id: 'veg009',
+            name: 'Kela (Banana)',
+            hindi: 'केला',
+            brand: 'Farm Fresh',
+            category: 'vegetables',
+            subcategory: 'fruit',
             price: 50,
             originalPrice: 60,
             discount: 17,
-            category: "vegetables",
-            subCategory: "fruits",
-            image: "https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "1 dozen",
-            brand: "Farm Fresh",
-            rating: 4.5,
-            deliveryTime: "10 min",
-            isFeatured: false,
-            isDeal: false,
-            tags: ["fruits", "banana", "healthy"]
-        },
-        {
-            id: 10,
-            name: "Carrots",
-            description: "Fresh carrots, rich in vitamins",
-            price: 40,
-            originalPrice: 45,
-            discount: 11,
-            category: "vegetables",
-            subCategory: "vegetables",
-            image: "https://images.unsplash.com/photo-1598170845058-78131a90f4bf?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "500 g",
-            brand: "Premium",
-            rating: 4.3,
-            deliveryTime: "10 min",
-            isFeatured: false,
-            isDeal: true,
-            tags: ["vegetables", "carrot", "healthy"]
-        },
-
-        // Dairy, Bread & Eggs
-        {
-            id: 11,
-            name: "Amul Gold Milk",
-            description: "Full cream milk, pasteurized",
-            price: 32,
-            originalPrice: 34,
-            discount: 6,
-            category: "dairy",
-            subCategory: "milk",
-            image: "https://images.unsplash.com/photo-1563636619-e9143da7973b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "500 ml",
-            brand: "Amul",
+            unit: 'dozen',
+            weight: '12 pieces',
+            packSize: '12pcs',
             rating: 4.6,
-            deliveryTime: "10 min",
-            isFeatured: true,
-            isDeal: false,
-            tags: ["dairy", "milk", "amul"]
+            reviews: 1432,
+            inStock: true,
+            isBestSeller: true,
+            image: 'https://images.unsplash.com/photo-1571771894821-ce9b6c11b08e?w=400',
+            description: 'Yelakki bananas, small and sweet',
+            origin: 'Jalgaon, Maharashtra',
+            deliveryTime: '10 min'
         },
         {
-            id: 12,
-            name: "Fresh Eggs",
-            description: "Farm fresh brown eggs",
-            price: 60,
-            originalPrice: 65,
-            discount: 8,
-            category: "dairy",
-            subCategory: "eggs",
-            image: "https://images.unsplash.com/photo-1562043231-4b0c897c3aa3?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "6 pieces",
-            brand: "Farm Fresh",
-            rating: 4.5,
-            deliveryTime: "10 min",
-            isFeatured: false,
-            isDeal: true,
-            tags: ["dairy", "eggs", "protein"]
-        },
-        {
-            id: 13,
-            name: "Amul Butter",
-            description: "Pure butter made from fresh cream",
-            price: 50,
-            originalPrice: 55,
-            discount: 9,
-            category: "dairy",
-            subCategory: "butter",
-            image: "https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "100 g",
-            brand: "Amul",
-            rating: 4.7,
-            deliveryTime: "10 min",
-            isFeatured: false,
-            isDeal: false,
-            tags: ["dairy", "butter", "amul"]
-        },
-        {
-            id: 14,
-            name: "Britannia Bread",
-            description: "Fresh whole wheat bread",
-            price: 35,
-            originalPrice: 40,
-            discount: 13,
-            category: "dairy",
-            subCategory: "bread",
-            image: "https://images.unsplash.com/photo-1509440159596-0249088772ff?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "400 g",
-            brand: "Britannia",
-            rating: 4.3,
-            deliveryTime: "10 min",
-            isFeatured: true,
-            isDeal: false,
-            tags: ["dairy", "bread", "britannia"]
-        },
-        {
-            id: 15,
-            name: "Amul Cheese Slices",
-            description: "Processed cheese slices",
-            price: 45,
-            originalPrice: 50,
-            discount: 10,
-            category: "dairy",
-            subCategory: "cheese",
-            image: "https://images.unsplash.com/photo-1488477181946-6428a0291777?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "100 g",
-            brand: "Amul",
-            rating: 4.4,
-            deliveryTime: "10 min",
-            isFeatured: false,
-            isDeal: true,
-            tags: ["dairy", "cheese", "amul"]
-        },
-
-        // Snacks & Beverages
-        {
-            id: 16,
-            name: "Lays Potato Chips",
-            description: "Classic salted potato chips",
-            price: 20,
-            originalPrice: 25,
+            id: 'veg010',
+            name: 'Santra (Orange)',
+            hindi: 'संतरा',
+            brand: 'Farm Fresh',
+            category: 'vegetables',
+            subcategory: 'fruit',
+            price: 80,
+            originalPrice: 100,
             discount: 20,
-            category: "snacks",
-            subCategory: "chips",
-            image: "https://images.unsplash.com/photo-1566478989037-eec170784d0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "50 g",
-            brand: "Lays",
-            rating: 4.4,
-            deliveryTime: "10 min",
-            isFeatured: true,
-            isDeal: false,
-            tags: ["snacks", "chips", "lays"]
-        },
-        {
-            id: 17,
-            name: "Coca Cola",
-            description: "Refreshing carbonated drink",
-            price: 40,
-            originalPrice: 45,
-            discount: 11,
-            category: "snacks",
-            subCategory: "beverages",
-            image: "https://images.unsplash.com/photo-1622483767028-3f66f32aef97?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "750 ml",
-            brand: "Coca Cola",
+            unit: 'kg',
+            weight: '1 kg',
+            packSize: '1kg',
             rating: 4.5,
-            deliveryTime: "10 min",
-            isFeatured: false,
-            isDeal: true,
-            tags: ["beverages", "soft drink", "cola"]
+            reviews: 876,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1582979512210-99b6a53386f9?w=400',
+            description: 'Nagpur oranges, juicy and sweet',
+            origin: 'Nagpur, Maharashtra',
+            deliveryTime: '10 min'
         },
         {
-            id: 18,
-            name: "Britannia Good Day Cookies",
-            description: "Butter cookies with cashew",
-            price: 35,
-            originalPrice: 40,
-            discount: 13,
-            category: "snacks",
-            subCategory: "biscuits",
-            image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "100 g",
-            brand: "Britannia",
-            rating: 4.6,
-            deliveryTime: "10 min",
-            isFeatured: false,
-            isDeal: false,
-            tags: ["snacks", "cookies", "britannia"]
-        },
-        {
-            id: 19,
-            name: "Maggi Noodles",
-            description: "2-minute masala noodles",
-            price: 15,
-            originalPrice: 20,
-            discount: 25,
-            category: "snacks",
-            subCategory: "noodles",
-            image: "https://images.unsplash.com/photo-1612927601601-6638404737ce?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "70 g",
-            brand: "Nestle",
-            rating: 4.8,
-            deliveryTime: "10 min",
-            isFeatured: true,
-            isDeal: true,
-            tags: ["snacks", "noodles", "maggi"]
-        },
-        {
-            id: 20,
-            name: "Parle-G Biscuits",
-            description: "Glucose biscuits, perfect with tea",
-            price: 10,
-            originalPrice: 12,
-            discount: 17,
-            category: "snacks",
-            subCategory: "biscuits",
-            image: "https://images.unsplash.com/photo-1558961363-fa8fdf82db35?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "100 g",
-            brand: "Parle",
-            rating: 4.7,
-            deliveryTime: "10 min",
-            isFeatured: false,
-            isDeal: false,
-            tags: ["snacks", "biscuits", "parle"]
-        },
-
-        // Household Care
-        {
-            id: 21,
-            name: "Surf Excel Detergent",
-            description: "Matic front load detergent powder",
-            price: 150,
-            originalPrice: 170,
-            discount: 12,
-            category: "household",
-            subCategory: "detergent",
-            image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "1 kg",
-            brand: "Surf Excel",
-            rating: 4.4,
-            deliveryTime: "10 min",
-            isFeatured: true,
-            isDeal: false,
-            tags: ["household", "detergent", "cleaning"]
-        },
-        {
-            id: 22,
-            name: "Domex Floor Cleaner",
-            description: "Multipurpose floor cleaner",
-            price: 180,
-            originalPrice: 200,
-            discount: 10,
-            category: "household",
-            subCategory: "cleaner",
-            image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "1 L",
-            brand: "Domex",
-            rating: 4.3,
-            deliveryTime: "10 min",
-            isFeatured: false,
-            isDeal: true,
-            tags: ["household", "cleaner", "floor"]
-        },
-        {
-            id: 23,
-            name: "Vim Dishwash Gel",
-            description: "Lemon powered dishwashing gel",
-            price: 85,
-            originalPrice: 95,
-            discount: 11,
-            category: "household",
-            subCategory: "dishwash",
-            image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "500 ml",
-            brand: "Vim",
-            rating: 4.5,
-            deliveryTime: "10 min",
-            isFeatured: false,
-            isDeal: false,
-            tags: ["household", "dishwash", "cleaning"]
-        },
-        {
-            id: 24,
-            name: "Harpic Toilet Cleaner",
-            description: "Powerful toilet cleaner",
-            price: 120,
-            originalPrice: 135,
-            discount: 11,
-            category: "household",
-            subCategory: "cleaner",
-            image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "1 L",
-            brand: "Harpic",
-            rating: 4.4,
-            deliveryTime: "10 min",
-            isFeatured: true,
-            isDeal: false,
-            tags: ["household", "cleaner", "toilet"]
-        },
-        {
-            id: 25,
-            name: "Good Knight Mosquito Repellent",
-            description: "Fast action mosquito repellent",
-            price: 45,
-            originalPrice: 50,
-            discount: 10,
-            category: "household",
-            subCategory: "repellent",
-            image: "https://images.unsplash.com/photo-1581094794329-c8112a89af12?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "1 unit",
-            brand: "Good Knight",
-            rating: 4.6,
-            deliveryTime: "10 min",
-            isFeatured: false,
-            isDeal: true,
-            tags: ["household", "repellent", "mosquito"]
-        },
-
-        // Featured Deals
-        {
-            id: 26,
-            name: "Dairy Milk Silk",
-            description: "Premium chocolate bar",
-            price: 90,
-            originalPrice: 120,
-            discount: 25,
-            category: "snacks",
-            subCategory: "chocolate",
-            image: "https://images.unsplash.com/photo-1570913199992-91d07c140e7a?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "150 g",
-            brand: "Cadbury",
-            rating: 4.7,
-            deliveryTime: "10 min",
-            isFeatured: false,
-            isDeal: true,
-            tags: ["snacks", "chocolate", "cadbury"]
-        },
-        {
-            id: 27,
-            name: "Tata Tea Gold",
-            description: "Premium tea leaves",
-            price: 120,
-            originalPrice: 150,
-            discount: 20,
-            category: "groceries",
-            subCategory: "tea",
-            image: "https://images.unsplash.com/photo-1561047029-3000c68339ca?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "250 g",
-            brand: "Tata",
-            rating: 4.4,
-            deliveryTime: "10 min",
-            isFeatured: false,
-            isDeal: true,
-            tags: ["groceries", "tea", "tata"]
-        },
-        {
-            id: 28,
-            name: "Nivea Body Lotion",
-            description: "Moisturizing body lotion",
+            id: 'veg011',
+            name: 'Aam (Mango)',
+            hindi: 'आम',
+            brand: 'Farm Fresh',
+            category: 'vegetables',
+            subcategory: 'fruit',
             price: 200,
             originalPrice: 250,
             discount: 20,
-            category: "personal-care",
-            subCategory: "lotion",
-            image: "https://images.unsplash.com/photo-1522338242990-8ea4c8c8bcc2?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "200 ml",
-            brand: "Nivea",
+            unit: 'kg',
+            weight: '1 kg',
+            packSize: '1kg',
+            rating: 4.9,
+            reviews: 2341,
+            inStock: false,
+            isSeasonal: true,
+            image: 'https://images.unsplash.com/photo-1553279768-865429fa0078?w=400',
+            description: 'Alphonso mangoes, king of fruits',
+            origin: 'Ratnagiri, Maharashtra',
+            deliveryTime: '10 min',
+            season: 'April-June'
+        },
+        {
+            id: 'veg012',
+            name: 'Dhaniya (Coriander)',
+            hindi: 'धनिया',
+            brand: 'Farm Fresh',
+            category: 'vegetables',
+            subcategory: 'herbs',
+            price: 10,
+            originalPrice: 12,
+            discount: 17,
+            unit: 'bunch',
+            weight: '1 bunch',
+            packSize: 'bunch',
+            rating: 4.3,
+            reviews: 432,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1595256256305-1e0937f08d50?w=400',
+            description: 'Fresh coriander leaves, aromatic',
+            origin: 'Local Farm',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'veg013',
+            name: 'Pudina (Mint)',
+            hindi: 'पुदीना',
+            brand: 'Farm Fresh',
+            category: 'vegetables',
+            subcategory: 'herbs',
+            price: 10,
+            originalPrice: 12,
+            discount: 17,
+            unit: 'bunch',
+            weight: '1 bunch',
+            packSize: 'bunch',
+            rating: 4.2,
+            reviews: 321,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1627245071979-5c54cc2fc244?w=400',
+            description: 'Fresh mint leaves, perfect for chutney',
+            origin: 'Local Farm',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'veg014',
+            name: 'Lahsun (Garlic)',
+            hindi: 'लहसुन',
+            brand: 'Farm Fresh',
+            category: 'vegetables',
+            subcategory: 'spice',
+            price: 50,
+            originalPrice: 60,
+            discount: 17,
+            unit: '250g',
+            weight: '250g',
+            packSize: '250g',
+            rating: 4.4,
+            reviews: 567,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1618517904750-58ee7f221db2?w=400',
+            description: 'Desi garlic, strong flavour',
+            origin: 'Mandsaur, Madhya Pradesh',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'veg015',
+            name: 'Adrak (Ginger)',
+            hindi: 'अदरक',
+            brand: 'Farm Fresh',
+            category: 'vegetables',
+            subcategory: 'spice',
+            price: 40,
+            originalPrice: 50,
+            discount: 20,
+            unit: '250g',
+            weight: '250g',
+            packSize: '250g',
             rating: 4.5,
-            deliveryTime: "10 min",
-            isFeatured: false,
-            isDeal: true,
-            tags: ["personal-care", "lotion", "nivea"]
+            reviews: 498,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1615485290382-441e4d049cb5?w=400',
+            description: 'Fresh ginger, spicy and aromatic',
+            origin: 'Kochi, Kerala',
+            deliveryTime: '10 min'
+        }
+    ],
+
+    // 🥛 DAIRY, BREAD & EGGS
+    dairy: [
+        {
+            id: 'dai001',
+            name: 'Amul Gold Milk',
+            hindi: 'अमूल गोल्ड दूध',
+            brand: 'Amul',
+            category: 'dairy',
+            subcategory: 'milk',
+            price: 32,
+            originalPrice: 36,
+            discount: 11,
+            unit: '500ml',
+            weight: '500 ml',
+            packSize: '500ml',
+            rating: 4.8,
+            reviews: 3456,
+            inStock: true,
+            isBestSeller: true,
+            image: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=400',
+            description: 'Full cream milk, rich and creamy',
+            brandLogo: 'amul',
+            nutrition: 'Fat: 6%, SNF: 9%',
+            deliveryTime: '10 min'
         },
         {
-            id: 29,
-            name: "Dettol Hand Sanitizer",
-            description: "Alcohol based hand sanitizer",
-            price: 60,
-            originalPrice: 80,
-            discount: 25,
-            category: "personal-care",
-            subCategory: "sanitizer",
-            image: "https://images.unsplash.com/photo-1583947581924-860bda6a26df?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "200 ml",
-            brand: "Dettol",
+            id: 'dai002',
+            name: 'Amul Taaza Milk',
+            hindi: 'अमूल ताजा दूध',
+            brand: 'Amul',
+            category: 'dairy',
+            subcategory: 'milk',
+            price: 28,
+            originalPrice: 30,
+            discount: 7,
+            unit: '500ml',
+            weight: '500 ml',
+            packSize: '500ml',
+            rating: 4.7,
+            reviews: 2876,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1563636619-e9143da7973b?w=400',
+            description: 'Toned milk, perfect for daily use',
+            brandLogo: 'amul',
+            nutrition: 'Fat: 3%, SNF: 8.5%',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'dai003',
+            name: 'Mother Dairy Milk',
+            hindi: 'मदर डेयरी दूध',
+            brand: 'Mother Dairy',
+            category: 'dairy',
+            subcategory: 'milk',
+            price: 30,
+            originalPrice: 32,
+            discount: 6,
+            unit: '500ml',
+            weight: '500 ml',
+            packSize: '500ml',
             rating: 4.6,
-            deliveryTime: "10 min",
-            isFeatured: false,
-            isDeal: true,
-            tags: ["personal-care", "sanitizer", "dettol"]
+            reviews: 1987,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1579334585605-3d86a6f4ef60?w=400',
+            description: 'Homogenized toned milk',
+            brandLogo: 'motherdairy',
+            deliveryTime: '10 min'
         },
         {
-            id: 30,
-            name: "Kurkure Masala Munch",
-            description: "Spicy corn snacks",
+            id: 'dai004',
+            name: 'Fresh Eggs',
+            hindi: 'ताजे अंडे',
+            brand: 'Farm Fresh',
+            category: 'dairy',
+            subcategory: 'eggs',
+            price: 60,
+            originalPrice: 70,
+            discount: 14,
+            unit: '6pcs',
+            weight: '6 pieces',
+            packSize: '6pcs',
+            rating: 4.5,
+            reviews: 2345,
+            inStock: true,
+            isBestSeller: true,
+            image: 'https://images.unsplash.com/photo-1587486913049-53fc88980cfc?w=400',
+            description: 'Brown eggs, protein rich',
+            brandLogo: 'farmfresh',
+            nutrition: 'Protein: 6g per egg',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'dai005',
+            name: 'Farm Eggs',
+            hindi: 'फार्म अंडे',
+            brand: 'Farm Fresh',
+            category: 'dairy',
+            subcategory: 'eggs',
+            price: 110,
+            originalPrice: 120,
+            discount: 8,
+            unit: '12pcs',
+            weight: '12 pieces',
+            packSize: '12pcs',
+            rating: 4.6,
+            reviews: 1876,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1506976785307-8732e854ad03?w=400',
+            description: 'White eggs, table tray',
+            brandLogo: 'farmfresh',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'dai006',
+            name: 'Amul Butter',
+            hindi: 'अमूल बटर',
+            brand: 'Amul',
+            category: 'dairy',
+            subcategory: 'butter',
+            price: 50,
+            originalPrice: 55,
+            discount: 9,
+            unit: '100g',
+            weight: '100 g',
+            packSize: '100g',
+            rating: 4.9,
+            reviews: 4567,
+            inStock: true,
+            isBestSeller: true,
+            image: 'https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?w=400',
+            description: 'Pasteurized butter, creamy taste',
+            brandLogo: 'amul',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'dai007',
+            name: 'Amul Cheese Slices',
+            hindi: 'अमूल चीज़ स्लाइस',
+            brand: 'Amul',
+            category: 'dairy',
+            subcategory: 'cheese',
+            price: 45,
+            originalPrice: 50,
+            discount: 10,
+            unit: '100g',
+            weight: '100 g',
+            packSize: '10 slices',
+            rating: 4.7,
+            reviews: 2341,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1486297678162-eb2a19b0a32d?w=400',
+            description: '10 cheese slices, perfect for sandwiches',
+            brandLogo: 'amul',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'dai008',
+            name: 'Britannia Bread',
+            hindi: 'ब्रिटानिया ब्रेड',
+            brand: 'Britannia',
+            category: 'dairy',
+            subcategory: 'bread',
+            price: 35,
+            originalPrice: 40,
+            discount: 13,
+            unit: '400g',
+            weight: '400 g',
+            packSize: '400g',
+            rating: 4.5,
+            reviews: 1987,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1598373182133-52452f7691ef?w=400',
+            description: 'Brown bread, healthy choice',
+            brandLogo: 'britannia',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'dai009',
+            name: 'Harvest Gold Bread',
+            hindi: 'हार्वेस्ट गोल्ड ब्रेड',
+            brand: 'Harvest Gold',
+            category: 'dairy',
+            subcategory: 'bread',
+            price: 40,
+            originalPrice: 45,
+            discount: 11,
+            unit: '450g',
+            weight: '450 g',
+            packSize: '450g',
+            rating: 4.4,
+            reviews: 1654,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1549931319-54578c141a53?w=400',
+            description: 'White bread, soft and fresh',
+            brandLogo: 'harvestgold',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'dai010',
+            name: 'Amul Paneer',
+            hindi: 'अमूल पनीर',
+            brand: 'Amul',
+            category: 'dairy',
+            subcategory: 'paneer',
+            price: 90,
+            originalPrice: 100,
+            discount: 10,
+            unit: '200g',
+            weight: '200 g',
+            packSize: '200g',
+            rating: 4.8,
+            reviews: 3245,
+            inStock: true,
+            isBestSeller: true,
+            image: 'https://images.unsplash.com/photo-1631451095765-2c91616fc9e6?w=400',
+            description: 'Fresh cottage cheese, soft and creamy',
+            brandLogo: 'amul',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'dai011',
+            name: 'Mother Dairy Paneer',
+            hindi: 'मदर डेयरी पनीर',
+            brand: 'Mother Dairy',
+            category: 'dairy',
+            subcategory: 'paneer',
+            price: 85,
+            originalPrice: 95,
+            discount: 11,
+            unit: '200g',
+            weight: '200 g',
+            packSize: '200g',
+            rating: 4.6,
+            reviews: 1987,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1631451095765-2c91616fc9e6?w=400',
+            description: 'Block paneer, firm texture',
+            brandLogo: 'motherdairy',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'dai012',
+            name: 'Amul Curd',
+            hindi: 'अमूल दही',
+            brand: 'Amul',
+            category: 'dairy',
+            subcategory: 'curd',
+            price: 40,
+            originalPrice: 45,
+            discount: 11,
+            unit: '400g',
+            weight: '400 g',
+            packSize: '400g',
+            rating: 4.7,
+            reviews: 2345,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1551025161-74b8b1da6bea?w=400',
+            description: 'Fresh curd, probiotic',
+            brandLogo: 'amul',
+            deliveryTime: '10 min'
+        }
+    ],
+
+    // 🍚 GROCERIES & STAPLES
+    staples: [
+        {
+            id: 'sta001',
+            name: 'Basmati Rice',
+            hindi: 'बासमती चावल',
+            brand: 'India Gate',
+            category: 'staples',
+            subcategory: 'rice',
+            price: 99,
+            originalPrice: 125,
+            discount: 21,
+            unit: 'kg',
+            weight: '1 kg',
+            packSize: '1kg',
+            rating: 4.7,
+            reviews: 2341,
+            inStock: true,
+            isBestSeller: true,
+            image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400',
+            description: 'Premium basmati rice, long grain',
+            brandLogo: 'indiagate',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'sta002',
+            name: 'Sona Masoori Rice',
+            hindi: 'सोना मसूरी चावल',
+            brand: 'Ponni',
+            category: 'staples',
+            subcategory: 'rice',
+            price: 75,
+            originalPrice: 85,
+            discount: 12,
+            unit: 'kg',
+            weight: '1 kg',
+            packSize: '1kg',
+            rating: 4.5,
+            reviews: 1876,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400',
+            description: 'Raw rice, South Indian staple',
+            brandLogo: 'ponni',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'sta003',
+            name: 'Whole Wheat Atta',
+            hindi: 'आटा',
+            brand: 'Aashirvaad',
+            category: 'staples',
+            subcategory: 'flour',
+            price: 45,
+            originalPrice: 55,
+            discount: 18,
+            unit: 'kg',
+            weight: '1 kg',
+            packSize: '1kg',
+            rating: 4.8,
+            reviews: 4567,
+            inStock: true,
+            isBestSeller: true,
+            image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400',
+            description: 'Whole wheat atta, soft rotis',
+            brandLogo: 'aashirvaad',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'sta004',
+            name: 'Multigrain Atta',
+            hindi: 'मल्टीग्रेन आटा',
+            brand: 'Pillsbury',
+            category: 'staples',
+            subcategory: 'flour',
+            price: 65,
+            originalPrice: 75,
+            discount: 13,
+            unit: 'kg',
+            weight: '1 kg',
+            packSize: '1kg',
+            rating: 4.4,
+            reviews: 1234,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400',
+            description: '5 grains mix, healthy option',
+            brandLogo: 'pillsbury',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'sta005',
+            name: 'Toor Dal',
+            hindi: 'तूर दाल',
+            brand: 'Tata Sampann',
+            category: 'staples',
+            subcategory: 'pulses',
+            price: 85,
+            originalPrice: 100,
+            discount: 15,
+            unit: '500g',
+            weight: '500 g',
+            packSize: '500g',
+            rating: 4.6,
+            reviews: 1987,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1515543904379-3d757f8e66e1?w=400',
+            description: 'Premium toor dal, oil treated',
+            brandLogo: 'tata',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'sta006',
+            name: 'Moong Dal',
+            hindi: 'मूंग दाल',
+            brand: 'Tata Sampann',
+            category: 'staples',
+            subcategory: 'pulses',
+            price: 90,
+            originalPrice: 105,
+            discount: 14,
+            unit: '500g',
+            weight: '500 g',
+            packSize: '500g',
+            rating: 4.6,
+            reviews: 1654,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1515543904379-3d757f8e66e1?w=400',
+            description: 'Yellow moong dal, easy to cook',
+            brandLogo: 'tata',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'sta007',
+            name: 'Chana Dal',
+            hindi: 'चना दाल',
+            brand: 'Tata Sampann',
+            category: 'staples',
+            subcategory: 'pulses',
+            price: 80,
+            originalPrice: 95,
+            discount: 16,
+            unit: '500g',
+            weight: '500 g',
+            packSize: '500g',
+            rating: 4.5,
+            reviews: 1432,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1515543904379-3d757f8e66e1?w=400',
+            description: 'Bengal gram dal, protein rich',
+            brandLogo: 'tata',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'sta008',
+            name: 'Sunflower Oil',
+            hindi: 'सूरजमुखी तेल',
+            brand: 'Fortune',
+            category: 'staples',
+            subcategory: 'oil',
+            price: 120,
+            originalPrice: 140,
+            discount: 14,
+            unit: 'L',
+            weight: '1 L',
+            packSize: '1L',
+            rating: 4.5,
+            reviews: 2345,
+            inStock: true,
+            isBestSeller: true,
+            image: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=400',
+            description: 'Refined sunflower oil, cholesterol free',
+            brandLogo: 'fortune',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'sta009',
+            name: 'Mustard Oil',
+            hindi: 'सरसों तेल',
+            brand: 'Emami',
+            category: 'staples',
+            subcategory: 'oil',
+            price: 140,
+            originalPrice: 160,
+            discount: 13,
+            unit: 'L',
+            weight: '1 L',
+            packSize: '1L',
+            rating: 4.4,
+            reviews: 1543,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=400',
+            description: 'Kachi ghani mustard oil',
+            brandLogo: 'emami',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'sta010',
+            name: 'Tata Salt',
+            hindi: 'ताता नमक',
+            brand: 'Tata',
+            category: 'staples',
+            subcategory: 'salt',
             price: 20,
             originalPrice: 25,
             discount: 20,
-            category: "snacks",
-            subCategory: "namkeen",
-            image: "https://images.unsplash.com/photo-1566478989037-eec170784d0b?ixlib=rb-1.2.1&auto=format&fit=crop&w=500&q=80",
-            unit: "50 g",
-            brand: "Kurkure",
-            rating: 4.3,
-            deliveryTime: "10 min",
-            isFeatured: false,
-            isDeal: true,
-            tags: ["snacks", "namkeen", "kurkure"]
+            unit: 'kg',
+            weight: '1 kg',
+            packSize: '1kg',
+            rating: 4.8,
+            reviews: 5678,
+            inStock: true,
+            isBestSeller: true,
+            image: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=400',
+            description: 'Iodized salt, vacuum evaporated',
+            brandLogo: 'tata',
+            deliveryTime: '10 min'
         }
-    ];
+    ],
 
-    // Categories Data
-    const categories = [
+    // 🍗 CHICKEN, MEAT & FISH
+    nonveg: [
         {
-            id: 1,
-            name: "Groceries & Staples",
-            icon: "fas fa-shopping-basket",
-            description: "Rice, Dal, Oil, Masala & more",
-            productCount: 50,
-            color: "#00B894"
+            id: 'non001',
+            name: 'Fresh Chicken',
+            hindi: 'ताजा चिकन',
+            brand: 'Zorabian',
+            category: 'nonveg',
+            subcategory: 'chicken',
+            price: 200,
+            originalPrice: 220,
+            discount: 9,
+            unit: 'kg',
+            weight: '1 kg',
+            packSize: '1kg',
+            rating: 4.6,
+            reviews: 2345,
+            inStock: true,
+            isBestSeller: true,
+            image: 'https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=400',
+            description: 'Fresh curry cut chicken, skinless',
+            brandLogo: 'zorabian',
+            deliveryTime: '15 min',
+            tags: ['non-vegetarian']
         },
         {
-            id: 2,
-            name: "Vegetables & Fruits",
-            icon: "fas fa-carrot",
-            description: "Fresh produce, organic options",
-            productCount: 45,
-            color: "#E17055"
+            id: 'non002',
+            name: 'Chicken Breast',
+            hindi: 'चिकन ब्रेस्ट',
+            brand: 'Zorabian',
+            category: 'nonveg',
+            subcategory: 'chicken',
+            price: 250,
+            originalPrice: 280,
+            discount: 11,
+            unit: 'kg',
+            weight: '1 kg',
+            packSize: '1kg',
+            rating: 4.5,
+            reviews: 1432,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1604503468506-a8da13d82791?w=400',
+            description: 'Boneless chicken breast, lean meat',
+            brandLogo: 'zorabian',
+            deliveryTime: '15 min',
+            tags: ['non-vegetarian', 'high-protein']
         },
         {
-            id: 3,
-            name: "Dairy, Bread & Eggs",
-            icon: "fas fa-cheese",
-            description: "Milk, Eggs, Butter, Bread",
-            productCount: 35,
-            color: "#FDCB6E"
+            id: 'non003',
+            name: 'Mutton',
+            hindi: 'मटन',
+            brand: 'Al Kabeer',
+            category: 'nonveg',
+            subcategory: 'mutton',
+            price: 550,
+            originalPrice: 600,
+            discount: 8,
+            unit: 'kg',
+            weight: '1 kg',
+            packSize: '1kg',
+            rating: 4.4,
+            reviews: 987,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=400',
+            description: 'Fresh mutton, curry cut',
+            brandLogo: 'alkabeer',
+            deliveryTime: '15 min',
+            tags: ['non-vegetarian']
         },
         {
-            id: 4,
-            name: "Meat & Fish",
-            icon: "fas fa-drumstick-bite",
-            description: "Chicken, Mutton, Fish, Seafood",
-            productCount: 25,
-            color: "#D63031"
+            id: 'non004',
+            name: 'Rohu Fish',
+            hindi: 'रोहू मछली',
+            brand: 'Fresh Catch',
+            category: 'nonveg',
+            subcategory: 'fish',
+            price: 300,
+            originalPrice: 350,
+            discount: 14,
+            unit: 'kg',
+            weight: '1 kg',
+            packSize: '1kg',
+            rating: 4.5,
+            reviews: 876,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1615141982883-c7ad0e69fd62?w=400',
+            description: 'Freshwater Rohu, cut into pieces',
+            brandLogo: 'freshcatch',
+            deliveryTime: '15 min',
+            tags: ['non-vegetarian']
         },
         {
-            id: 5,
-            name: "Snacks & Beverages",
-            icon: "fas fa-cookie-bite",
-            description: "Chips, Drinks, Biscuits, Chocolates",
-            productCount: 40,
-            color: "#6C5CE7"
-        },
-        {
-            id: 6,
-            name: "Household Care",
-            icon: "fas fa-home",
-            description: "Cleaning, Detergents, Tools",
-            productCount: 38,
-            color: "#0984E3"
-        },
-        {
-            id: 7,
-            name: "Personal Care",
-            icon: "fas fa-spa",
-            description: "Shampoo, Soap, Cosmetics",
-            productCount: 42,
-            color: "#FD79A8"
-        },
-        {
-            id: 8,
-            name: "Electronics",
-            icon: "fas fa-laptop",
-            description: "Earphones, Chargers, Appliances",
-            productCount: 22,
-            color: "#636E72"
-        },
-        {
-            id: 9,
-            name: "Pharma & Wellness",
-            icon: "fas fa-pills",
-            description: "Medicines, Supplements, Devices",
-            productCount: 30,
-            color: "#00B894"
-        },
-        {
-            id: 10,
-            name: "Baby Care",
-            icon: "fas fa-baby",
-            description: "Diapers, Baby Food, Wipes",
-            productCount: 20,
-            color: "#A29BFE"
-        },
-        {
-            id: 11,
-            name: "Pet Care",
-            icon: "fas fa-paw",
-            description: "Pet Food, Toys, Accessories",
-            productCount: 18,
-            color: "#E17055"
-        },
-        {
-            id: 12,
-            name: "Home & Office",
-            icon: "fas fa-building",
-            description: "Stationery, Decor, Storage",
-            productCount: 28,
-            color: "#FDCB6E"
+            id: 'non005',
+            name: 'Prawns',
+            hindi: 'झींगे',
+            brand: 'Fresh Catch',
+            category: 'nonveg',
+            subcategory: 'seafood',
+            price: 500,
+            originalPrice: 550,
+            discount: 9,
+            unit: 'kg',
+            weight: '1 kg',
+            packSize: '1kg',
+            rating: 4.6,
+            reviews: 765,
+            inStock: true,
+            isBestSeller: true,
+            image: 'https://images.unsplash.com/photo-1565680018434-b513d5e5fd47?w=400',
+            description: 'Medium size prawns, deveined',
+            brandLogo: 'freshcatch',
+            deliveryTime: '15 min',
+            tags: ['non-vegetarian', 'seafood']
         }
-    ];
+    ],
 
-    // State
-    let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+    // 🍪 SNACKS & MUNCHIES
+    snacks: [
+        {
+            id: 'snk001',
+            name: 'Lays Classic',
+            hindi: 'लेज़ क्लासिक',
+            brand: 'Lays',
+            category: 'snacks',
+            subcategory: 'chips',
+            price: 20,
+            originalPrice: 20,
+            discount: 0,
+            unit: '50g',
+            weight: '50 g',
+            packSize: '50g',
+            rating: 4.7,
+            reviews: 6789,
+            inStock: true,
+            isBestSeller: true,
+            image: 'https://images.unsplash.com/photo-1613918431701-3e68fece885a?w=400',
+            description: 'Potato chips, salted',
+            brandLogo: 'lays',
+            deliveryTime: '10 min',
+            tags: ['vegetarian', 'snacks']
+        },
+        {
+            id: 'snk002',
+            name: 'Lays Indian Masala',
+            hindi: 'लेज़ इंडियन मसाला',
+            brand: 'Lays',
+            category: 'snacks',
+            subcategory: 'chips',
+            price: 20,
+            originalPrice: 20,
+            discount: 0,
+            unit: '50g',
+            weight: '50 g',
+            packSize: '50g',
+            rating: 4.8,
+            reviews: 5678,
+            inStock: true,
+            isBestSeller: true,
+            image: 'https://images.unsplash.com/photo-1613918431701-3e68fece885a?w=400',
+            description: 'Magic masala flavored chips',
+            brandLogo: 'lays',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'snk003',
+            name: 'Kurkure Masala',
+            hindi: 'कुरकुरे मसाला',
+            brand: 'Kurkure',
+            category: 'snacks',
+            subcategory: 'namkeen',
+            price: 20,
+            originalPrice: 20,
+            discount: 0,
+            unit: '50g',
+            weight: '50 g',
+            packSize: '50g',
+            rating: 4.6,
+            reviews: 4567,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1613918431701-3e68fece885a?w=400',
+            description: 'Masala munch, crunchy snack',
+            brandLogo: 'kurkure',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'snk004',
+            name: 'Maggi Noodles',
+            hindi: 'मैगी नूडल्स',
+            brand: 'Maggi',
+            category: 'snacks',
+            subcategory: 'instant',
+            price: 14,
+            originalPrice: 14,
+            discount: 0,
+            unit: '70g',
+            weight: '70 g',
+            packSize: '70g',
+            rating: 4.9,
+            reviews: 9876,
+            inStock: true,
+            isBestSeller: true,
+            image: 'https://images.unsplash.com/photo-1612929633738-8fe44ee7c94b?w=400',
+            description: '2-minute noodles, masala flavor',
+            brandLogo: 'maggi',
+            deliveryTime: '10 min',
+            tags: ['vegetarian', 'instant']
+        },
+        {
+            id: 'snk005',
+            name: 'Haldiram\'s Aloo Bhujia',
+            hindi: 'हल्दीराम आलू भुजिया',
+            brand: 'Haldiram\'s',
+            category: 'snacks',
+            subcategory: 'namkeen',
+            price: 40,
+            originalPrice: 45,
+            discount: 11,
+            unit: '200g',
+            weight: '200 g',
+            packSize: '200g',
+            rating: 4.7,
+            reviews: 3456,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1613918431701-3e68fece885a?w=400',
+            description: 'Crispy aloo bhujia, traditional taste',
+            brandLogo: 'haldirams',
+            deliveryTime: '10 min'
+        }
+    ],
 
-    // Public Methods
-    const init = () => {
-        console.log('Products module initialized');
-        loadCategories();
-        loadProducts();
-    };
+    // 🥤 BEVERAGES
+    beverages: [
+        {
+            id: 'bev001',
+            name: 'Coca Cola',
+            hindi: 'कोका कोला',
+            brand: 'Coca-Cola',
+            category: 'beverages',
+            subcategory: 'softdrinks',
+            price: 40,
+            originalPrice: 45,
+            discount: 11,
+            unit: '750ml',
+            weight: '750 ml',
+            packSize: '750ml',
+            rating: 4.6,
+            reviews: 4567,
+            inStock: true,
+            isBestSeller: true,
+            image: 'https://images.unsplash.com/photo-1554866585-cd94860890b7?w=400',
+            description: 'Classic cola, chilled',
+            brandLogo: 'cocacola',
+            deliveryTime: '10 min',
+            tags: ['cold', 'beverage']
+        },
+        {
+            id: 'bev002',
+            name: 'Thums Up',
+            hindi: 'थम्स अप',
+            brand: 'Thums Up',
+            category: 'beverages',
+            subcategory: 'softdrinks',
+            price: 40,
+            originalPrice: 45,
+            discount: 11,
+            unit: '750ml',
+            weight: '750 ml',
+            packSize: '750ml',
+            rating: 4.7,
+            reviews: 3987,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1554866585-cd94860890b7?w=400',
+            description: 'Charged cola, strong taste',
+            brandLogo: 'thumsup',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'bev003',
+            name: 'Real Fruit Juice',
+            hindi: 'रियल फ्रूट जूस',
+            brand: 'Real',
+            category: 'beverages',
+            subcategory: 'juice',
+            price: 90,
+            originalPrice: 100,
+            discount: 10,
+            unit: '1L',
+            weight: '1 L',
+            packSize: '1L',
+            rating: 4.5,
+            reviews: 2345,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1622597467836-f3285f2131b9?w=400',
+            description: 'Mixed fruit juice, no preservatives',
+            brandLogo: 'real',
+            deliveryTime: '10 min',
+            tags: ['juice', 'healthy']
+        },
+        {
+            id: 'bev004',
+            name: 'Paper Boat Aam Panna',
+            hindi: 'पेपर बोट आम पन्ना',
+            brand: 'Paper Boat',
+            category: 'beverages',
+            subcategory: 'juice',
+            price: 40,
+            originalPrice: 45,
+            discount: 11,
+            unit: '250ml',
+            weight: '250 ml',
+            packSize: '250ml',
+            rating: 4.8,
+            reviews: 2987,
+            inStock: true,
+            isBestSeller: true,
+            image: 'https://images.unsplash.com/photo-1622597467836-f3285f2131b9?w=400',
+            description: 'Raw mango drink, traditional recipe',
+            brandLogo: 'paperboat',
+            deliveryTime: '10 min'
+        }
+    ],
 
-    const loadCategories = () => {
-        const categoriesGrid = $('#categoriesGrid');
-        if (!categoriesGrid) return;
+    // ☕ TEA & COFFEE
+    tea: [
+        {
+            id: 'tea001',
+            name: 'Tata Tea Gold',
+            hindi: 'ताता टी गोल्ड',
+            brand: 'Tata Tea',
+            category: 'tea',
+            subcategory: 'tea',
+            price: 120,
+            originalPrice: 135,
+            discount: 11,
+            unit: '250g',
+            weight: '250 g',
+            packSize: '250g',
+            rating: 4.7,
+            reviews: 3456,
+            inStock: true,
+            isBestSeller: true,
+            image: 'https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=400',
+            description: 'Premium tea leaves, strong aroma',
+            brandLogo: 'tatatea',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'tea002',
+            name: 'Red Label Tea',
+            hindi: 'रेड लेबल चाय',
+            brand: 'Red Label',
+            category: 'tea',
+            subcategory: 'tea',
+            price: 110,
+            originalPrice: 125,
+            discount: 12,
+            unit: '250g',
+            weight: '250 g',
+            packSize: '250g',
+            rating: 4.6,
+            reviews: 2987,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1564890369478-c89ca6d9cde9?w=400',
+            description: 'Natural care tea, family favorite',
+            brandLogo: 'redlabel',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'tea003',
+            name: 'Nescafe Classic',
+            hindi: 'नेस्कैफे क्लासिक',
+            brand: 'Nescafe',
+            category: 'tea',
+            subcategory: 'coffee',
+            price: 280,
+            originalPrice: 300,
+            discount: 7,
+            unit: '100g',
+            weight: '100 g',
+            packSize: '100g',
+            rating: 4.8,
+            reviews: 4123,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1559525835-2d1578032576?w=400',
+            description: 'Instant coffee, rich aroma',
+            brandLogo: 'nescafe',
+            deliveryTime: '10 min'
+        }
+    ],
 
-        categoriesGrid.innerHTML = '';
-        
-        categories.forEach((category, index) => {
-            const categoryCard = createCategoryCard(category, index);
-            categoriesGrid.appendChild(categoryCard);
-        });
-    };
+    // 🧹 CLEANING ESSENTIALS
+    cleaning: [
+        {
+            id: 'cln001',
+            name: 'Surf Excel Matic',
+            hindi: 'सर्फ एक्सेल मैटिक',
+            brand: 'Surf Excel',
+            category: 'cleaning',
+            subcategory: 'detergent',
+            price: 150,
+            originalPrice: 170,
+            discount: 12,
+            unit: 'kg',
+            weight: '1 kg',
+            packSize: '1kg',
+            rating: 4.6,
+            reviews: 2345,
+            inStock: true,
+            isBestSeller: true,
+            image: 'https://images.unsplash.com/photo-1626803331821-7955513c1843?w=400',
+            description: 'Front load washing powder',
+            brandLogo: 'surfexcel',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'cln002',
+            name: 'Vim Liquid',
+            hindi: 'विम लिक्विड',
+            brand: 'Vim',
+            category: 'cleaning',
+            subcategory: 'dishwash',
+            price: 85,
+            originalPrice: 95,
+            discount: 11,
+            unit: '500ml',
+            weight: '500 ml',
+            packSize: '500ml',
+            rating: 4.5,
+            reviews: 1987,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1626803331821-7955513c1843?w=400',
+            description: 'Lemon dishwash gel, grease cutter',
+            brandLogo: 'vim',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'cln003',
+            name: 'Harpic',
+            hindi: 'हार्पिक',
+            brand: 'Harpic',
+            category: 'cleaning',
+            subcategory: 'toilet',
+            price: 120,
+            originalPrice: 140,
+            discount: 14,
+            unit: '1L',
+            weight: '1 L',
+            packSize: '1L',
+            rating: 4.7,
+            reviews: 1765,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1626803331821-7955513c1843?w=400',
+            description: 'Toilet cleaner, power plus',
+            brandLogo: 'harpic',
+            deliveryTime: '10 min'
+        }
+    ],
 
-    const createCategoryCard = (category, index) => {
-        const card = utils.createElement('a', 'category-card stagger-item');
-        card.href = `#${category.name.toLowerCase().replace(/ /g, '-')}`;
-        card.style.animationDelay = `${index * 0.1}s`;
-        
-        card.innerHTML = `
-            <div class="category-icon" style="background-color: ${category.color}20; color: ${category.color}">
-                <i class="${category.icon}"></i>
-            </div>
-            <h3>${category.name}</h3>
-            <p>${category.description}</p>
-            <span class="product-count">${category.productCount} products</span>
-        `;
-        
-        card.addEventListener('click', (e) => {
-            e.preventDefault();
-            filterProductsByCategory(category.name);
-            utils.scrollTo(document.getElementById(category.name.toLowerCase().replace(/ /g, '-')));
-        });
-        
-        return card;
-    };
+    // 💇 PERSONAL CARE
+    personal: [
+        {
+            id: 'per001',
+            name: 'Dove Shampoo',
+            hindi: 'डव शैम्पू',
+            brand: 'Dove',
+            category: 'personal',
+            subcategory: 'hair',
+            price: 200,
+            originalPrice: 220,
+            discount: 9,
+            unit: '180ml',
+            weight: '180 ml',
+            packSize: '180ml',
+            rating: 4.6,
+            reviews: 3456,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1631729371254-42c2892f0e6e?w=400',
+            description: 'Hair fall rescue shampoo',
+            brandLogo: 'dove',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'per002',
+            name: 'Parachute Coconut Oil',
+            hindi: 'पैराशूट नारियल तेल',
+            brand: 'Parachute',
+            category: 'personal',
+            subcategory: 'hair',
+            price: 100,
+            originalPrice: 110,
+            discount: 9,
+            unit: '300ml',
+            weight: '300 ml',
+            packSize: '300ml',
+            rating: 4.8,
+            reviews: 5678,
+            inStock: true,
+            isBestSeller: true,
+            image: 'https://images.unsplash.com/photo-1631729371254-42c2892f0e6e?w=400',
+            description: 'Pure coconut oil, hair growth',
+            brandLogo: 'parachute',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'per003',
+            name: 'Dove Soap',
+            hindi: 'डव साबुन',
+            brand: 'Dove',
+            category: 'personal',
+            subcategory: 'bath',
+            price: 50,
+            originalPrice: 55,
+            discount: 9,
+            unit: '100g',
+            weight: '100 g',
+            packSize: '100g',
+            rating: 4.7,
+            reviews: 4321,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1631729371254-42c2892f0e6e?w=400',
+            description: 'Cream beauty bathing bar',
+            brandLogo: 'dove',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'per004',
+            name: 'Colgate Toothpaste',
+            hindi: 'कोलगेट टूथपेस्ट',
+            brand: 'Colgate',
+            category: 'personal',
+            subcategory: 'oral',
+            price: 85,
+            originalPrice: 95,
+            discount: 11,
+            unit: '100g',
+            weight: '100 g',
+            packSize: '100g',
+            rating: 4.7,
+            reviews: 3890,
+            inStock: true,
+            isBestSeller: true,
+            image: 'https://images.unsplash.com/photo-1631729371254-42c2892f0e6e?w=400',
+            description: 'Strong teeth, cavity protection',
+            brandLogo: 'colgate',
+            deliveryTime: '10 min'
+        }
+    ],
 
-    const loadProducts = () => {
-        loadFlashSaleProducts();
-        loadFeaturedProducts();
-        loadCategoryProducts('groceries', 'groceriesProducts');
-        loadCategoryProducts('vegetables', 'vegetablesProducts');
-        loadCategoryProducts('dairy', 'dairyProducts');
-        loadCategoryProducts('snacks', 'snacksProducts');
-        loadCategoryProducts('household', 'householdProducts');
-    };
+    // 🍫 SWEETS & CHOCOLATES
+    sweets: [
+        {
+            id: 'swt001',
+            name: 'Dairy Milk',
+            hindi: 'डेयरी मिल्क',
+            brand: 'Cadbury',
+            category: 'sweets',
+            subcategory: 'chocolate',
+            price: 20,
+            originalPrice: 20,
+            discount: 0,
+            unit: '20g',
+            weight: '20 g',
+            packSize: '20g',
+            rating: 4.9,
+            reviews: 7890,
+            inStock: true,
+            isBestSeller: true,
+            image: 'https://images.unsplash.com/photo-1627552245715-77d79bbf6fe2?w=400',
+            description: 'Silk chocolate bar',
+            brandLogo: 'cadbury',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'swt002',
+            name: 'Dairy Milk Silk',
+            hindi: 'डेयरी मिल्क सिल्क',
+            brand: 'Cadbury',
+            category: 'sweets',
+            subcategory: 'chocolate',
+            price: 90,
+            originalPrice: 100,
+            discount: 10,
+            unit: '150g',
+            weight: '150 g',
+            packSize: '150g',
+            rating: 4.9,
+            reviews: 5678,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1627552245715-77d79bbf6fe2?w=400',
+            description: 'Silk chocolate bar, smooth',
+            brandLogo: 'cadbury',
+            deliveryTime: '10 min'
+        },
+        {
+            id: 'swt003',
+            name: 'Haldiram\'s Gulab Jamun',
+            hindi: 'हल्दीराम गुलाब जामुन',
+            brand: 'Haldiram\'s',
+            category: 'sweets',
+            subcategory: 'indian',
+            price: 80,
+            originalPrice: 90,
+            discount: 11,
+            unit: '6pcs',
+            weight: '6 pieces',
+            packSize: '6pcs',
+            rating: 4.8,
+            reviews: 3456,
+            inStock: true,
+            image: 'https://images.unsplash.com/photo-1627552245715-77d79bbf6fe2?w=400',
+            description: 'Ready-to-eat gulab jamun',
+            brandLogo: 'haldirams',
+            deliveryTime: '10 min'
+        }
+    ],
 
-    const loadFlashSaleProducts = () => {
-        const container = $('#flashSaleProducts');
-        if (!container) return;
-        
-        const flashProducts = products.filter(p => p.isDeal).slice(0, 4);
-        container.innerHTML = '';
-        
-        flashProducts.forEach((product, index) => {
-            const productCard = createProductCard(product, true, index);
-            container.appendChild(productCard);
-        });
-    };
+    // Get all products combined
+    getAll: function() {
+        return [
+            ...this.vegetables,
+            ...this.dairy,
+            ...this.staples,
+            ...this.nonveg,
+            ...this.snacks,
+            ...this.beverages,
+            ...this.tea,
+            ...this.cleaning,
+            ...this.personal,
+            ...this.sweets
+        ];
+    },
 
-    const loadFeaturedProducts = () => {
-        const container = $('#featuredProducts');
-        if (!container) return;
-        
-        const featuredProducts = products.filter(p => p.isFeatured).slice(0, 8);
-        container.innerHTML = '';
-        
-        featuredProducts.forEach((product, index) => {
-            const productCard = createProductCard(product, false, index);
-            container.appendChild(productCard);
-        });
-    };
+    // Get products by category
+    getByCategory: function(categoryId) {
+        switch(categoryId) {
+            case 'vegetables': return this.vegetables;
+            case 'dairy': return this.dairy;
+            case 'staples': return this.staples;
+            case 'nonveg': return this.nonveg;
+            case 'snacks': return this.snacks;
+            case 'beverages': return this.beverages;
+            case 'tea': return this.tea;
+            case 'cleaning': return this.cleaning;
+            case 'personal': return this.personal;
+            case 'sweets': return this.sweets;
+            default: return [];
+        }
+    },
 
-    const loadCategoryProducts = (category, elementId) => {
-        const container = $(`#${elementId}`);
-        if (!container) return;
-        
-        const categoryProducts = products
-            .filter(p => p.category === category)
-            .slice(0, 4);
-        
-        container.innerHTML = '';
-        
-        categoryProducts.forEach((product, index) => {
-            const productCard = createProductCard(product, false, index);
-            container.appendChild(productCard);
-        });
-    };
+    // Get product by ID
+    getById: function(productId) {
+        const allProducts = this.getAll();
+        return allProducts.find(product => product.id === productId);
+    },
 
-    const createProductCard = (product, isDeal = false, index = 0) => {
-        const card = utils.createElement('div', `product-card stagger-item`);
-        card.style.animationDelay = `${index * 0.1}s`;
-        card.dataset.id = product.id;
-        
-        const discountPercentage = product.originalPrice ? 
-            Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100) : 
-            product.discount;
-        
-        card.innerHTML = `
-            ${discountPercentage > 0 ? `<div class="product-badge">${discountPercentage}% OFF</div>` : ''}
-            <div class="product-image">
-                <img src="${product.image}" alt="${product.name}" loading="lazy">
-            </div>
-            <div class="product-content">
-                <h3 class="product-title">${product.name}</h3>
-                <p class="product-description">${product.description}</p>
-                <div class="product-price">
-                    <div>
-                        <span class="price-current">${utils.formatCurrency(product.price)}</span>
-                        ${product.originalPrice ? `<span class="price-original">${utils.formatCurrency(product.originalPrice)}</span>` : ''}
-                    </div>
-                    ${discountPercentage > 0 ? `<span class="price-discount">${discountPercentage}% OFF</span>` : ''}
-                </div>
-                <p class="product-unit">${product.unit}</p>
-                <div class="product-actions">
-                    <button class="btn-add-cart" data-id="${product.id}">
-                        <i class="fas fa-cart-plus"></i>
-                        Add to Cart
-                    </button>
-                    <button class="btn-favorite ${isFavorite(product.id) ? 'active' : ''}" data-id="${product.id}">
-                        <i class="fas fa-heart"></i>
-                    </button>
-                </div>
-            </div>
-        `;
-        
-        // Add event listeners
-        const addCartBtn = card.querySelector('.btn-add-cart');
-        const favoriteBtn = card.querySelector('.btn-favorite');
-        
-        addCartBtn.addEventListener('click', () => {
-            window.addToCart(product.id, 1);
-            utils.showNotification(`${product.name} added to cart!`, 'success');
-            utils.animate(addCartBtn, 'animate-cart-add');
-        });
-        
-        favoriteBtn.addEventListener('click', () => {
-            toggleFavorite(product.id);
-            const isFav = isFavorite(product.id);
-            utils.toggleClass(favoriteBtn, 'active');
-            utils.showNotification(
-                isFav ? 'Added to favorites!' : 'Removed from favorites',
-                isFav ? 'success' : 'info'
-            );
-            utils.animate(favoriteBtn, 'animate-heart-beat');
-        });
-        
-        return card;
-    };
-
-    const getProductById = (id) => {
-        return products.find(product => product.id === id);
-    };
-
-    const getProductsByCategory = (category) => {
-        return products.filter(product => product.category === category);
-    };
-
-    const searchProducts = (query) => {
-        const searchTerm = query.toLowerCase();
-        return products.filter(product =>
-            product.name.toLowerCase().includes(searchTerm) ||
-            product.description.toLowerCase().includes(searchTerm) ||
-            product.category.toLowerCase().includes(searchTerm) ||
-            product.brand.toLowerCase().includes(searchTerm) ||
-            product.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+    // Search products
+    search: function(query) {
+        const allProducts = this.getAll();
+        query = query.toLowerCase();
+        return allProducts.filter(product => 
+            product.name.toLowerCase().includes(query) ||
+            product.hindi.toLowerCase().includes(query) ||
+            product.brand.toLowerCase().includes(query) ||
+            product.category.toLowerCase().includes(query)
         );
-    };
+    },
 
-    const filterProductsByCategory = (category) => {
-        const categoryProducts = getProductsByCategory(category.toLowerCase());
-        // In a real app, this would update the products grid
-        console.log(`Filtering by category: ${category}`, categoryProducts);
-        return categoryProducts;
-    };
+    // Get best sellers
+    getBestSellers: function() {
+        const allProducts = this.getAll();
+        return allProducts.filter(product => product.isBestSeller);
+    },
 
-    const getFeaturedProducts = () => {
-        return products.filter(product => product.isFeatured);
-    };
+    // Get discounted products (flash sale)
+    getDiscounted: function(minDiscount = 15) {
+        const allProducts = this.getAll();
+        return allProducts.filter(product => product.discount >= minDiscount);
+    },
 
-    const getDealProducts = () => {
-        return products.filter(product => product.isDeal);
-    };
+    // Get products by brand
+    getByBrand: function(brandName) {
+        const allProducts = this.getAll();
+        return allProducts.filter(product => 
+            product.brand.toLowerCase() === brandName.toLowerCase()
+        );
+    }
+};
 
-    const toggleFavorite = (productId) => {
-        const index = favorites.indexOf(productId);
-        if (index === -1) {
-            favorites.push(productId);
-        } else {
-            favorites.splice(index, 1);
-        }
-        utils.storage.set('favorites', favorites);
-        return index === -1; // Returns true if added, false if removed
-    };
-
-    const isFavorite = (productId) => {
-        return favorites.includes(productId);
-    };
-
-    const getFavorites = () => {
-        return favorites.map(id => getProductById(id)).filter(Boolean);
-    };
-
-    const getAllProducts = () => {
-        return products;
-    };
-
-    const getAllCategories = () => {
-        return categories;
-    };
-
-    // Initialize
-    document.addEventListener('DOMContentLoaded', init);
-
-    // Public API
-    return {
-        init,
-        getProductById,
-        getProductsByCategory,
-        searchProducts,
-        filterProductsByCategory,
-        getFeaturedProducts,
-        getDealProducts,
-        toggleFavorite,
-        isFavorite,
-        getFavorites,
-        getAllProducts,
-        getAllCategories
-    };
-})();
-
-// Export to global scope
-window.productsModule = productsModule;
+// Export for use in other files
+window.QuickCart = window.QuickCart || {};
+window.QuickCart.products = QuickCart.products;
