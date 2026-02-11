@@ -1,461 +1,174 @@
-/* ===== RESPONSIVE DESIGN ===== */
+/*
+* QUICKCART INDIA - RESPONSIVE DESIGN
+* 🇮🇳 Mobile First | 320px to 4K
+*/
 
-/* Large Desktops (1200px and above) */
-@media (min-width: 1200px) {
-    .container {
-        max-width: 1200px;
+/* --------------------------------------------- */
+/* SMALL PHONES (320px - 375px)                 */
+/* --------------------------------------------- */
+
+@media screen and (max-width: 375px) {
+    :root {
+        --font-lg: 14px;
+        --font-xl: 16px;
+        --font-2xl: 18px;
+        --font-3xl: 20px;
+    }
+
+    .location-details span {
+        max-width: 120px;
+    }
+
+    .category-icon {
+        width: 50px;
+        height: 50px;
+    }
+
+    .category-icon i {
+        font-size: 20px;
+    }
+
+    .brands-grid {
+        grid-template-columns: repeat(3, 1fr);
+    }
+
+    .product-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .product-image {
+        height: 120px;
+    }
+
+    .otp-box {
+        width: 40px;
+        height: 50px;
+        font-size: var(--font-xl);
     }
 }
 
-/* Desktops (992px to 1199px) */
-@media (max-width: 1199px) {
-    .container {
-        max-width: 960px;
+/* --------------------------------------------- */
+/* MEDIUM PHONES (376px - 425px)                */
+/* --------------------------------------------- */
+
+@media screen and (min-width: 376px) and (max-width: 425px) {
+    .brands-grid {
+        grid-template-columns: repeat(3, 1fr);
     }
-    
-    .hero-banner .container {
-        grid-template-columns: 1fr 1fr;
-        gap: 30px;
-    }
-    
-    .hero-title {
-        font-size: 2.5rem;
-    }
-    
-    .products-grid {
-        grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
+
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 }
 
-/* Tablets (768px to 991px) */
-@media (max-width: 991px) {
-    .container {
+/* --------------------------------------------- */
+/* LARGE PHONES (426px - 768px)                 */
+/* --------------------------------------------- */
+
+@media screen and (min-width: 426px) and (max-width: 768px) {
+    .app-wrapper {
+        max-width: 480px;
+    }
+
+    .brands-grid {
+        grid-template-columns: repeat(4, 1fr);
+    }
+}
+
+/* --------------------------------------------- */
+/* TABLETS (769px - 1024px)                     */
+/* --------------------------------------------- */
+
+@media screen and (min-width: 769px) and (max-width: 1024px) {
+    .app-wrapper {
         max-width: 720px;
     }
-    
-    /* Header Adjustments */
-    .menu-toggle {
-        display: block;
+
+    .product-grid {
+        grid-template-columns: repeat(3, 1fr);
     }
-    
-    .header-top {
-        flex-wrap: wrap;
-    }
-    
-    .search-container {
-        order: 3;
-        flex: 0 0 100%;
-        margin-top: 15px;
-        max-width: 100%;
-    }
-    
-    .location-selector {
-        display: none;
-    }
-    
-    .user-actions {
-        gap: 10px;
-    }
-    
-    .action-btn span {
-        display: none;
-    }
-    
-    .action-btn {
-        padding: 10px;
-    }
-    
-    .cart-btn span:first-child {
-        display: none;
-    }
-    
-    /* Categories Navigation */
-    .categories-container {
-        gap: 10px;
-        padding: 10px 0;
-    }
-    
-    .category-link {
-        padding: 8px 12px;
-        font-size: 0.9rem;
-    }
-    
-    .category-link span {
-        display: none;
-    }
-    
-    /* Hero Banner */
-    .hero-banner .container {
-        grid-template-columns: 1fr;
-        text-align: center;
-    }
-    
-    .hero-features {
-        justify-content: center;
-    }
-    
-    .hero-buttons {
-        justify-content: center;
-    }
-    
-    /* Categories Grid */
-    .categories-grid {
-        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    }
-    
-    /* Products Grid */
-    .products-grid {
-        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-        gap: 20px;
-    }
-    
-    /* Features */
-    .features-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    /* Download Section */
-    .download-section .container {
-        grid-template-columns: 1fr;
-        text-align: center;
-    }
-    
-    .download-buttons {
-        justify-content: center;
-    }
-    
-    /* Footer */
-    .footer-content {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    /* Shopping Cart */
-    .shopping-cart {
-        width: 350px;
+
+    .brands-grid {
+        grid-template-columns: repeat(4, 1fr);
     }
 }
 
-/* Mobile Landscape (576px to 767px) */
-@media (max-width: 767px) {
-    .container {
-        max-width: 540px;
-        padding: 0 15px;
-    }
-    
-    /* Header */
-    .logo-text h1 {
-        font-size: 1.5rem;
-    }
-    
-    .tagline {
-        font-size: 0.7rem;
-    }
-    
-    .search-btn span {
-        display: none;
-    }
-    
-    .search-btn {
-        padding: 12px;
-    }
-    
-    .search-btn i {
-        margin: 0;
-    }
-    
-    /* Categories */
-    .categories-grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-    
-    /* Flash Sale */
-    .sale-header {
-        flex-direction: column;
-        gap: 20px;
-        align-items: flex-start;
-    }
-    
-    /* Products Grid */
-    .products-grid {
-        grid-template-columns: repeat(2, 1fr);
-        gap: 15px;
-    }
-    
-    .product-card {
-        padding: 15px;
-    }
-    
-    /* Features */
-    .features-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    /* Download Buttons */
-    .download-buttons {
-        flex-direction: column;
-    }
-    
-    /* Footer */
-    .footer-content {
-        grid-template-columns: 1fr;
-    }
-    
-    .footer-bottom {
-        flex-direction: column;
-        gap: 15px;
-        text-align: center;
-    }
-    
-    /* Shopping Cart */
-    .shopping-cart {
-        width: 100%;
-        right: -100%;
-    }
-    
-    /* Auth Modal */
-    .auth-modal {
-        padding: 15px;
-    }
-    
-    .auth-form,
-    .otp-section,
-    .auth-header,
-    .auth-footer {
-        padding: 20px;
-    }
-    
-    .social-auth {
-        flex-direction: column;
-        padding: 0 20px 20px;
-    }
-}
+/* --------------------------------------------- */
+/* DESKTOP (1025px+)                            */
+/* --------------------------------------------- */
 
-/* Mobile Portrait (up to 575px) */
-@media (max-width: 575px) {
-    .container {
-        padding: 0 10px;
+@media screen and (min-width: 1025px) {
+    .app-wrapper {
+        max-width: 480px;
+        margin: 0 auto;
+        box-shadow: var(--shadow-xl);
+        border-radius: var(--radius-xl);
+        overflow: hidden;
+        height: 95vh;
+        margin-top: 2.5vh;
     }
-    
-    /* Announcement Bar */
-    .announcement-bar p {
-        font-size: 0.8rem;
-        text-align: center;
-        flex-wrap: wrap;
-        gap: 5px;
-    }
-    
-    /* Hero Banner */
-    .hero-title {
-        font-size: 2rem;
-    }
-    
-    .hero-subtitle {
-        font-size: 1rem;
-    }
-    
-    .hero-features {
-        gap: 10px;
-    }
-    
-    .feature {
-        padding: 8px 12px;
-        font-size: 0.9rem;
-    }
-    
-    .hero-buttons {
-        flex-direction: column;
-        width: 100%;
-    }
-    
-    .btn-primary,
-    .btn-outline {
-        width: 100%;
-        justify-content: center;
-    }
-    
-    /* Section Header */
-    .section-header {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-    }
-    
-    .view-all {
-        align-self: flex-end;
-    }
-    
-    /* Products Grid */
-    .products-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    /* Product Card */
-    .product-content {
-        padding: 15px;
-    }
-    
-    .product-actions {
-        flex-direction: column;
-    }
-    
-    .btn-favorite {
-        width: 100%;
-        height: 44px;
-    }
-    
-    /* Flash Sale Timer */
-    .sale-timer {
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 10px;
-    }
-    
-    .timer {
-        font-size: 1.2rem;
-    }
-    
-    /* Mobile Sidebar */
-    .mobile-sidebar {
-        width: 280px;
-    }
-    
-    /* Toast */
-    .toast-container {
-        left: 10px;
-        right: 10px;
-        bottom: 10px;
-    }
-    
-    .toast {
-        width: 100%;
-    }
-}
 
-/* Small Mobile Devices (up to 375px) */
-@media (max-width: 375px) {
-    /* Header */
-    .logo {
-        gap: 8px;
-    }
-    
-    .logo-icon {
-        width: 35px;
-        height: 35px;
-        font-size: 1.3rem;
-    }
-    
-    .logo-text h1 {
-        font-size: 1.3rem;
-    }
-    
-    /* Categories */
-    .categories-grid {
-        grid-template-columns: 1fr;
-    }
-    
-    .category-card {
-        padding: 20px;
-    }
-    
-    /* Product Card */
-    .product-image {
-        height: 180px;
-    }
-    
-    /* Shopping Cart */
-    .cart-item {
-        flex-direction: column;
-        text-align: center;
-    }
-    
-    .cart-item-image {
-        width: 100%;
-        height: 150px;
-    }
-    
-    .cart-item-actions {
-        flex-direction: column;
-        gap: 10px;
-    }
-}
-
-/* Touch Device Optimizations */
-@media (hover: none) and (pointer: coarse) {
-    .btn-primary:hover,
-    .btn-outline:hover,
-    .category-card:hover,
-    .product-card:hover {
-        transform: none;
-    }
-    
-    .action-btn:hover,
-    .category-link:hover,
-    .menu-item:hover {
-        background: initial;
-    }
-    
-    .btn-add-cart,
-    .btn-favorite,
-    .quantity-btn,
-    .cart-btn,
-    .search-btn {
-        min-height: 44px;
-        min-width: 44px;
-    }
-    
-    input,
-    select,
-    textarea {
-        font-size: 16px; /* Prevents zoom on iOS */
-    }
-}
-
-/* High Resolution Displays */
-@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
-    .logo-icon,
-    .category-icon,
-    .feature-icon {
-        -webkit-font-smoothing: antialiased;
-        -moz-osx-font-smoothing: grayscale;
-    }
-}
-
-/* Print Styles */
-@media print {
-    .announcement-bar,
-    .header-top,
-    .categories-nav,
-    .mobile-sidebar,
-    .shopping-cart,
-    .auth-modal,
-    .checkout-modal,
-    .toast-container,
-    .hero-buttons,
-    .product-actions,
-    .download-section,
-    .social-links,
-    .footer-bottom {
-        display: none !important;
-    }
-    
     body {
-        background: white;
-        color: black;
-        font-size: 12pt;
+        background: var(--gray-200);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        min-height: 100vh;
     }
-    
-    .container {
-        max-width: 100%;
-        padding: 0;
+
+    ::-webkit-scrollbar {
+        width: 6px;
     }
-    
-    a {
-        color: black;
-        text-decoration: underline;
+}
+
+/* --------------------------------------------- */
+/* LANDSCAPE MODE                              */
+/* --------------------------------------------- */
+
+@media screen and (orientation: landscape) and (max-height: 500px) {
+    .bottom-nav {
+        position: relative;
+        margin-top: var(--space-lg);
     }
-    
-    .hero-banner,
-    .category-section {
-        break-inside: avoid;
+
+    .main-content {
+        padding-bottom: var(--space-lg);
+    }
+
+    .modal-content {
+        max-height: 80vh;
+    }
+}
+
+/* --------------------------------------------- */
+/* DARK MODE SUPPORT (Coming Soon)              */
+/* --------------------------------------------- */
+
+@media (prefers-color-scheme: dark) {
+    /* Will be implemented in v2.0 */
+}
+
+/* --------------------------------------------- */
+/* PRINT STYLES                                 */
+/* --------------------------------------------- */
+
+@media print {
+    .bottom-nav,
+    .location-header,
+    .search-section,
+    .coupon-float {
+        display: none;
+    }
+}
+
+/* --------------------------------------------- */
+/* ACCESSIBILITY                                */
+/* --------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
     }
 }
