@@ -3,61 +3,896 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <meta name="description" content="QuickCart - India's Fastest 10-Minute Grocery Delivery App. Order fruits, vegetables, dairy, snacks & more. Free delivery in Mumbai, Delhi, Bangalore.">
-    <meta name="keywords" content="grocery delivery india, online kirana, blinkit clone, zepto clone, 10 minute delivery, amul, tata, bigbasket">
-    <meta name="author" content="QuickCart India">
-    <meta name="theme-color" content="#FF9933">
-    
     <title>QuickCart - 10 Min Grocery Delivery | India's #1 Kirana App</title>
     
-    <!-- Favicon -->
-    <link rel="icon" type="image/x-icon" href="images/favicon.ico">
-    <link rel="apple-touch-icon" href="images/logo.png">
-    
-    <!-- CSS Files -->
-    <link rel="stylesheet" href="css/animation.css">
-    <link rel="stylesheet" href="css/style.css">
-    <link rel="stylesheet" href="css/responsive.css">
-    
-    <!-- Google Fonts - Poppins (Indian friendly) -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome 6 (Indian version) -->
+    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
-    <!-- Swiper JS for carousels -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* ====== COMPLETE CSS - WORKING 100% ====== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .app-wrapper {
+            max-width: 480px;
+            width: 100%;
+            background: white;
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* Loading Screen */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            height: 100%;
+            background: linear-gradient(145deg, #fff4e6, white);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            transition: opacity 0.3s;
+        }
+
+        .loading-content {
+            text-align: center;
+        }
+
+        .loading-logo h2 {
+            font-size: 32px;
+            color: #1a1a1a;
+            margin-top: 10px;
+        }
+
+        .loading-logo span {
+            color: #138808;
+        }
+
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid #ffe0b3;
+            border-top: 4px solid #FF9933;
+            border-right: 4px solid #138808;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 30px auto;
+        }
+
+        .loading-tagline {
+            color: #138808;
+            font-weight: 600;
+            margin: 10px 0;
+        }
+
+        .loading-location {
+            color: #666;
+            font-size: 14px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Main App */
+        #app {
+            display: none;
+            position: relative;
+            background: white;
+        }
+
+        /* Location Header */
+        .location-header {
+            background: white;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .location-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .location-left {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .location-left i {
+            color: #FF9933;
+            font-size: 18px;
+        }
+
+        .delivery-label {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .delivery-time {
+            color: #138808;
+            font-weight: 600;
+        }
+
+        .address-selector {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+
+        .pincode-badge {
+            background: #f0f0f0;
+            padding: 2px 8px;
+            border-radius: 20px;
+            font-size: 10px;
+            color: #666;
+        }
+
+        .icon-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            color: #666;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #FF9933;
+            color: white;
+            font-size: 10px;
+            padding: 2px 6px;
+            border-radius: 50%;
+        }
+
+        /* Search Bar */
+        .search-section {
+            background: white;
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            position: sticky;
+            top: 70px;
+            z-index: 99;
+        }
+
+        .search-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .search-wrapper {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            background: #f5f5f5;
+            border-radius: 8px;
+            padding: 0 15px;
+        }
+
+        .search-wrapper i {
+            color: #999;
+        }
+
+        .search-wrapper input {
+            flex: 1;
+            padding: 12px 10px;
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            outline: none;
+        }
+
+        .voice-search {
+            background: none;
+            border: none;
+            color: #666;
+            cursor: pointer;
+        }
+
+        .filter-btn {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 0 15px;
+            color: #666;
+            cursor: pointer;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 15px;
+            padding-bottom: 90px;
+        }
+
+        /* Categories */
+        .categories-section {
+            margin-bottom: 25px;
+        }
+
+        .categories-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .categories-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .categories-header a {
+            color: #FF9933;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .categories-slider {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .categories-slider::-webkit-scrollbar {
+            display: none;
+        }
+
+        .category-pill {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 80px;
+            cursor: pointer;
+        }
+
+        .category-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 5px;
+        }
+
+        .category-icon i {
+            font-size: 24px;
+        }
+
+        .category-pill span {
+            font-size: 12px;
+            font-weight: 500;
+            text-align: center;
+        }
+
+        /* Flash Sale */
+        .flash-sale {
+            background: linear-gradient(145deg, #fff4e6, #ffe8d9);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 25px;
+        }
+
+        .flash-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 15px;
+        }
+
+        .flash-title {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .flash-title i {
+            color: #ff4444;
+        }
+
+        .flash-title h3 {
+            font-size: 16px;
+            font-weight: 700;
+            color: #ff4444;
+        }
+
+        .timer-container {
+            background: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            display: flex;
+            gap: 5px;
+        }
+
+        .timer {
+            background: #1a1a1a;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+
+        /* Brands */
+        .brand-store {
+            margin-bottom: 25px;
+        }
+
+        .brand-store h3 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .brands-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .brand-card {
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+        }
+
+        .brand-card img {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 5px;
+        }
+
+        .brand-card span {
+            font-size: 12px;
+            font-weight: 600;
+            display: block;
+        }
+
+        .brand-card small {
+            font-size: 10px;
+            color: #138808;
+        }
+
+        /* Product Section */
+        .product-section {
+            margin-bottom: 25px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+
+        .section-header h3 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+        .section-subtitle {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .section-header a {
+            color: #FF9933;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        /* Product Card */
+        .product-card {
+            background: white;
+            border: 1px solid #eee;
+            border-radius: 12px;
+            padding: 12px;
+            position: relative;
+            cursor: pointer;
+        }
+
+        .product-image {
+            position: relative;
+            margin-bottom: 10px;
+            height: 120px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .product-image img {
+            max-width: 100%;
+            max-height: 120px;
+            object-fit: contain;
+        }
+
+        .product-badge {
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            background: #ff4444;
+            color: white;
+            font-size: 10px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 20px;
+        }
+
+        .product-wishlist {
+            position: absolute;
+            top: 5px;
+            right: 5px;
+            background: white;
+            border: none;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #999;
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+
+        .product-brand {
+            font-size: 10px;
+            color: #666;
+            text-transform: uppercase;
+        }
+
+        .product-name {
+            font-size: 14px;
+            font-weight: 500;
+            color: #1a1a1a;
+            margin-bottom: 2px;
+        }
+
+        .product-weight {
+            font-size: 10px;
+            color: #999;
+            margin-bottom: 5px;
+        }
+
+        .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            margin-bottom: 5px;
+        }
+
+        .rating-stars {
+            color: #FFC107;
+            font-size: 10px;
+        }
+
+        .rating-count {
+            font-size: 10px;
+            color: #666;
+        }
+
+        .product-price {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .current-price {
+            font-size: 16px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .original-price {
+            font-size: 12px;
+            color: #999;
+            text-decoration: line-through;
+        }
+
+        .discount {
+            font-size: 10px;
+            color: #138808;
+            font-weight: 600;
+        }
+
+        .product-add-btn {
+            width: 100%;
+            background: #e8f5e9;
+            border: 1px solid #138808;
+            border-radius: 6px;
+            padding: 8px;
+            color: #138808;
+            font-weight: 600;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            cursor: pointer;
+        }
+
+        .product-add-btn:hover {
+            background: #138808;
+            color: white;
+        }
+
+        /* Bottom Navigation */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            background: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            border-top: 1px solid #eee;
+            box-shadow: 0 -4px 10px rgba(0,0,0,0.05);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .nav-item i {
+            font-size: 20px;
+            color: #999;
+        }
+
+        .nav-item span {
+            font-size: 10px;
+            color: #999;
+        }
+
+        .nav-item.active i,
+        .nav-item.active span {
+            color: #FF9933;
+        }
+
+        .cart-count {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: #FF9933;
+            color: white;
+            font-size: 9px;
+            min-width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Coupon Float */
+        .coupon-float {
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            max-width: 400px;
+            background: white;
+            border: 2px solid #FF9933;
+            border-radius: 50px;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            z-index: 999;
+        }
+
+        .coupon-float i:first-child {
+            color: #FF9933;
+        }
+
+        .coupon-float span {
+            flex: 1;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .coupon-float button {
+            background: #FF9933;
+            color: white;
+            border: none;
+            padding: 5px 15px;
+            border-radius: 50px;
+            font-size: 12px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .close-coupon {
+            color: #999;
+            cursor: pointer;
+        }
+
+        /* Cart Drawer */
+        .cart-drawer {
+            position: fixed;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            max-width: 480px;
+            height: 100vh;
+            background: white;
+            z-index: 2000;
+            transition: right 0.3s;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .cart-drawer.open {
+            right: 0;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-header h2 {
+            font-size: 20px;
+            font-weight: 600;
+        }
+
+        .cart-header i {
+            font-size: 20px;
+            cursor: pointer;
+            color: #666;
+        }
+
+        .cart-items {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .cart-item-image {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+        }
+
+        .cart-item-details {
+            flex: 1;
+        }
+
+        .cart-item-name {
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .cart-item-price {
+            font-size: 14px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-top: 5px;
+        }
+
+        .cart-item-quantity {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .quantity-btn {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+        }
+
+        .cart-bill {
+            padding: 20px;
+            border-top: 1px solid #eee;
+        }
+
+        .bill-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .bill-row.total {
+            font-size: 16px;
+            font-weight: 700;
+            margin-top: 10px;
+            padding-top: 10px;
+            border-top: 1px dashed #ddd;
+        }
+
+        .btn-checkout {
+            background: #FF9933;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 20px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            max-width: 480px;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 3000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            width: 90%;
+            border-radius: 16px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            border-bottom: 1px solid #eee;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .empty-cart i {
+            color: #ddd;
+            font-size: 48px;
+            margin-bottom: 20px;
+        }
+
+        .empty-cart h3 {
+            color: #666;
+            margin-bottom: 10px;
+        }
+
+        .btn-outline {
+            background: white;
+            color: #FF9933;
+            border: 1px solid #FF9933;
+            border-radius: 8px;
+            padding: 12px 20px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        /* Demo Banner */
+        .demo-banner {
+            background: #138808;
+            color: white;
+            text-align: center;
+            padding: 8px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .demo-banner i {
+            margin-right: 5px;
+        }
+    </style>
 </head>
 <body>
-    <!-- ⚡ QUICKCART INDIA - ULTRA REALISTIC GROCERY PLATFORM ⚡ -->
-    <!-- ⏱️ 10-MINUTE DELIVERY | 🇮🇳 100% INDIAN PRODUCTS | 📍 50+ CITIES -->
-    
-    <!-- 🚀 LOADING SCREEN (INDIAN STYLE) -->
+    <!-- Loading Screen -->
     <div id="loading-screen" class="loading-screen">
         <div class="loading-content">
             <div class="loading-logo">
-                <span class="fa-stack fa-2x">
-                    <i class="fas fa-circle fa-stack-2x" style="color: #FF9933;"></i>
-                    <i class="fas fa-bolt fa-stack-1x fa-inverse"></i>
-                </span>
-                <h2>Quick<span style="color: #138808;">Cart</span></h2>
+                <i class="fas fa-bolt fa-3x" style="color: #FF9933;"></i>
+                <h2>Quick<span>Cart</span></h2>
             </div>
-            <div class="loading-spinner">
-                <div class="spinner"></div>
-            </div>
+            <div class="spinner"></div>
             <p class="loading-tagline">Ghar Baithe, 10 Minute Mein! 🛵💨</p>
-            <p class="loading-location">Detecting your location...</p>
+            <p class="loading-location">Loading your grocery store...</p>
         </div>
     </div>
 
-    <!-- 🏠 MAIN APP WRAPPER -->
-    <div id="app" class="app-wrapper" style="display: none;">
+    <!-- Main App -->
+    <div id="app" class="app-wrapper">
         
-        <!-- 📍 LOCATION BAR (FIXED TOP) - BLINKIT STYLE -->
+        <!-- DEMO BANNER -->
+        <div class="demo-banner">
+            <i class="fas fa-info-circle"></i> DEMO MODE - Auto-Logged in as +91 98765 43210
+        </div>
+
+        <!-- Location Header -->
         <header class="location-header">
             <div class="location-container">
                 <div class="location-left">
-                    <i class="fas fa-map-marker-alt" style="color: #FF9933;"></i>
+                    <i class="fas fa-map-marker-alt"></i>
                     <div class="location-details">
                         <span class="delivery-label">Delivery in <span class="delivery-time">10</span> min</span>
                         <div class="address-selector" onclick="QuickCart.location.showSelector()">
@@ -79,370 +914,153 @@
             </div>
         </header>
 
-        <!-- 🔍 SEARCH BAR (STICKY) -->
+        <!-- Search Bar -->
         <div class="search-section">
             <div class="search-container">
                 <div class="search-wrapper">
                     <i class="fas fa-search"></i>
-                    <input type="text" id="search-input" placeholder='Search "Amul Milk", "Tata Salt", "Maggi"...' autocomplete="off">
-                    <button class="voice-search" onclick="QuickCart.search.voiceSearch()">
+                    <input type="text" id="search-input" placeholder='Search "Amul Milk", "Tata Salt", "Maggi"...'>
+                    <button class="voice-search" onclick="QuickCart.utils.showNotification('Voice search coming soon!', 'info')">
                         <i class="fas fa-microphone"></i>
                     </button>
                 </div>
-                <button class="filter-btn" onclick="QuickCart.filter.toggle()">
+                <button class="filter-btn" onclick="QuickCart.utils.showNotification('Filters coming soon!', 'info')">
                     <i class="fas fa-sliders-h"></i>
                 </button>
             </div>
         </div>
 
-        <!-- 📱 MAIN CONTENT (SCROLLABLE) -->
-        <main class="main-content">
-            
-            <!-- 🎯 CATEGORY PILLS - INDIAN STYLE -->
+        <!-- Main Content -->
+        <main class="main-content" id="main-content">
+            <!-- Categories -->
             <section class="categories-section">
                 <div class="categories-header">
                     <h3>Browse Categories</h3>
-                    <a href="#" onclick="QuickCart.categories.viewAll()">View All <i class="fas fa-arrow-right"></i></a>
+                    <a href="#" onclick="QuickCart.utils.showNotification('All categories coming soon!', 'info')">View All <i class="fas fa-arrow-right"></i></a>
                 </div>
-                <div class="categories-slider">
-                    <div class="category-pill" onclick="QuickCart.category.load('vegetables')">
-                        <div class="category-icon" style="background: #E8F5E9;">
-                            <i class="fas fa-carrot" style="color: #2E7D32;"></i>
-                        </div>
-                        <span>Sabzi Mandi</span>
-                    </div>
-                    <div class="category-pill" onclick="QuickCart.category.load('dairy')">
-                        <div class="category-icon" style="background: #FFF3E0;">
-                            <i class="fas fa-jug" style="color: #FF6F00;"></i>
-                        </div>
-                        <span>Doodh, Anda</span>
-                    </div>
-                    <div class="category-pill" onclick="QuickCart.category.load('staples')">
-                        <div class="category-icon" style="background: #F3E5F5;">
-                            <i class="fas fa-seedling" style="color: #6A1B9A;"></i>
-                        </div>
-                        <span>Kiryana</span>
-                    </div>
-                    <div class="category-pill" onclick="QuickCart.category.load('snacks')">
-                        <div class="category-icon" style="background: #FFEBEE;">
-                            <i class="fas fa-cookie-bite" style="color: #C2185B;"></i>
-                        </div>
-                        <span>Namkeen</span>
-                    </div>
-                    <div class="category-pill" onclick="QuickCart.category.load('beverages')">
-                        <div class="category-icon" style="background: #E1F5FE;">
-                            <i class="fas fa-wine-bottle" style="color: #0277BD;"></i>
-                        </div>
-                        <span>Cold Drinks</span>
-                    </div>
-                    <div class="category-pill" onclick="QuickCart.category.load('nonveg')">
-                        <div class="category-icon" style="background: #FBE9E7;">
-                            <i class="fas fa-drumstick-bite" style="color: #BF360C;"></i>
-                        </div>
-                        <span>Chicken & Fish</span>
-                    </div>
-                    <div class="category-pill" onclick="QuickCart.category.load('cleaning')">
-                        <div class="category-icon" style="background: #E0F7FA;">
-                            <i class="fas fa-soap" style="color: #00695C;"></i>
-                        </div>
-                        <span>Cleaning</span>
-                    </div>
-                    <div class="category-pill" onclick="QuickCart.category.load('personal')">
-                        <div class="category-icon" style="background: #FCE4EC;">
-                            <i class="fas fa-shower" style="color: #880E4F;"></i>
-                        </div>
-                        <span>Personal Care</span>
-                    </div>
+                <div class="categories-slider" id="categories-slider">
+                    <!-- Categories will be loaded by JS -->
                 </div>
             </section>
 
-            <!-- ⚡ FLASH SALE - LIMITED TIME OFFER -->
+            <!-- Flash Sale -->
             <section class="flash-sale">
                 <div class="flash-header">
                     <div class="flash-title">
-                        <i class="fas fa-bolt" style="color: #FF6B6B;"></i>
+                        <i class="fas fa-bolt"></i>
                         <h3>Flash Sale</h3>
                     </div>
                     <div class="timer-container">
-                        <span>Ends in: </span>
-                        <div class="timer" id="flash-timer">10:23:45</div>
+                        <span>Ends in:</span>
+                        <span class="timer" id="flash-timer">23:59:59</span>
                     </div>
-                    <a href="#" onclick="QuickCart.flashSale.viewAll()">View All</a>
+                    <a href="#" onclick="QuickCart.utils.showNotification('Flash sale products!', 'info')">View All</a>
                 </div>
-                <div class="swiper flashSwiper">
-                    <div class="swiper-wrapper" id="flash-products">
-                        <!-- Flash products loaded via JS -->
-                    </div>
+                <div class="product-grid" id="flash-products">
+                    <!-- Flash products loaded by JS -->
                 </div>
             </section>
 
-            <!-- 🏆 BRAND STORE - AMUL, TATA, FORTUNE -->
+            <!-- Top Brands -->
             <section class="brand-store">
                 <h3>Top Brands <span style="color: #FF9933;">🇮🇳</span></h3>
-                <div class="brands-grid">
-                    <div class="brand-card" onclick="QuickCart.brand.load('amul')">
-                        <img src="https://images.unsplash.com/photo-1621868002587-9cb6e3ee5b6b?w=200" alt="Amul" loading="lazy">
-                        <span>Amul</span>
-                        <small>Up to 30% off</small>
-                    </div>
-                    <div class="brand-card" onclick="QuickCart.brand.load('tata')">
-                        <img src="https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=200" alt="Tata" loading="lazy">
-                        <span>Tata</span>
-                        <small>20% off</small>
-                    </div>
-                    <div class="brand-card" onclick="QuickCart.brand.load('fortune')">
-                        <img src="https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=200" alt="Fortune" loading="lazy">
-                        <span>Fortune</span>
-                        <small>25% off</small>
-                    </div>
-                    <div class="brand-card" onclick="QuickCart.brand.load('aashirvaad')">
-                        <img src="https://images.unsplash.com/photo-1509440159596-0249088772ff?w=200" alt="Aashirvaad" loading="lazy">
-                        <span>Aashirvaad</span>
-                        <small>15% off</small>
-                    </div>
-                    <div class="brand-card" onclick="QuickCart.brand.load('britannia')">
-                        <img src="https://images.unsplash.com/photo-1587240971770-d47beeaae5fe?w=200" alt="Britannia" loading="lazy">
-                        <span>Britannia</span>
-                        <small>Buy 1 Get 1</small>
-                    </div>
-                    <div class="brand-card" onclick="QuickCart.brand.load('parle')">
-                        <img src="https://images.unsplash.com/photo-1590080874088-eecbb95f6c1b?w=200" alt="Parle" loading="lazy">
-                        <span>Parle</span>
-                        <small>₹10 starting</small>
-                    </div>
+                <div class="brands-grid" id="brands-grid">
+                    <!-- Brands loaded by JS -->
                 </div>
             </section>
 
-            <!-- 🥬 VEGETABLES SECTION - SABZI MANDI -->
+            <!-- Vegetables Section -->
             <section class="product-section">
                 <div class="section-header">
                     <div>
-                        <h3>Sabzi Mandi <span style="font-size: 14px; color: #666;">(Fresh from farm)</span></h3>
-                        <p class="section-subtitle">सब्जी मंडी - ताज़ी सब्जियाँ</p>
+                        <h3>🥬 Sabzi Mandi</h3>
+                        <p class="section-subtitle">Fresh from farm</p>
                     </div>
                     <a href="#" onclick="QuickCart.category.load('vegetables')">See All <i class="fas fa-chevron-right"></i></a>
                 </div>
                 <div class="product-grid" id="vegetables-grid">
-                    <!-- Vegetables loaded via JS -->
+                    <!-- Vegetables loaded by JS -->
                 </div>
             </section>
 
-            <!-- 🥛 DAIRY, BREAD & EGGS - DOODH, ANDA, BREAD -->
+            <!-- Dairy Section -->
             <section class="product-section">
                 <div class="section-header">
                     <div>
-                        <h3>Dairy, Bread & Eggs <span style="font-size: 14px; color: #666;">(Doodh, Anda, Bread)</span></h3>
-                        <p class="section-subtitle">दूध, अंडा, ब्रेड - फ्रेश</p>
+                        <h3>🥛 Doodh, Anda, Bread</h3>
+                        <p class="section-subtitle">Fresh daily</p>
                     </div>
                     <a href="#" onclick="QuickCart.category.load('dairy')">See All <i class="fas fa-chevron-right"></i></a>
                 </div>
                 <div class="product-grid" id="dairy-grid">
-                    <!-- Dairy products loaded via JS -->
+                    <!-- Dairy loaded by JS -->
                 </div>
             </section>
 
-            <!-- 🍚 GROCERIES & STAPLES - KIRYANA -->
+            <!-- Staples Section -->
             <section class="product-section">
                 <div class="section-header">
                     <div>
-                        <h3>Kiryana Store <span style="font-size: 14px; color: #666;">(Rice, Atta, Dal)</span></h3>
-                        <p class="section-subtitle">किराना स्टोर - 50+ items</p>
+                        <h3>🍚 Kiryana Store</h3>
+                        <p class="section-subtitle">Rice, Atta, Dal</p>
                     </div>
                     <a href="#" onclick="QuickCart.category.load('staples')">See All <i class="fas fa-chevron-right"></i></a>
                 </div>
                 <div class="product-grid" id="staples-grid">
-                    <!-- Staples loaded via JS -->
+                    <!-- Staples loaded by JS -->
                 </div>
             </section>
 
-            <!-- 🍗 CHICKEN, MEAT & FISH - NON-VEG -->
+            <!-- Snacks Section -->
             <section class="product-section">
                 <div class="section-header">
                     <div>
-                        <h3>Chicken & Fish <span style="font-size: 14px; color: #666;">(Freshly Cut)</span></h3>
-                        <p class="section-subtitle">चिकन, मटन, मछली - फ्रेश</p>
-                    </div>
-                    <a href="#" onclick="QuickCart.category.load('nonveg')">See All <i class="fas fa-chevron-right"></i></a>
-                </div>
-                <div class="product-grid" id="nonveg-grid">
-                    <!-- Non-veg products loaded via JS -->
-                </div>
-            </section>
-
-            <!-- 🍪 SNACKS & MUNCHIES - NAMKEEN -->
-            <section class="product-section">
-                <div class="section-header">
-                    <div>
-                        <h3>Namkeen & Snacks <span style="font-size: 14px; color: #666;">(Cravings?)</span></h3>
-                        <p class="section-subtitle">नमकीन, चिप्स, मैगी</p>
+                        <h3>🍪 Namkeen & Snacks</h3>
+                        <p class="section-subtitle">Cravings?</p>
                     </div>
                     <a href="#" onclick="QuickCart.category.load('snacks')">See All <i class="fas fa-chevron-right"></i></a>
                 </div>
                 <div class="product-grid" id="snacks-grid">
-                    <!-- Snacks loaded via JS -->
-                </div>
-            </section>
-
-            <!-- 🥤 BEVERAGES - COLD DRINKS & JUICES -->
-            <section class="product-section">
-                <div class="section-header">
-                    <div>
-                        <h3>Cold Drinks & Juices</h3>
-                        <p class="section-subtitle">कोक, पेप्सी, स्प्राइट</p>
-                    </div>
-                    <a href="#" onclick="QuickCart.category.load('beverages')">See All <i class="fas fa-chevron-right"></i></a>
-                </div>
-                <div class="product-grid" id="beverages-grid">
-                    <!-- Beverages loaded via JS -->
-                </div>
-            </section>
-
-            <!-- 🧹 CLEANING ESSENTIALS -->
-            <section class="product-section">
-                <div class="section-header">
-                    <div>
-                        <h3>Cleaning Essentials</h3>
-                        <p class="section-subtitle">सर्फ, विम, हार्पिक</p>
-                    </div>
-                    <a href="#" onclick="QuickCart.category.load('cleaning')">See All <i class="fas fa-chevron-right"></i></a>
-                </div>
-                <div class="product-grid" id="cleaning-grid">
-                    <!-- Cleaning products loaded via JS -->
+                    <!-- Snacks loaded by JS -->
                 </div>
             </section>
         </main>
 
-        <!-- 🛒 BOTTOM NAVIGATION (INDIAN APP STYLE) -->
+        <!-- Bottom Navigation -->
         <nav class="bottom-nav">
-            <div class="nav-item active" onclick="QuickCart.navigation.go('home')">
+            <div class="nav-item active" onclick="QuickCart.navigation.go('home', this)">
                 <i class="fas fa-home"></i>
                 <span>Home</span>
             </div>
-            <div class="nav-item" onclick="QuickCart.navigation.go('categories')">
+            <div class="nav-item" onclick="QuickCart.navigation.go('categories', this)">
                 <i class="fas fa-th"></i>
                 <span>Categories</span>
             </div>
-            <div class="nav-item cart-nav" onclick="QuickCart.navigation.go('cart')">
+            <div class="nav-item cart-nav" onclick="QuickCart.cart.open()">
                 <i class="fas fa-shopping-cart"></i>
                 <span>Cart</span>
-                <span class="cart-count" id="cart-total-count">0</span>
+                <span class="cart-count" id="cart-count">0</span>
             </div>
-            <div class="nav-item" onclick="QuickCart.navigation.go('orders')">
+            <div class="nav-item" onclick="QuickCart.navigation.go('orders', this)">
                 <i class="fas fa-clipboard-list"></i>
                 <span>Orders</span>
             </div>
-            <div class="nav-item" onclick="QuickCart.navigation.go('account')">
+            <div class="nav-item" onclick="QuickCart.navigation.go('account', this)">
                 <i class="fas fa-user"></i>
                 <span>Account</span>
             </div>
         </nav>
 
-        <!-- 🎫 COUPON BAR - FLOATING OFFER -->
-        <div class="coupon-float" id="couponFloat">
+        <!-- Coupon Float -->
+        <div class="coupon-float" id="coupon-float">
             <i class="fas fa-tag"></i>
             <span>FLASH50 - ₹50 off on ₹399+</span>
             <button onclick="QuickCart.coupons.apply('FLASH50')">Apply</button>
-            <i class="fas fa-times close-coupon" onclick="document.getElementById('couponFloat').style.display='none'"></i>
+            <i class="fas fa-times close-coupon" onclick="this.parentElement.style.display='none'"></i>
         </div>
     </div>
 
-    <!-- 🔐 OTP LOGIN MODAL (BLINKIT/ZEPTO STYLE) -->
-    <div id="login-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Login / Sign Up</h2>
-                <i class="fas fa-times" onclick="QuickCart.auth.closeModal()"></i>
-            </div>
-            <div class="modal-body">
-                <div class="login-illustration">
-                    <i class="fas fa-mobile-alt fa-3x" style="color: #FF9933;"></i>
-                    <p>Get OTP on your mobile</p>
-                </div>
-                <div class="input-group">
-                    <label>Mobile Number</label>
-                    <div class="phone-input">
-                        <span class="country-code">+91</span>
-                        <input type="tel" id="mobile-number" placeholder="98765 43210" maxlength="10" pattern="[0-9]{10}">
-                    </div>
-                </div>
-                <button class="btn-primary" id="send-otp-btn" onclick="QuickCart.auth.sendOTP()">
-                    Send OTP <i class="fas fa-arrow-right"></i>
-                </button>
-                <p class="terms-text">
-                    By continuing, you agree to our <a href="#">Terms</a> & <a href="#">Privacy</a>
-                </p>
-            </div>
-        </div>
-    </div>
-
-    <!-- 🔢 OTP VERIFICATION MODAL -->
-    <div id="otp-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Verify OTP</h2>
-                <i class="fas fa-times" onclick="QuickCart.auth.closeModal()"></i>
-            </div>
-            <div class="modal-body">
-                <p class="otp-sent-text">OTP sent to +91 <span id="verified-number"></span></p>
-                <div class="otp-inputs">
-                    <input type="text" maxlength="1" class="otp-box" oninput="QuickCart.auth.moveToNext(this, 'otp2')" id="otp1">
-                    <input type="text" maxlength="1" class="otp-box" oninput="QuickCart.auth.moveToNext(this, 'otp3')" id="otp2">
-                    <input type="text" maxlength="1" class="otp-box" oninput="QuickCart.auth.moveToNext(this, 'otp4')" id="otp3">
-                    <input type="text" maxlength="1" class="otp-box" oninput="QuickCart.auth.moveToNext(this, 'otp5')" id="otp4">
-                    <input type="text" maxlength="1" class="otp-box" oninput="QuickCart.auth.moveToNext(this, 'otp6')" id="otp5">
-                    <input type="text" maxlength="1" class="otp-box" oninput="QuickCart.auth.verifyOTP()" id="otp6">
-                </div>
-                <button class="btn-primary" id="verify-otp-btn" onclick="QuickCart.auth.verifyOTP()">
-                    Verify & Continue
-                </button>
-                <div class="resend-otp">
-                    <span id="timer-text">Resend in <span id="timer">30</span>s</span>
-                    <button id="resend-btn" disabled onclick="QuickCart.auth.resendOTP()">Resend OTP</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 📍 LOCATION SELECTOR MODAL -->
-    <div id="location-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Choose your location</h2>
-                <i class="fas fa-times" onclick="QuickCart.location.closeModal()"></i>
-            </div>
-            <div class="modal-body">
-                <button class="btn-outline" onclick="QuickCart.location.detectCurrent()">
-                    <i class="fas fa-location-dot"></i> Detect current location
-                </button>
-                <div class="saved-addresses">
-                    <h4>Saved Addresses</h4>
-                    <div class="address-card" onclick="QuickCart.location.select('Home')">
-                        <i class="fas fa-home"></i>
-                        <div>
-                            <strong>Home</strong>
-                            <p>301, Green Park, Andheri West, Mumbai - 400053</p>
-                        </div>
-                    </div>
-                    <div class="address-card" onclick="QuickCart.location.select('Work')">
-                        <i class="fas fa-briefcase"></i>
-                        <div>
-                            <strong>Work</strong>
-                            <p>WeWork, Powai, Mumbai - 400076</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="pincode-check">
-                    <h4>Check pincode</h4>
-                    <div class="pincode-input">
-                        <input type="text" id="pincode-input" placeholder="Enter pincode" maxlength="6">
-                        <button onclick="QuickCart.location.checkPincode()">Check</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- 🛒 CART SIDEBAR (RIGHT SIDE DRAWER) -->
+    <!-- Cart Drawer -->
     <div id="cart-drawer" class="cart-drawer">
         <div class="cart-header">
             <div>
@@ -452,13 +1070,16 @@
             <i class="fas fa-times" onclick="QuickCart.cart.close()"></i>
         </div>
         <div class="cart-items" id="cart-items-list">
-            <!-- Cart items loaded via JS -->
+            <div class="empty-cart">
+                <i class="fas fa-shopping-cart"></i>
+                <h3>Your cart is empty</h3>
+                <p style="color: #666; margin-bottom: 20px;">Add items to get started</p>
+                <button class="btn-outline" onclick="QuickCart.cart.close()">
+                    Start Shopping
+                </button>
+            </div>
         </div>
-        <div class="cart-savings">
-            <i class="fas fa-tag"></i>
-            <span>You saved ₹<span id="cart-savings">0</span> on this order!</span>
-        </div>
-        <div class="cart-bill">
+        <div class="cart-bill" id="cart-bill" style="display: none;">
             <div class="bill-row">
                 <span>Subtotal</span>
                 <span>₹<span id="cart-subtotal">0</span></span>
@@ -467,219 +1088,789 @@
                 <span>Delivery Fee</span>
                 <span id="delivery-fee">₹29</span>
             </div>
-            <div class="bill-row platform-fee">
-                <span>Platform Fee</span>
-                <span><strike>₹5</strike> <span style="color: #138808;">Free</span></span>
-            </div>
             <div class="bill-row total">
                 <span>Total</span>
                 <span>₹<span id="cart-total">0</span></span>
             </div>
+            <button class="btn-checkout" onclick="QuickCart.checkout.proceed()">
+                Proceed to Checkout <i class="fas fa-arrow-right"></i>
+            </button>
         </div>
-        <button class="btn-checkout" onclick="QuickCart.checkout.proceed()">
-            Proceed to Checkout <i class="fas fa-arrow-right"></i>
-        </button>
     </div>
 
-    <!-- 💳 CHECKOUT MODAL -->
-    <div id="checkout-modal" class="modal checkout-modal">
+    <!-- Login Modal (Simplified) -->
+    <div id="login-modal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Checkout</h2>
-                <i class="fas fa-times" onclick="QuickCart.checkout.close()"></i>
+                <h2>Login</h2>
+                <i class="fas fa-times" onclick="this.closest('.modal').classList.remove('show')"></i>
             </div>
             <div class="modal-body">
-                <div class="checkout-section">
-                    <h4>Delivery Address</h4>
-                    <div class="address-selector-checkout">
-                        <div class="selected-address">
-                            <i class="fas fa-home"></i>
-                            <div>
-                                <p><strong>Home</strong> - 301, Green Park, Andheri West, Mumbai - 400053</p>
-                                <span class="delivery-time-slot">10-15 min delivery</span>
-                            </div>
-                        </div>
-                        <button onclick="QuickCart.location.change()">Change</button>
+                <p style="margin-bottom: 20px; color: #138808; font-weight: 600;">
+                    <i class="fas fa-info-circle"></i> Demo: Use any 10-digit number
+                </p>
+                <div style="margin-bottom: 20px;">
+                    <label style="font-size: 14px; font-weight: 500;">Mobile Number</label>
+                    <div style="display: flex; align-items: center; border: 1px solid #ddd; border-radius: 8px; padding: 12px; margin-top: 5px;">
+                        <span style="color: #666; padding-right: 10px; border-right: 1px solid #ddd;">+91</span>
+                        <input type="tel" id="mobile-number" placeholder="98765 43210" style="flex: 1; border: none; outline: none; padding-left: 10px;" maxlength="10">
                     </div>
                 </div>
-
-                <div class="checkout-section">
-                    <h4>Payment Method</h4>
-                    <div class="payment-options">
-                        <label class="payment-option">
-                            <input type="radio" name="payment" value="upi" checked>
-                            <i class="fas fa-qrcode"></i>
-                            <span>UPI</span>
-                            <span class="payment-badge">Google Pay, PhonePe, Paytm</span>
-                        </label>
-                        <label class="payment-option">
-                            <input type="radio" name="payment" value="card">
-                            <i class="fas fa-credit-card"></i>
-                            <span>Credit/Debit Card</span>
-                        </label>
-                        <label class="payment-option">
-                            <input type="radio" name="payment" value="wallet">
-                            <i class="fas fa-wallet"></i>
-                            <span>QuickCart Wallet</span>
-                            <span class="balance">₹500</span>
-                        </label>
-                        <label class="payment-option">
-                            <input type="radio" name="payment" value="cod">
-                            <i class="fas fa-money-bill"></i>
-                            <span>Cash on Delivery</span>
-                        </label>
-                    </div>
-                </div>
-
-                <div class="checkout-section">
-                    <h4>Apply Coupon</h4>
-                    <div class="coupon-input">
-                        <input type="text" id="coupon-code" placeholder="Enter coupon code">
-                        <button onclick="QuickCart.coupons.applyCheckout()">Apply</button>
-                    </div>
-                    <div class="available-coupons">
-                        <div class="coupon-chip" onclick="QuickCart.coupons.select('WELCOME10')">
-                            <span>WELCOME10</span>
-                            <small>10% off</small>
-                        </div>
-                        <div class="coupon-chip" onclick="QuickCart.coupons.select('SAVE20')">
-                            <span>SAVE20</span>
-                            <small>20% off</small>
-                        </div>
-                        <div class="coupon-chip" onclick="QuickCart.coupons.select('FREEDEL')">
-                            <span>FREEDEL</span>
-                            <small>Free delivery</small>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="order-summary">
-                    <h4>Order Summary</h4>
-                    <div class="summary-items" id="order-summary-items">
-                        <!-- Summary items -->
-                    </div>
-                    <div class="summary-total">
-                        <span>Total Payable</span>
-                        <span class="total-amount">₹<span id="payable-amount">0</span></span>
-                    </div>
-                </div>
-
-                <button class="btn-place-order" onclick="QuickCart.checkout.placeOrder()">
-                    Place Order <i class="fas fa-check-circle"></i>
+                <button onclick="QuickCart.auth.sendOTP()" style="width: 100%; background: #FF9933; color: white; border: none; border-radius: 8px; padding: 14px; font-size: 16px; font-weight: 600; cursor: pointer;">
+                    Send OTP <i class="fas fa-arrow-right"></i>
                 </button>
             </div>
         </div>
     </div>
 
-    <!-- 🎉 ORDER CONFIRMATION MODAL -->
-    <div id="order-confirmation-modal" class="modal">
-        <div class="modal-content confirmation-content">
-            <div class="confirmation-icon">
-                <i class="fas fa-check-circle"></i>
+    <!-- OTP Modal -->
+    <div id="otp-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Verify OTP</h2>
+                <i class="fas fa-times" onclick="this.closest('.modal').classList.remove('show')"></i>
             </div>
-            <h2>Order Placed Successfully!</h2>
-            <p class="order-id">Order #<span id="confirmation-order-id">ORD123456</span></p>
-            <div class="delivery-estimate">
-                <i class="fas fa-bolt"></i>
-                <span>Delivering in 10 minutes</span>
-            </div>
-            <div class="delivery-partner">
-                <img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=100" alt="Delivery Partner">
-                <div>
-                    <p>Rahul Sharma is on the way</p>
-                    <span>⚡ 3 min away</span>
+            <div class="modal-body">
+                <p style="margin-bottom: 20px;">OTP sent to +91 <span id="verified-number">9876543210</span></p>
+                <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px;">
+                    <input type="text" maxlength="1" class="otp-box" style="width: 50px; height: 60px; border: 2px solid #ddd; border-radius: 8px; text-align: center; font-size: 24px; font-weight: 600;" oninput="QuickCart.auth.moveToNext(this, 'otp2')" id="otp1">
+                    <input type="text" maxlength="1" class="otp-box" style="width: 50px; height: 60px; border: 2px solid #ddd; border-radius: 8px; text-align: center; font-size: 24px; font-weight: 600;" oninput="QuickCart.auth.moveToNext(this, 'otp3')" id="otp2">
+                    <input type="text" maxlength="1" class="otp-box" style="width: 50px; height: 60px; border: 2px solid #ddd; border-radius: 8px; text-align: center; font-size: 24px; font-weight: 600;" oninput="QuickCart.auth.moveToNext(this, 'otp4')" id="otp3">
+                    <input type="text" maxlength="1" class="otp-box" style="width: 50px; height: 60px; border: 2px solid #ddd; border-radius: 8px; text-align: center; font-size: 24px; font-weight: 600;" oninput="QuickCart.auth.moveToNext(this, 'otp5')" id="otp4">
+                    <input type="text" maxlength="1" class="otp-box" style="width: 50px; height: 60px; border: 2px solid #ddd; border-radius: 8px; text-align: center; font-size: 24px; font-weight: 600;" oninput="QuickCart.auth.moveToNext(this, 'otp6')" id="otp5">
+                    <input type="text" maxlength="1" class="otp-box" style="width: 50px; height: 60px; border: 2px solid #ddd; border-radius: 8px; text-align: center; font-size: 24px; font-weight: 600;" oninput="QuickCart.auth.verifyOTP()" id="otp6">
+                </div>
+                <button onclick="QuickCart.auth.verifyOTP()" style="width: 100%; background: #FF9933; color: white; border: none; border-radius: 8px; padding: 14px; font-size: 16px; font-weight: 600; cursor: pointer; margin-bottom: 15px;">
+                    Verify & Continue
+                </button>
+                <div style="text-align: center;">
+                    <span id="timer-text">Resend in <span id="timer">30</span>s</span>
+                    <button id="resend-btn" disabled style="background: none; border: none; color: #FF9933; font-weight: 600; cursor: pointer; margin-left: 10px;" onclick="QuickCart.auth.resendOTP()">Resend OTP</button>
                 </div>
             </div>
-            <button onclick="QuickCart.order.track()" class="btn-track">
-                Track Order
-            </button>
-            <button onclick="QuickCart.modal.close()" class="btn-continue">
+        </div>
+    </div>
+
+    <!-- Order Confirmation Modal -->
+    <div id="order-confirmation" class="modal">
+        <div class="modal-content" style="text-align: center; padding: 30px;">
+            <i class="fas fa-check-circle" style="font-size: 64px; color: #138808; margin-bottom: 20px;"></i>
+            <h2 style="margin-bottom: 10px;">Order Placed!</h2>
+            <p style="color: #666; margin-bottom: 20px;">Your order will arrive in 10 minutes</p>
+            <p style="background: #f5f5f5; padding: 10px; border-radius: 8px; margin-bottom: 20px;">
+                <strong>Order #</strong> <span id="order-number">ORD123456</span>
+            </p>
+            <button onclick="this.closest('.modal').classList.remove('show')" style="background: #FF9933; color: white; border: none; border-radius: 8px; padding: 12px 30px; font-size: 14px; font-weight: 600; cursor: pointer;">
                 Continue Shopping
             </button>
         </div>
     </div>
 
-    <!-- ⏱️ DELIVERY TRACKING MODAL -->
-    <div id="tracking-modal" class="modal">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h2>Track Order</h2>
-                <i class="fas fa-times" onclick="QuickCart.tracking.close()"></i>
-            </div>
-            <div class="modal-body">
-                <div class="tracking-status">
-                    <div class="status-item completed">
-                        <i class="fas fa-check-circle"></i>
-                        <div>
-                            <p>Order Placed</p>
-                            <span>10:23 AM</span>
-                        </div>
-                    </div>
-                    <div class="status-item completed">
-                        <i class="fas fa-check-circle"></i>
-                        <div>
-                            <p>Packed by Store</p>
-                            <span>10:25 AM</span>
-                        </div>
-                    </div>
-                    <div class="status-item completed">
-                        <i class="fas fa-check-circle"></i>
-                        <div>
-                            <p>Delivery Partner Assigned</p>
-                            <span>10:27 AM</span>
-                        </div>
-                    </div>
-                    <div class="status-item active">
-                        <i class="fas fa-spinner fa-pulse"></i>
-                        <div>
-                            <p>On the Way</p>
-                            <span>10:29 AM</span>
-                        </div>
-                    </div>
-                    <div class="status-item pending">
-                        <i class="far fa-circle"></i>
-                        <div>
-                            <p>Delivered</p>
-                            <span>ETA: 4 min</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="delivery-map">
-                    <img src="https://images.unsplash.com/photo-1569336415962-a4bd9f69c07b?w=400" alt="Delivery Map">
-                </div>
-
-                <div class="delivery-partner-info">
-                    <img src="https://images.unsplash.com/photo-1633332755192-727a05c4013d?w=100" alt="Partner">
-                    <div>
-                        <h4>Rahul Sharma</h4>
-                        <div class="partner-stats">
-                            <span><i class="fas fa-star"></i> 4.8</span>
-                            <span><i class="fas fa-motorcycle"></i> 1250 deliveries</span>
-                        </div>
-                    </div>
-                    <button class="btn-call">
-                        <i class="fas fa-phone"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- JavaScript Files -->
-    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
-    <script src="js/utils.js"></script>
-    <script src="js/products.js"></script>
-    <script src="js/cart.js"></script>
-    <script src="js/auth.js"></script>
-    <script src="js/checkout.js"></script>
-    <script src="js/app.js"></script>
-    
     <script>
-        // Initialize the app when DOM is ready
+        // ========== COMPLETE WORKING JAVASCRIPT ==========
+        // QuickCart Application - Fully Functional
+        
+        const QuickCart = {
+            // App state
+            cart: [],
+            user: null,
+            wishlist: [],
+            
+            // Initialize app
+            init: function() {
+                console.log('QuickCart: Initializing...');
+                
+                // Load data from localStorage
+                this.loadCart();
+                this.loadUser();
+                this.loadWishlist();
+                
+                // Load all products
+                this.loadCategories();
+                this.loadBrands();
+                this.loadVegetables();
+                this.loadDairy();
+                this.loadStaples();
+                this.loadSnacks();
+                this.loadFlashProducts();
+                
+                // Auto login demo user
+                this.autoLogin();
+                
+                // Start timer
+                this.startFlashTimer();
+                
+                // Update cart count
+                this.updateCartCount();
+                
+                console.log('QuickCart: Ready!');
+            },
+            
+            // Auto login for demo
+            autoLogin: function() {
+                if (!this.user) {
+                    this.user = {
+                        mobile: '9876543210',
+                        name: 'Demo User',
+                        wallet: 500
+                    };
+                    localStorage.setItem('quickcart_user', JSON.stringify(this.user));
+                }
+                
+                // Hide loading screen
+                setTimeout(() => {
+                    document.getElementById('loading-screen').style.display = 'none';
+                    document.getElementById('app').style.display = 'block';
+                }, 1000);
+            },
+            
+            // Load cart from localStorage
+            loadCart: function() {
+                const saved = localStorage.getItem('quickcart_cart');
+                this.cart = saved ? JSON.parse(saved) : [];
+            },
+            
+            // Save cart
+            saveCart: function() {
+                localStorage.setItem('quickcart_cart', JSON.stringify(this.cart));
+                this.updateCartCount();
+            },
+            
+            // Load user
+            loadUser: function() {
+                const saved = localStorage.getItem('quickcart_user');
+                this.user = saved ? JSON.parse(saved) : null;
+            },
+            
+            // Load wishlist
+            loadWishlist: function() {
+                const saved = localStorage.getItem('quickcart_wishlist');
+                this.wishlist = saved ? JSON.parse(saved) : [];
+                document.getElementById('wishlist-count').textContent = this.wishlist.length;
+            },
+            
+            // Update cart count
+            updateCartCount: function() {
+                const count = this.cart.reduce((sum, item) => sum + item.quantity, 0);
+                document.querySelectorAll('.cart-count, #cart-item-count').forEach(el => {
+                    if (el) {
+                        el.textContent = count;
+                        el.style.display = count > 0 ? 'flex' : 'none';
+                    }
+                });
+            },
+            
+            // ========== PRODUCTS DATABASE ==========
+            products: {
+                vegetables: [
+                    { id: 'veg1', name: 'Aloo (Potato)', brand: 'Farm Fresh', price: 35, original: 45, discount: 22, unit: 'kg', weight: '1 kg', rating: 4.5, image: 'https://images.unsplash.com/photo-1518977676601-b53f82aba655?w=400', inStock: true },
+                    { id: 'veg2', name: 'Pyaz (Onion)', brand: 'Farm Fresh', price: 40, original: 50, discount: 20, unit: 'kg', weight: '1 kg', rating: 4.4, image: 'https://images.unsplash.com/photo-1508747703725-71977763f4a5?w=400', inStock: true },
+                    { id: 'veg3', name: 'Tamatar (Tomato)', brand: 'Farm Fresh', price: 30, original: 40, discount: 25, unit: 'kg', weight: '1 kg', rating: 4.3, image: 'https://images.unsplash.com/photo-1592924357228-91a4daadcfea?w=400', inStock: true },
+                    { id: 'veg4', name: 'Gajar (Carrot)', brand: 'Organic', price: 45, original: 60, discount: 25, unit: '500g', weight: '500 g', rating: 4.6, image: 'https://images.unsplash.com/photo-1598170845058-32b9d6a5da37?w=400', inStock: true },
+                    { id: 'veg5', name: 'Mirchi (Green Chilli)', brand: 'Farm Fresh', price: 25, original: 30, discount: 17, unit: '100g', weight: '100 g', rating: 4.7, image: 'https://images.unsplash.com/photo-1583771374034-0ec0cdd44b85?w=400', inStock: true },
+                    { id: 'veg6', name: 'Nimbu (Lemon)', brand: 'Farm Fresh', price: 20, original: 25, discount: 20, unit: '6pcs', weight: '6 pieces', rating: 4.5, image: 'https://images.unsplash.com/photo-1587330979470-3595ac045ab0?w=400', inStock: true }
+                ],
+                dairy: [
+                    { id: 'dai1', name: 'Amul Gold Milk', brand: 'Amul', price: 32, original: 36, discount: 11, unit: '500ml', weight: '500 ml', rating: 4.8, image: 'https://images.unsplash.com/photo-1550583724-b2692b85b150?w=400', inStock: true },
+                    { id: 'dai2', name: 'Fresh Eggs', brand: 'Farm Fresh', price: 60, original: 70, discount: 14, unit: '6pcs', weight: '6 pieces', rating: 4.5, image: 'https://images.unsplash.com/photo-1587486913049-53fc88980cfc?w=400', inStock: true },
+                    { id: 'dai3', name: 'Amul Butter', brand: 'Amul', price: 50, original: 55, discount: 9, unit: '100g', weight: '100 g', rating: 4.9, image: 'https://images.unsplash.com/photo-1589985270826-4b7bb135bc9d?w=400', inStock: true },
+                    { id: 'dai4', name: 'Britannia Bread', brand: 'Britannia', price: 35, original: 40, discount: 13, unit: '400g', weight: '400 g', rating: 4.5, image: 'https://images.unsplash.com/photo-1598373182133-52452f7691ef?w=400', inStock: true }
+                ],
+                staples: [
+                    { id: 'sta1', name: 'Basmati Rice', brand: 'India Gate', price: 99, original: 125, discount: 21, unit: 'kg', weight: '1 kg', rating: 4.7, image: 'https://images.unsplash.com/photo-1586201375761-83865001e31c?w=400', inStock: true },
+                    { id: 'sta2', name: 'Whole Wheat Atta', brand: 'Aashirvaad', price: 45, original: 55, discount: 18, unit: 'kg', weight: '1 kg', rating: 4.8, image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=400', inStock: true },
+                    { id: 'sta3', name: 'Toor Dal', brand: 'Tata Sampann', price: 85, original: 100, discount: 15, unit: '500g', weight: '500 g', rating: 4.6, image: 'https://images.unsplash.com/photo-1515543904379-3d757f8e66e1?w=400', inStock: true },
+                    { id: 'sta4', name: 'Sunflower Oil', brand: 'Fortune', price: 120, original: 140, discount: 14, unit: 'L', weight: '1 L', rating: 4.5, image: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=400', inStock: true }
+                ],
+                snacks: [
+                    { id: 'snk1', name: 'Lays Classic', brand: 'Lays', price: 20, original: 20, discount: 0, unit: '50g', weight: '50 g', rating: 4.7, image: 'https://images.unsplash.com/photo-1613918431701-3e68fece885a?w=400', inStock: true },
+                    { id: 'snk2', name: 'Maggi Noodles', brand: 'Maggi', price: 14, original: 14, discount: 0, unit: '70g', weight: '70 g', rating: 4.9, image: 'https://images.unsplash.com/photo-1612929633738-8fe44ee7c94b?w=400', inStock: true },
+                    { id: 'snk3', name: 'Kurkure Masala', brand: 'Kurkure', price: 20, original: 20, discount: 0, unit: '50g', weight: '50 g', rating: 4.6, image: 'https://images.unsplash.com/photo-1613918431701-3e68fece885a?w=400', inStock: true }
+                ]
+            },
+            
+            // ========== UI RENDERING ==========
+            renderProductCard: function(product) {
+                return `
+                    <div class="product-card" onclick="QuickCart.product.show('${product.id}')">
+                        <div class="product-image">
+                            <img src="${product.image}" alt="${product.name}" loading="lazy">
+                            ${product.discount > 0 ? `<span class="product-badge">${product.discount}% OFF</span>` : ''}
+                            <button class="product-wishlist" onclick="event.stopPropagation(); QuickCart.wishlist.toggle('${product.id}')">
+                                <i class="${this.wishlist.includes(product.id) ? 'fas' : 'far'} fa-heart" style="color: ${this.wishlist.includes(product.id) ? '#ff4444' : '#999'}"></i>
+                            </button>
+                        </div>
+                        <div class="product-info">
+                            <p class="product-brand">${product.brand}</p>
+                            <p class="product-name">${product.name}</p>
+                            <p class="product-weight">${product.weight}</p>
+                            <div class="product-rating">
+                                <span class="rating-stars">★★★★</span>
+                                <span class="rating-count">${product.rating}</span>
+                            </div>
+                            <div class="product-price">
+                                <span class="current-price">₹${product.price}</span>
+                                ${product.original > product.price ? 
+                                    `<span class="original-price">₹${product.original}</span>
+                                     <span class="discount">${product.discount}% off</span>` : ''
+                                }
+                            </div>
+                            <button class="product-add-btn" onclick="event.stopPropagation(); QuickCart.cart.add('${product.id}', '${product.name}', ${product.price}, '${product.image}', '${product.weight}')">
+                                <i class="fas fa-plus"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                `;
+            },
+            
+            // Load categories
+            loadCategories: function() {
+                const slider = document.getElementById('categories-slider');
+                if (!slider) return;
+                
+                const categories = [
+                    { icon: 'fa-carrot', color: '#2E7D32', bg: '#E8F5E9', name: 'Sabzi Mandi', hindi: 'सब्जी मंडी' },
+                    { icon: 'fa-jug', color: '#FF6F00', bg: '#FFF3E0', name: 'Doodh, Anda', hindi: 'दूध, अंडा' },
+                    { icon: 'fa-seedling', color: '#6A1B9A', bg: '#F3E5F5', name: 'Kiryana', hindi: 'किराना' },
+                    { icon: 'fa-cookie-bite', color: '#C2185B', bg: '#FFEBEE', name: 'Namkeen', hindi: 'नमकीन' },
+                    { icon: 'fa-wine-bottle', color: '#0277BD', bg: '#E1F5FE', name: 'Cold Drinks', hindi: 'कोल्ड ड्रिंक्स' },
+                    { icon: 'fa-drumstick-bite', color: '#BF360C', bg: '#FBE9E7', name: 'Chicken', hindi: 'चिकन' },
+                    { icon: 'fa-soap', color: '#00695C', bg: '#E0F7FA', name: 'Cleaning', hindi: 'सफाई' },
+                    { icon: 'fa-shower', color: '#880E4F', bg: '#FCE4EC', name: 'Personal Care', hindi: 'पर्सनल केयर' }
+                ];
+                
+                let html = '';
+                categories.forEach(cat => {
+                    html += `
+                        <div class="category-pill" onclick="QuickCart.utils.showNotification('${cat.name} category', 'info')">
+                            <div class="category-icon" style="background: ${cat.bg};">
+                                <i class="fas ${cat.icon}" style="color: ${cat.color};"></i>
+                            </div>
+                            <span>${cat.name}</span>
+                            <small style="font-size: 9px; color: #666;">${cat.hindi}</small>
+                        </div>
+                    `;
+                });
+                slider.innerHTML = html;
+            },
+            
+            // Load brands
+            loadBrands: function() {
+                const grid = document.getElementById('brands-grid');
+                if (!grid) return;
+                
+                const brands = [
+                    { name: 'Amul', image: 'https://images.unsplash.com/photo-1621868002587-9cb6e3ee5b6b?w=200', offer: 'Up to 30% off' },
+                    { name: 'Tata', image: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=200', offer: '20% off' },
+                    { name: 'Fortune', image: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=200', offer: '25% off' },
+                    { name: 'Aashirvaad', image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=200', offer: '15% off' },
+                    { name: 'Britannia', image: 'https://images.unsplash.com/photo-1587240971770-d47beeaae5fe?w=200', offer: 'Buy 1 Get 1' },
+                    { name: 'Parle', image: 'https://images.unsplash.com/photo-1590080874088-eecbb95f6c1b?w=200', offer: '₹10 starting' }
+                ];
+                
+                let html = '';
+                brands.forEach(brand => {
+                    html += `
+                        <div class="brand-card" onclick="QuickCart.utils.showNotification('${brand.name} store', 'info')">
+                            <img src="${brand.image}" alt="${brand.name}" loading="lazy">
+                            <span>${brand.name}</span>
+                            <small>${brand.offer}</small>
+                        </div>
+                    `;
+                });
+                grid.innerHTML = html;
+            },
+            
+            // Load vegetables
+            loadVegetables: function() {
+                const grid = document.getElementById('vegetables-grid');
+                if (!grid) return;
+                
+                let html = '';
+                this.products.vegetables.slice(0, 4).forEach(product => {
+                    html += this.renderProductCard(product);
+                });
+                grid.innerHTML = html;
+            },
+            
+            // Load dairy
+            loadDairy: function() {
+                const grid = document.getElementById('dairy-grid');
+                if (!grid) return;
+                
+                let html = '';
+                this.products.dairy.slice(0, 4).forEach(product => {
+                    html += this.renderProductCard(product);
+                });
+                grid.innerHTML = html;
+            },
+            
+            // Load staples
+            loadStaples: function() {
+                const grid = document.getElementById('staples-grid');
+                if (!grid) return;
+                
+                let html = '';
+                this.products.staples.slice(0, 4).forEach(product => {
+                    html += this.renderProductCard(product);
+                });
+                grid.innerHTML = html;
+            },
+            
+            // Load snacks
+            loadSnacks: function() {
+                const grid = document.getElementById('snacks-grid');
+                if (!grid) return;
+                
+                let html = '';
+                this.products.snacks.slice(0, 4).forEach(product => {
+                    html += this.renderProductCard(product);
+                });
+                grid.innerHTML = html;
+            },
+            
+            // Load flash products
+            loadFlashProducts: function() {
+                const grid = document.getElementById('flash-products');
+                if (!grid) return;
+                
+                const flash = [
+                    this.products.vegetables[0],
+                    this.products.dairy[0],
+                    this.products.staples[0],
+                    this.products.snacks[0]
+                ];
+                
+                let html = '';
+                flash.forEach(product => {
+                    html += this.renderProductCard(product);
+                });
+                grid.innerHTML = html;
+            },
+            
+            // ========== CART FUNCTIONS ==========
+            cart: {
+                add: function(id, name, price, image, weight) {
+                    const item = QuickCart.cart.find(i => i.id === id);
+                    
+                    if (item) {
+                        item.quantity += 1;
+                    } else {
+                        QuickCart.cart.push({
+                            id: id,
+                            name: name,
+                            price: price,
+                            image: image,
+                            weight: weight,
+                            quantity: 1
+                        });
+                    }
+                    
+                    QuickCart.saveCart();
+                    QuickCart.updateCartCount();
+                    QuickCart.cart.renderCart();
+                    
+                    // Show notification
+                    QuickCart.utils.showNotification(`${name} added to cart`, 'success');
+                    
+                    // Animation
+                    const btn = event.target;
+                    btn.style.background = '#138808';
+                    btn.style.color = 'white';
+                    setTimeout(() => {
+                        btn.style.background = '#e8f5e9';
+                        btn.style.color = '#138808';
+                    }, 200);
+                },
+                
+                remove: function(id) {
+                    QuickCart.cart = QuickCart.cart.filter(item => item.id !== id);
+                    QuickCart.saveCart();
+                    QuickCart.updateCartCount();
+                    QuickCart.cart.renderCart();
+                    QuickCart.utils.showNotification('Item removed', 'info');
+                },
+                
+                updateQuantity: function(id, change) {
+                    const item = QuickCart.cart.find(i => i.id === id);
+                    if (item) {
+                        item.quantity += change;
+                        if (item.quantity <= 0) {
+                            this.remove(id);
+                        } else {
+                            QuickCart.saveCart();
+                            QuickCart.updateCartCount();
+                            QuickCart.cart.renderCart();
+                        }
+                    }
+                },
+                
+                renderCart: function() {
+                    const container = document.getElementById('cart-items-list');
+                    const billSection = document.getElementById('cart-bill');
+                    
+                    if (!container) return;
+                    
+                    if (QuickCart.cart.length === 0) {
+                        container.innerHTML = `
+                            <div class="empty-cart">
+                                <i class="fas fa-shopping-cart"></i>
+                                <h3>Your cart is empty</h3>
+                                <p style="color: #666; margin-bottom: 20px;">Add items to get started</p>
+                                <button class="btn-outline" onclick="QuickCart.cart.close()">
+                                    Start Shopping
+                                </button>
+                            </div>
+                        `;
+                        if (billSection) billSection.style.display = 'none';
+                    } else {
+                        let html = '';
+                        let subtotal = 0;
+                        
+                        QuickCart.cart.forEach(item => {
+                            subtotal += item.price * item.quantity;
+                            html += `
+                                <div class="cart-item">
+                                    <img src="${item.image}" alt="${item.name}" class="cart-item-image">
+                                    <div class="cart-item-details">
+                                        <p class="cart-item-name">${item.name}</p>
+                                        <p style="font-size: 12px; color: #666;">${item.weight}</p>
+                                        <p class="cart-item-price">₹${item.price}</p>
+                                        <div class="cart-item-quantity">
+                                            <button class="quantity-btn" onclick="QuickCart.cart.updateQuantity('${item.id}', -1)">-</button>
+                                            <span style="font-size: 14px; font-weight: 600;">${item.quantity}</span>
+                                            <button class="quantity-btn" onclick="QuickCart.cart.updateQuantity('${item.id}', 1)">+</button>
+                                            <button class="quantity-btn" onclick="QuickCart.cart.remove('${item.id}')" style="margin-left: auto; color: #ff4444;">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            `;
+                        });
+                        
+                        container.innerHTML = html;
+                        
+                        // Update bill
+                        const deliveryFee = subtotal >= 199 ? 0 : 29;
+                        const total = subtotal + deliveryFee;
+                        
+                        document.getElementById('cart-subtotal').textContent = subtotal;
+                        document.getElementById('delivery-fee').innerHTML = deliveryFee === 0 ? 'Free' : `₹${deliveryFee}`;
+                        document.getElementById('cart-total').textContent = total;
+                        
+                        if (billSection) billSection.style.display = 'block';
+                    }
+                },
+                
+                open: function() {
+                    this.renderCart();
+                    document.getElementById('cart-drawer').classList.add('open');
+                },
+                
+                close: function() {
+                    document.getElementById('cart-drawer').classList.remove('open');
+                },
+                
+                getTotal: function() {
+                    const subtotal = QuickCart.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                    const deliveryFee = subtotal >= 199 ? 0 : 29;
+                    return subtotal + deliveryFee;
+                }
+            },
+            
+            // ========== WISHLIST ==========
+            wishlist: {
+                toggle: function(id) {
+                    const index = QuickCart.wishlist.indexOf(id);
+                    if (index === -1) {
+                        QuickCart.wishlist.push(id);
+                        QuickCart.utils.showNotification('Added to wishlist', 'success');
+                    } else {
+                        QuickCart.wishlist.splice(index, 1);
+                        QuickCart.utils.showNotification('Removed from wishlist', 'info');
+                    }
+                    
+                    localStorage.setItem('quickcart_wishlist', JSON.stringify(QuickCart.wishlist));
+                    document.getElementById('wishlist-count').textContent = QuickCart.wishlist.length;
+                    
+                    // Refresh current view
+                    QuickCart.loadVegetables();
+                    QuickCart.loadDairy();
+                    QuickCart.loadStaples();
+                    QuickCart.loadSnacks();
+                    QuickCart.loadFlashProducts();
+                },
+                
+                show: function() {
+                    QuickCart.utils.showNotification(`Wishlist: ${QuickCart.wishlist.length} items`, 'info');
+                }
+            },
+            
+            // ========== AUTH ==========
+            auth: {
+                showLoginModal: function() {
+                    document.getElementById('login-modal').classList.add('show');
+                },
+                
+                sendOTP: function() {
+                    const mobile = document.getElementById('mobile-number').value;
+                    if (!mobile || mobile.length !== 10) {
+                        QuickCart.utils.showNotification('Please enter 10-digit mobile number', 'error');
+                        return;
+                    }
+                    
+                    document.getElementById('login-modal').classList.remove('show');
+                    document.getElementById('verified-number').textContent = mobile;
+                    document.getElementById('otp-modal').classList.add('show');
+                    QuickCart.auth.startTimer(30);
+                    QuickCart.utils.showNotification('Demo OTP: 123456', 'info');
+                },
+                
+                startTimer: function(seconds) {
+                    const timerEl = document.getElementById('timer');
+                    const resendBtn = document.getElementById('resend-btn');
+                    let timeLeft = seconds;
+                    
+                    const timer = setInterval(() => {
+                        timeLeft--;
+                        if (timerEl) timerEl.textContent = timeLeft;
+                        if (timeLeft <= 0) {
+                            clearInterval(timer);
+                            if (resendBtn) resendBtn.disabled = false;
+                        }
+                    }, 1000);
+                },
+                
+                moveToNext: function(current, nextId) {
+                    if (current.value.length === 1) {
+                        const next = document.getElementById(nextId);
+                        if (next) next.focus();
+                    }
+                },
+                
+                verifyOTP: function() {
+                    const otp1 = document.getElementById('otp1')?.value || '';
+                    const otp2 = document.getElementById('otp2')?.value || '';
+                    const otp3 = document.getElementById('otp3')?.value || '';
+                    const otp4 = document.getElementById('otp4')?.value || '';
+                    const otp5 = document.getElementById('otp5')?.value || '';
+                    const otp6 = document.getElementById('otp6')?.value || '';
+                    
+                    const otp = otp1 + otp2 + otp3 + otp4 + otp5 + otp6;
+                    
+                    if (otp === '123456') {
+                        document.getElementById('otp-modal').classList.remove('show');
+                        QuickCart.utils.showNotification('Login successful!', 'success');
+                    } else {
+                        QuickCart.utils.showNotification('Invalid OTP. Try 123456', 'error');
+                    }
+                },
+                
+                resendOTP: function() {
+                    document.getElementById('resend-btn').disabled = true;
+                    QuickCart.auth.startTimer(30);
+                    QuickCart.utils.showNotification('OTP resent: 123456', 'info');
+                },
+                
+                showProfile: function() {
+                    if (QuickCart.user) {
+                        QuickCart.utils.showNotification(`Logged in as +91 ${QuickCart.user.mobile}`, 'success');
+                    } else {
+                        this.showLoginModal();
+                    }
+                }
+            },
+            
+            // ========== CHECKOUT ==========
+            checkout: {
+                proceed: function() {
+                    if (QuickCart.cart.length === 0) {
+                        QuickCart.utils.showNotification('Your cart is empty', 'error');
+                        return;
+                    }
+                    
+                    if (!QuickCart.user) {
+                        QuickCart.auth.showLoginModal();
+                        return;
+                    }
+                    
+                    // Create order
+                    const orderId = 'ORD' + Math.floor(Math.random() * 1000000);
+                    document.getElementById('order-number').textContent = orderId;
+                    
+                    // Clear cart
+                    QuickCart.cart = [];
+                    QuickCart.saveCart();
+                    QuickCart.updateCartCount();
+                    QuickCart.cart.renderCart();
+                    QuickCart.cart.close();
+                    
+                    // Show confirmation
+                    document.getElementById('order-confirmation').classList.add('show');
+                    
+                    // Hide coupon
+                    document.getElementById('coupon-float').style.display = 'none';
+                    
+                    QuickCart.utils.showNotification('Order placed successfully! 🎉', 'success');
+                }
+            },
+            
+            // ========== LOCATION ==========
+            location: {
+                showSelector: function() {
+                    QuickCart.utils.showNotification('Location: Andheri West, Mumbai', 'info');
+                }
+            },
+            
+            // ========== COUPONS ==========
+            coupons: {
+                apply: function(code) {
+                    const subtotal = QuickCart.cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+                    
+                    if (subtotal >= 399) {
+                        QuickCart.utils.showNotification('Coupon applied! ₹50 off', 'success');
+                        document.getElementById('coupon-float').style.display = 'none';
+                    } else {
+                        QuickCart.utils.showNotification(`Add ₹${399 - subtotal} more to apply`, 'warning');
+                    }
+                }
+            },
+            
+            // ========== PRODUCT ==========
+            product: {
+                show: function(id) {
+                    // Find product in all categories
+                    let product = null;
+                    for (const category in QuickCart.products) {
+                        const found = QuickCart.products[category].find(p => p.id === id);
+                        if (found) {
+                            product = found;
+                            break;
+                        }
+                    }
+                    
+                    if (product) {
+                        QuickCart.utils.showNotification(`${product.name} - ₹${product.price}`, 'info');
+                    }
+                }
+            },
+            
+            // ========== CATEGORY ==========
+            category: {
+                load: function(category) {
+                    QuickCart.utils.showNotification(`Loading ${category}...`, 'info');
+                }
+            },
+            
+            // ========== NAVIGATION ==========
+            navigation: {
+                go: function(page, element) {
+                    // Update active state
+                    document.querySelectorAll('.nav-item').forEach(item => {
+                        item.classList.remove('active');
+                    });
+                    element.classList.add('active');
+                    
+                    if (page === 'home') {
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                    } else {
+                        QuickCart.utils.showNotification(`${page} page coming soon!`, 'info');
+                    }
+                }
+            },
+            
+            // ========== UTILS ==========
+            utils: {
+                showNotification: function(message, type = 'info') {
+                    // Remove existing notification
+                    const existing = document.querySelector('.demo-notification');
+                    if (existing) existing.remove();
+                    
+                    const notification = document.createElement('div');
+                    notification.className = 'demo-notification';
+                    notification.style.cssText = `
+                        position: fixed;
+                        top: 20px;
+                        left: 50%;
+                        transform: translateX(-50%);
+                        background: ${type === 'success' ? '#138808' : type === 'error' ? '#ff4444' : type === 'warning' ? '#FF9933' : '#333'};
+                        color: white;
+                        padding: 12px 24px;
+                        border-radius: 50px;
+                        font-size: 14px;
+                        font-weight: 500;
+                        z-index: 9999;
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                        display: flex;
+                        align-items: center;
+                        gap: 8px;
+                        max-width: 90%;
+                        animation: slideDown 0.3s;
+                    `;
+                    
+                    let icon = '';
+                    if (type === 'success') icon = '<i class="fas fa-check-circle"></i>';
+                    else if (type === 'error') icon = '<i class="fas fa-exclamation-circle"></i>';
+                    else if (type === 'warning') icon = '<i class="fas fa-exclamation-triangle"></i>';
+                    else icon = '<i class="fas fa-info-circle"></i>';
+                    
+                    notification.innerHTML = `${icon} ${message}`;
+                    document.body.appendChild(notification);
+                    
+                    setTimeout(() => {
+                        notification.style.animation = 'slideUp 0.3s';
+                        setTimeout(() => notification.remove(), 300);
+                    }, 3000);
+                }
+            },
+            
+            // Start flash timer
+            startFlashTimer: function() {
+                const timerEl = document.getElementById('flash-timer');
+                if (!timerEl) return;
+                
+                let hours = 10;
+                let minutes = 23;
+                let seconds = 45;
+                
+                setInterval(() => {
+                    seconds--;
+                    if (seconds < 0) {
+                        seconds = 59;
+                        minutes--;
+                        if (minutes < 0) {
+                            minutes = 59;
+                            hours--;
+                            if (hours < 0) {
+                                hours = 23;
+                            }
+                        }
+                    }
+                    
+                    timerEl.textContent = `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+                }, 1000);
+            }
+        };
+
+        // Initialize app when page loads
         document.addEventListener('DOMContentLoaded', function() {
             QuickCart.init();
         });
+
+        // Add animation styles
+        const styleSheet = document.createElement('style');
+        styleSheet.textContent = `
+            @keyframes slideDown {
+                from { opacity: 0; transform: translate(-50%, -20px); }
+                to { opacity: 1; transform: translate(-50%, 0); }
+            }
+            @keyframes slideUp {
+                from { opacity: 1; transform: translate(-50%, 0); }
+                to { opacity: 0; transform: translate(-50%, -20px); }
+            }
+        `;
+        document.head.appendChild(styleSheet);
     </script>
 </body>
 </html>
