@@ -1,409 +1,290 @@
-// ===== AUTHENTICATION MODULE =====
+/**
+ * QUICKCART INDIA - AUTHENTICATION SYSTEM
+ * 🇮🇳 OTP Login with Auto-Demo Mode
+ */
 
-const authModule = (() => {
-    // User State
-    let currentUser = JSON.parse(localStorage.getItem('currentUser')) || null;
-    let otpTimer = null;
+const QuickCart = window.QuickCart || {};
+
+QuickCart.auth = {
+    // Current user data
+    user: null,
     
-    // Public Methods
-    const init = () => {
-        console.log('Auth module initialized');
-        updateAuthUI();
-        setupAuthListeners();
-    };
+    // Initialize auth
+    init: function() {
+        console.log('🔐 Auth module initializing...');
+        this.loadUser();
+        this.checkAuth();
+    },
     
-    const setupAuthListeners = () => {
-        // Auth button
-        const authBtn = $('#authBtn');
-        const mobileLogin = $('#mobileLogin');
-        const closeAuthModal = $('#closeAuthModal');
-        const loginForm = $('#loginForm');
-        const verifyOtpBtn = $('#verifyOtpBtn');
-        const resendOtp = $('#resendOtp');
-        const otpInputs = $$('.otp-digit');
-        const authTabs = $$('.auth-tab');
-        
-        // Open auth modal
-        if (authBtn) {
-            authBtn.addEventListener('click', openAuthModal);
+    // Load user from localStorage
+    loadUser: function() {
+        try {
+            const savedUser = localStorage.getItem('quickcart_user');
+            this.user = savedUser ? JSON.parse(savedUser) : null;
+            console.log('📦 Loaded user:', this.user ? 'Yes' : 'No');
+        } catch(e) {
+            console.error('Error loading user:', e);
+            this.user = null;
         }
-        
-        if (mobileLogin) {
-            mobileLogin.addEventListener('click', () => {
-                closeMobileMenu();
-                openAuthModal();
-            });
-        }
-        
-        // Close auth modal
-        if (closeAuthModal) {
-            closeAuthModal.addEventListener('click', closeAuthModalHandler);
-        }
-        
-        // Login form submission
-        if (loginForm) {
-            loginForm.addEventListener('submit', handleLoginSubmit);
-        }
-        
-        // OTP verification
-        if (verifyOtpBtn) {
-            verifyOtpBtn.addEventListener('click', verifyOTP);
-        }
-        
-        // Resend OTP
-        if (resendOtp) {
-            resendOtp.addEventListener('click', handleResendOTP);
-        }
-        
-        // OTP input auto-focus
-        otpInputs.forEach((input, index) => {
-            input.addEventListener('input', function() {
-                if (this.value.length === 1) {
-                    if (index < otpInputs.length - 1) {
-                        otpInputs[index + 1].focus();
-                    }
-                }
-            });
-            
-            input.addEventListener('keydown', function(e) {
-                if (e.key === 'Backspace' && this.value.length === 0) {
-                    if (index > 0) {
-                        otpInputs[index - 1].focus();
-                    }
-                }
-            });
-        });
-        
-        // Auth tabs
-        authTabs.forEach(tab => {
-            tab.addEventListener('click', function() {
-                const tabName = this.dataset.tab;
-                switchAuthTab(tabName);
-            });
-        });
-        
-        // Close modal on overlay click
-        const authModal = $('#authModal');
-        if (authModal) {
-            authModal.addEventListener('click', function(e) {
-                if (e.target === this) {
-                    closeAuthModalHandler();
-                }
-            });
-        }
-    };
+    },
     
-    const openAuthModal = () => {
-        const authModal = $('#authModal');
-        if (authModal) {
-            utils.addClass(authModal, 'open');
-            document.body.style.overflow = 'hidden';
-            resetAuthForm();
-        }
-    };
+    // Save user to localStorage
+    saveUser: function() {
+        localStorage.setItem('quickcart_user', JSON.stringify(this.user));
+    },
     
-    const closeAuthModalHandler = () => {
-        const authModal = $('#authModal');
-        if (authModal) {
-            utils.removeClass(authModal, 'open');
-            document.body.style.overflow = 'auto';
-            resetAuthForm();
-        }
-    };
+    // Check if user is authenticated
+    isAuthenticated: function() {
+        return this.user !== null;
+    },
     
-    const resetAuthForm = () => {
-        const loginForm = $('#loginForm');
-        const otpSection = $('#otpSection');
-        const phoneInput = $('#phoneNumber');
-        const otpInputs = $$('.otp-digit');
+    // Check auth status and update UI
+    checkAuth: function() {
+        this.loadUser();
         
-        if (loginForm) loginForm.reset();
-        if (otpSection) utils.removeClass(otpSection, 'active');
-        if (phoneInput) phoneInput.value = '';
-        otpInputs.forEach(input => input.value = '');
-        
-        // Reset to login tab
-        switchAuthTab('login');
-        
-        // Clear OTP timer
-        if (otpTimer) {
-            clearInterval(otpTimer);
-            otpTimer = null;
+        if (this.isAuthenticated()) {
+            console.log('✅ User authenticated:', this.user);
+            this.updateUIForLoggedInUser();
+            return true;
+        } else {
+            console.log('🔐 No user found - AUTO LOGIN ENABLED');
+            this.autoLoginForDemo();
+            return false;
         }
-    };
+    },
     
-    const switchAuthTab = (tab) => {
-        const tabs = $$('.auth-tab');
-        const loginForm = $('#loginForm');
-        const phoneInput = $('#phoneNumber');
+    // AUTO LOGIN FOR DEMO - IMMEDIATE ACCESS
+    autoLoginForDemo: function() {
+        console.log('🚀 Auto-login activated...');
         
-        tabs.forEach(t => {
-            if (t.dataset.tab === tab) {
-                utils.addClass(t, 'active');
-            } else {
-                utils.removeClass(t, 'active');
-            }
-        });
-        
-        if (tab === 'login') {
-            if (phoneInput) {
-                phoneInput.type = 'tel';
-                phoneInput.placeholder = 'Enter 10-digit mobile number';
-            }
-        } else if (tab === 'signup') {
-            if (phoneInput) {
-                phoneInput.type = 'tel';
-                phoneInput.placeholder = 'Enter 10-digit mobile number';
-            }
-        }
-    };
-    
-    const handleLoginSubmit = async (e) => {
-        e.preventDefault();
-        
-        const phoneInput = $('#phoneNumber');
-        const phone = phoneInput.value.trim();
-        
-        if (!utils.validatePhone(phone)) {
-            utils.showNotification('Please enter a valid 10-digit phone number', 'error');
-            utils.animate(phoneInput, 'animate-shake');
-            return;
-        }
-        
-        // Show loading
-        utils.showLoading('Sending OTP...');
-        
-        // Simulate API call
+        // Create demo user immediately
         setTimeout(() => {
-            utils.hideLoading();
-            
-            // Generate demo OTP
-            const demoOTP = '123456';
-            sessionStorage.setItem('demoOTP', demoOTP);
-            sessionStorage.setItem('otpPhone', phone);
-            sessionStorage.setItem('otpExpiry', Date.now() + 300000); // 5 minutes
-            
-            // Show OTP section
-            const otpSection = $('#otpSection');
-            const otpPhoneNumber = $('#otpPhoneNumber');
-            
-            if (otpSection && otpPhoneNumber) {
-                utils.addClass(otpSection, 'active');
-                otpPhoneNumber.textContent = phone;
+            if (!this.isAuthenticated()) {
+                console.log('📱 Creating demo user...');
+                this.createUser('9876543210');
                 
-                // Clear OTP inputs
-                $$('.otp-digit').forEach(input => {
-                    input.value = '';
-                });
+                // Force hide loading screen
+                this.forceShowApp();
                 
-                // Focus first OTP input
-                $$('.otp-digit')[0].focus();
+                QuickCart.utils.showNotification('Welcome to QuickCart! Demo Mode Active', 'success');
             }
-            
-            utils.showNotification(`OTP sent to ${phone}`, 'success');
-            startOTPTimer();
         }, 1500);
-    };
+    },
     
-    const verifyOTP = () => {
-        const otpInputs = $$('.otp-digit');
-        const enteredOTP = Array.from(otpInputs)
-            .map(input => input.value)
-            .join('');
+    // Force show app (emergency override)
+    forceShowApp: function() {
+        console.log('🔄 Force showing app...');
+        const loadingScreen = document.getElementById('loading-screen');
+        const app = document.getElementById('app');
         
-        const demoOTP = sessionStorage.getItem('demoOTP');
-        const phone = sessionStorage.getItem('otpPhone');
-        
-        if (!enteredOTP || enteredOTP.length !== 6) {
-            utils.showNotification('Please enter 6-digit OTP', 'error');
-            return;
+        if (loadingScreen) {
+            loadingScreen.style.transition = 'opacity 0.3s';
+            loadingScreen.style.opacity = '0';
+            
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+                if (app) {
+                    app.style.display = 'block';
+                    console.log('✅ App is now visible');
+                }
+            }, 300);
         }
         
-        utils.showLoading('Verifying OTP...');
-        
+        // Also try direct hide
         setTimeout(() => {
-            utils.hideLoading();
-            
-            if (enteredOTP === demoOTP) {
-                // OTP verified successfully
-                loginUser(phone);
-            } else {
-                utils.showNotification('Invalid OTP. Please try again.', 'error');
-                
-                // Shake animation for incorrect OTP
-                otpInputs.forEach(input => {
-                    utils.animate(input, 'animate-shake');
-                });
-            }
-        }, 1000);
-    };
+            const ls = document.getElementById('loading-screen');
+            const ap = document.getElementById('app');
+            if (ls) ls.style.display = 'none';
+            if (ap) ap.style.display = 'block';
+        }, 500);
+    },
     
-    const handleResendOTP = (e) => {
-        if (e) e.preventDefault();
-        
-        const phone = sessionStorage.getItem('otpPhone');
-        if (!phone) return;
-        
-        // Generate new demo OTP
-        const demoOTP = '123456';
-        sessionStorage.setItem('demoOTP', demoOTP);
-        sessionStorage.setItem('otpExpiry', Date.now() + 300000);
-        
-        utils.showNotification('OTP resent successfully', 'success');
-        startOTPTimer();
-    };
-    
-    const startOTPTimer = () => {
-        const resendLink = $('#resendOtp');
-        if (!resendLink) return;
-        
-        let timeLeft = 30;
-        resendLink.style.pointerEvents = 'none';
-        resendLink.textContent = `Resend in ${timeLeft}s`;
-        
-        // Clear existing timer
-        if (otpTimer) {
-            clearInterval(otpTimer);
-        }
-        
-        otpTimer = setInterval(() => {
-            timeLeft--;
-            resendLink.textContent = `Resend in ${timeLeft}s`;
-            
-            if (timeLeft <= 0) {
-                clearInterval(otpTimer);
-                otpTimer = null;
-                resendLink.style.pointerEvents = 'auto';
-                resendLink.textContent = 'Resend OTP';
-            }
-        }, 1000);
-    };
-    
-    const loginUser = (phone) => {
-        const user = {
-            id: generateUserId(),
-            phone: phone,
-            name: `User${phone.slice(-4)}`,
-            email: null,
+    // Create new user
+    createUser: function(mobile) {
+        this.user = {
+            id: 'user_' + Date.now(),
+            mobile: mobile,
+            name: 'QuickCart User',
+            email: '',
+            isNewUser: true,
             createdAt: new Date().toISOString(),
-            lastLogin: new Date().toISOString()
+            wallet: {
+                balance: 500,
+                cashback: 50
+            },
+            addresses: [
+                {
+                    id: 'addr_1',
+                    type: 'home',
+                    name: 'Home',
+                    address: '301, Green Park, Andheri West',
+                    city: 'Mumbai',
+                    pincode: '400053',
+                    landmark: 'Near Station',
+                    isDefault: true
+                }
+            ],
+            orders: [],
+            wishlist: []
         };
         
-        currentUser = user;
-        utils.storage.set('currentUser', user);
-        
-        updateAuthUI();
-        closeAuthModalHandler();
-        
-        utils.showNotification(`Welcome back, ${user.name}!`, 'success');
-    };
+        this.saveUser();
+        console.log('✅ Demo user created:', this.user.mobile);
+        this.updateUIForLoggedInUser();
+    },
     
-    const logoutUser = () => {
-        currentUser = null;
-        utils.storage.remove('currentUser');
-        
-        updateAuthUI();
-        utils.showNotification('Logged out successfully', 'info');
-    };
+    // Show login modal
+    showLoginModal: function() {
+        const modal = document.getElementById('login-modal');
+        if (modal) {
+            modal.classList.add('show');
+        }
+    },
     
-    const updateAuthUI = () => {
-        const authBtn = $('#authBtn');
-        const mobileLogin = $('#mobileLogin');
-        const userInfo = $('.user-info');
-        const userName = $('.user-details h3');
-        const userGreeting = $('.user-details p');
+    // Close modal
+    closeModal: function() {
+        const modals = document.querySelectorAll('.modal.show');
+        modals.forEach(modal => {
+            modal.classList.remove('show');
+        });
+    },
+    
+    // Send OTP
+    sendOTP: function() {
+        const mobileInput = document.getElementById('mobile-number');
+        const mobile = mobileInput ? mobileInput.value.trim() : '';
         
-        if (currentUser) {
-            // User is logged in
-            if (authBtn) {
-                authBtn.innerHTML = `
-                    <i class="fas fa-user-check"></i>
-                    <span>${currentUser.name}</span>
-                `;
-                authBtn.onclick = showUserMenu;
-            }
+        if (!this.validateMobile(mobile)) {
+            QuickCart.utils.showNotification('Please enter valid 10-digit mobile number', 'error');
+            return false;
+        }
+        
+        const btn = document.getElementById('send-otp-btn');
+        const originalText = btn.innerHTML;
+        btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Sending...';
+        btn.disabled = true;
+        
+        setTimeout(() => {
+            document.getElementById('login-modal').classList.remove('show');
+            document.getElementById('verified-number').textContent = mobile;
+            document.getElementById('otp-modal').classList.add('show');
             
-            if (mobileLogin) {
-                mobileLogin.innerHTML = `
-                    <i class="fas fa-sign-out-alt"></i>
-                    <span>Logout</span>
-                `;
-                mobileLogin.onclick = logoutUser;
-            }
+            btn.innerHTML = originalText;
+            btn.disabled = false;
             
-            if (userInfo && userName && userGreeting) {
-                userName.textContent = currentUser.name;
-                userGreeting.textContent = `Welcome back!`;
+            this.startOTPTimer(30);
+            QuickCart.utils.showNotification('Demo OTP: 123456', 'info');
+        }, 1500);
+    },
+    
+    // Validate Indian mobile number
+    validateMobile: function(mobile) {
+        return /^[6-9]\d{9}$/.test(mobile);
+    },
+    
+    // Start OTP resend timer
+    startOTPTimer: function(seconds) {
+        const timerEl = document.getElementById('timer');
+        const resendBtn = document.getElementById('resend-btn');
+        let timeLeft = seconds;
+        
+        const timer = setInterval(() => {
+            timeLeft--;
+            if (timerEl) timerEl.textContent = timeLeft;
+            
+            if (timeLeft <= 0) {
+                clearInterval(timer);
+                if (timerEl) timerEl.textContent = '0';
+                if (resendBtn) resendBtn.disabled = false;
             }
+        }, 1000);
+        
+        this.currentTimer = timer;
+    },
+    
+    // Move to next OTP input
+    moveToNext: function(current, nextId) {
+        if (current.value.length === 1) {
+            const next = document.getElementById(nextId);
+            if (next) next.focus();
+        }
+    },
+    
+    // Verify OTP
+    verifyOTP: function() {
+        const otp1 = document.getElementById('otp1')?.value || '';
+        const otp2 = document.getElementById('otp2')?.value || '';
+        const otp3 = document.getElementById('otp3')?.value || '';
+        const otp4 = document.getElementById('otp4')?.value || '';
+        const otp5 = document.getElementById('otp5')?.value || '';
+        const otp6 = document.getElementById('otp6')?.value || '';
+        
+        const otp = otp1 + otp2 + otp3 + otp4 + otp5 + otp6;
+        
+        if (otp.length !== 6) {
+            QuickCart.utils.showNotification('Please enter 6-digit OTP', 'error');
+            return false;
+        }
+        
+        if (otp === '123456') {
+            const mobile = document.getElementById('verified-number')?.textContent || '9876543210';
+            this.createUser(mobile);
+            this.closeModal();
+            this.forceShowApp();
+            QuickCart.utils.showNotification('Login successful! Welcome to QuickCart', 'success');
+            return true;
         } else {
-            // User is not logged in
-            if (authBtn) {
-                authBtn.innerHTML = `
-                    <i class="fas fa-user"></i>
-                    <span>Login</span>
-                `;
-                authBtn.onclick = openAuthModal;
-            }
-            
-            if (mobileLogin) {
-                mobileLogin.innerHTML = `
-                    <i class="fas fa-sign-in-alt"></i>
-                    <span>Sign In</span>
-                `;
-                mobileLogin.onclick = openAuthModal;
-            }
-            
-            if (userInfo && userName && userGreeting) {
-                userName.textContent = 'Welcome to QuickCart';
-                userGreeting.textContent = 'Sign in to access your account';
-            }
+            QuickCart.utils.showNotification('Invalid OTP. Demo OTP: 123456', 'error');
+            return false;
         }
-    };
+    },
     
-    const showUserMenu = () => {
-        // In a real app, this would show a dropdown menu
-        utils.showNotification('User menu coming soon!', 'info');
-    };
+    // Resend OTP
+    resendOTP: function() {
+        const btn = document.getElementById('resend-btn');
+        btn.disabled = true;
+        QuickCart.utils.showNotification('OTP resent successfully! Demo: 123456', 'success');
+        this.startOTPTimer(30);
+    },
     
-    const closeMobileMenu = () => {
-        const sidebar = $('#mobileSidebar');
-        const overlay = $('#sidebarOverlay');
-        
-        if (sidebar && overlay) {
-            utils.removeClass(sidebar, 'open');
-            utils.removeClass(overlay, 'show');
-            document.body.style.overflow = 'auto';
+    // Update UI for logged in user
+    updateUIForLoggedInUser: function() {
+        console.log('👤 Updating UI for logged in user');
+        this.forceShowApp();
+    },
+    
+    // Logout
+    logout: function() {
+        if (confirm('Are you sure you want to logout?')) {
+            this.user = null;
+            localStorage.removeItem('quickcart_user');
+            QuickCart.utils.showNotification('Logged out successfully', 'info');
+            
+            // Reload page to reset state
+            setTimeout(() => {
+                location.reload();
+            }, 1000);
         }
-    };
+    },
     
-    const generateUserId = () => {
-        return 'user_' + Math.random().toString(36).substr(2, 9);
-    };
-    
-    const isLoggedIn = () => {
-        return currentUser !== null;
-    };
-    
-    const getCurrentUser = () => {
-        return currentUser;
-    };
-    
-    // Initialize
-    document.addEventListener('DOMContentLoaded', init);
-    
-    // Public API
-    return {
-        init,
-        loginUser,
-        logoutUser,
-        isLoggedIn,
-        getCurrentUser,
-        openAuthModal,
-        closeAuthModal: closeAuthModalHandler
-    };
-})();
+    // Show profile
+    showProfile: function() {
+        if (!this.isAuthenticated()) {
+            this.showLoginModal();
+        } else {
+            QuickCart.utils.showNotification(`Logged in as +91 ${this.user.mobile}`, 'success');
+        }
+    }
+};
 
-// Export to global scope
-window.authModule = authModule;
-window.openLoginModal = authModule.openAuthModal;
-window.closeLoginModal = authModule.closeAuthModal;
+// Initialize auth on load
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🚀 QuickCart Auth ready');
+    if (window.QuickCart) {
+        window.QuickCart.auth = QuickCart.auth;
+        window.QuickCart.auth.init();
+    }
+});
+
+window.QuickCart = window.QuickCart || {};
+window.QuickCart.auth = QuickCart.auth;
