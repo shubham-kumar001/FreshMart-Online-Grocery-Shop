@@ -1,21 +1,18 @@
 /*
-* QUICKCART INDIA - ANIMATIONS
-* 🇮🇳 Smooth Transitions & Micro-interactions
+* QUICKBAZAAR INDIA - ANIMATIONS
+* 🇮🇳 Smooth Micro-interactions
 */
 
-/* --------------------------------------------- */
-/* ENTRANCE ANIMATIONS                          */
-/* --------------------------------------------- */
-
+/* Fade Animations */
 @keyframes fadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
 }
 
-@keyframes fadeInDown {
+@keyframes fadeInUp {
     from {
         opacity: 0;
-        transform: translateY(-20px);
+        transform: translateY(20px);
     }
     to {
         opacity: 1;
@@ -23,10 +20,10 @@
     }
 }
 
-@keyframes fadeInUp {
+@keyframes fadeInDown {
     from {
         opacity: 0;
-        transform: translateY(20px);
+        transform: translateY(-20px);
     }
     to {
         opacity: 1;
@@ -56,43 +53,69 @@
     }
 }
 
-/* --------------------------------------------- */
-/* LOADING ANIMATIONS                           */
-/* --------------------------------------------- */
+/* Scale Animations */
+@keyframes scaleIn {
+    from {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    to {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
 
-@keyframes pulse {
-    0%, 100% {
+@keyframes scaleOut {
+    from {
+        opacity: 1;
+        transform: scale(1);
+    }
+    to {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+}
+
+/* Slide Animations */
+@keyframes slideInUp {
+    from {
+        transform: translate(-50%, 20px);
+        opacity: 0;
+    }
+    to {
+        transform: translate(-50%, 0);
         opacity: 1;
     }
-    50% {
-        opacity: 0.5;
+}
+
+@keyframes slideInDown {
+    from {
+        transform: translateY(-100%);
+    }
+    to {
+        transform: translateY(0);
     }
 }
 
-@keyframes shimmer {
-    0% {
-        background-position: -1000px 0;
+@keyframes slideInLeft {
+    from {
+        transform: translateX(-100%);
     }
-    100% {
-        background-position: 1000px 0;
+    to {
+        transform: translateX(0);
     }
 }
 
-.shimmer {
-    animation: shimmer 2s infinite linear;
-    background: linear-gradient(
-        to right,
-        var(--gray-200) 4%,
-        var(--gray-100) 25%,
-        var(--gray-200) 36%
-    );
-    background-size: 1000px 100%;
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+    }
+    to {
+        transform: translateX(0);
+    }
 }
 
-/* --------------------------------------------- */
-/* CART ANIMATIONS                              */
-/* --------------------------------------------- */
-
+/* Cart Animations */
 @keyframes cartBounce {
     0%, 100% {
         transform: scale(1);
@@ -106,74 +129,113 @@
     animation: cartBounce 0.3s ease;
 }
 
-@keyframes slideInRight {
-    from {
-        transform: translateX(100%);
-    }
-    to {
-        transform: translateX(0);
-    }
-}
-
-.cart-drawer.open {
-    animation: slideInRight 0.3s ease;
-}
-
-/* --------------------------------------------- */
-/* PRODUCT CARD ANIMATIONS                      */
-/* --------------------------------------------- */
-
-@keyframes cardHover {
-    0% {
-        transform: translateY(0);
-    }
-    100% {
-        transform: translateY(-4px);
-    }
-}
-
-.product-card:hover {
-    animation: cardHover 0.2s ease forwards;
-}
-
-@keyframes wishlistPop {
+/* Wishlist Animation */
+@keyframes heartBeat {
     0% {
         transform: scale(1);
     }
-    50% {
+    14% {
         transform: scale(1.3);
     }
-    100% {
+    28% {
+        transform: scale(1);
+    }
+    42% {
+        transform: scale(1.3);
+    }
+    70% {
         transform: scale(1);
     }
 }
 
 .wishlist-active {
-    animation: wishlistPop 0.3s ease;
+    animation: heartBeat 0.6s ease;
 }
 
-/* --------------------------------------------- */
-/* BUTTON ANIMATIONS                            */
-/* --------------------------------------------- */
-
-@keyframes buttonPulse {
+/* Spinner Animation */
+@keyframes spin {
     0% {
-        box-shadow: 0 0 0 0 rgba(255, 153, 51, 0.4);
-    }
-    70% {
-        box-shadow: 0 0 0 10px rgba(255, 153, 51, 0);
+        transform: rotate(0deg);
     }
     100% {
-        box-shadow: 0 0 0 0 rgba(255, 153, 51, 0);
+        transform: rotate(360deg);
     }
 }
 
-.btn-primary,
-.btn-checkout {
-    animation: buttonPulse 2s infinite;
+/* Pulse Animation */
+@keyframes pulse {
+    0%, 100% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
 }
 
-@keyframes spin {
+/* Shimmer Loading */
+@keyframes shimmer {
+    0% {
+        background-position: -1000px 0;
+    }
+    100% {
+        background-position: 1000px 0;
+    }
+}
+
+.shimmer {
+    background: linear-gradient(
+        to right,
+        var(--gray-200) 4%,
+        var(--gray-100) 25%,
+        var(--gray-200) 36%
+    );
+    background-size: 1000px 100%;
+    animation: shimmer 2s infinite linear;
+}
+
+/* Gradient Shift */
+@keyframes gradientShift {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+/* Float Animation */
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-5px);
+    }
+}
+
+.float {
+    animation: float 2s infinite ease-in-out;
+}
+
+/* Bounce Animation */
+@keyframes bounce {
+    0%, 100% {
+        transform: translateY(0);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+.bounce {
+    animation: bounce 1s infinite ease-in-out;
+}
+
+/* Rotate Animation */
+@keyframes rotate {
     from {
         transform: rotate(0deg);
     }
@@ -182,47 +244,161 @@
     }
 }
 
-.fa-spinner,
-.fa-pulse {
-    animation: spin 1s linear infinite;
+.rotate {
+    animation: rotate 2s linear infinite;
 }
 
-/* --------------------------------------------- */
-/* MODAL ANIMATIONS                             */
-/* --------------------------------------------- */
-
-@keyframes modalSlideUp {
-    from {
-        opacity: 0;
-        transform: translateY(50px);
+/* Shake Animation */
+@keyframes shake {
+    0%, 100% {
+        transform: translateX(0);
     }
-    to {
+    10%, 30%, 50%, 70%, 90% {
+        transform: translateX(-5px);
+    }
+    20%, 40%, 60%, 80% {
+        transform: translateX(5px);
+    }
+}
+
+.shake {
+    animation: shake 0.5s ease;
+}
+
+/* Ripple Effect */
+@keyframes ripple {
+    0% {
+        transform: scale(0);
         opacity: 1;
+    }
+    100% {
+        transform: scale(4);
+        opacity: 0;
+    }
+}
+
+.ripple-effect {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.5);
+    animation: ripple 0.6s linear;
+}
+
+/* Confetti Animation */
+@keyframes confetti {
+    0% {
+        transform: translateY(0) rotate(0deg);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(100vh) rotate(720deg);
+        opacity: 0;
+    }
+}
+
+.confetti {
+    position: fixed;
+    width: 10px;
+    height: 10px;
+    background: var(--saffron);
+    animation: confetti 3s ease forwards;
+}
+
+/* Progress Pulse */
+@keyframes progressPulse {
+    0% {
+        background-color: rgba(19, 136, 8, 0.1);
+    }
+    100% {
+        background-color: rgba(19, 136, 8, 0.3);
+    }
+}
+
+.status-item.active {
+    animation: progressPulse 1s infinite alternate;
+}
+
+/* Typing Indicator */
+@keyframes typing {
+    0%, 60%, 100% {
         transform: translateY(0);
     }
+    30% {
+        transform: translateY(-10px);
+    }
 }
 
-.modal.show .modal-content {
-    animation: modalSlideUp 0.3s ease;
+.typing-indicator span {
+    display: inline-block;
+    animation: typing 1.4s infinite;
 }
 
-@keyframes modalFadeIn {
-    from {
+.typing-indicator span:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+.typing-indicator span:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+/* Scroll Indicator */
+@keyframes scrollDown {
+    0% {
+        transform: translateY(0);
         opacity: 0;
     }
-    to {
+    50% {
+        transform: translateY(10px);
         opacity: 1;
+    }
+    100% {
+        transform: translateY(20px);
+        opacity: 0;
     }
 }
 
-.modal.show {
-    animation: modalFadeIn 0.2s ease;
+.scroll-indicator {
+    animation: scrollDown 2s infinite;
 }
 
-/* --------------------------------------------- */
-/* NOTIFICATION ANIMATIONS                      */
-/* --------------------------------------------- */
+/* Countdown Pulse */
+@keyframes countdownPulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.7;
+    }
+}
 
+.timer {
+    animation: countdownPulse 1s infinite;
+}
+
+/* Heartbeat */
+@keyframes heartbeat {
+    0% {
+        transform: scale(1);
+    }
+    14% {
+        transform: scale(1.3);
+    }
+    28% {
+        transform: scale(1);
+    }
+    42% {
+        transform: scale(1.3);
+    }
+    70% {
+        transform: scale(1);
+    }
+}
+
+.live-badge {
+    animation: heartbeat 1.5s infinite;
+}
+
+/* Notification */
 @keyframes notificationSlide {
     0% {
         transform: translateX(100%);
@@ -251,209 +427,4 @@
 
 .notification.hide {
     animation: notificationFadeOut 0.3s ease forwards;
-}
-
-/* --------------------------------------------- */
-/* COUNTDOWN ANIMATIONS                         */
-/* --------------------------------------------- */
-
-@keyframes countdownPulse {
-    0%, 100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.7;
-    }
-}
-
-.timer {
-    animation: countdownPulse 1s infinite;
-}
-
-/* --------------------------------------------- */
-/* DELIVERY TRACKING ANIMATIONS                 */
-/* --------------------------------------------- */
-
-@keyframes progressPulse {
-    0% {
-        background-color: rgba(19, 136, 8, 0.1);
-    }
-    100% {
-        background-color: rgba(19, 136, 8, 0.3);
-    }
-}
-
-.status-item.active {
-    animation: progressPulse 1s infinite alternate;
-}
-
-@keyframes moveRight {
-    0% {
-        transform: translateX(0);
-    }
-    100% {
-        transform: translateX(5px);
-    }
-}
-
-.delivery-partner i {
-    animation: moveRight 0.5s infinite alternate;
-}
-
-/* --------------------------------------------- */
-/* PAGE TRANSITIONS                             */
-/* --------------------------------------------- */
-
-@keyframes pageTransition {
-    0% {
-        opacity: 0;
-        transform: scale(0.98);
-    }
-    100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-}
-
-.page-transition {
-    animation: pageTransition 0.3s ease;
-}
-
-/* --------------------------------------------- */
-/* SHAKE ANIMATIONS (Error States)              */
-/* --------------------------------------------- */
-
-@keyframes shake {
-    0%, 100% {
-        transform: translateX(0);
-    }
-    10%, 30%, 50%, 70%, 90% {
-        transform: translateX(-5px);
-    }
-    20%, 40%, 60%, 80% {
-        transform: translateX(5px);
-    }
-}
-
-.shake {
-    animation: shake 0.5s ease;
-}
-
-/* --------------------------------------------- */
-/* CONFETTI ANIMATION (Order Success)           */
-/* --------------------------------------------- */
-
-@keyframes confetti {
-    0% {
-        transform: translateY(0) rotate(0deg);
-        opacity: 1;
-    }
-    100% {
-        transform: translateY(100vh) rotate(720deg);
-        opacity: 0;
-    }
-}
-
-.confetti {
-    position: fixed;
-    width: 10px;
-    height: 10px;
-    background: var(--saffron);
-    animation: confetti 3s ease forwards;
-}
-
-/* --------------------------------------------- */
-/* TYPING INDICATOR (Search)                    */
-/* --------------------------------------------- */
-
-@keyframes typing {
-    0%, 60%, 100% {
-        transform: translateY(0);
-    }
-    30% {
-        transform: translateY(-10px);
-    }
-}
-
-.typing-indicator span {
-    animation: typing 1.4s infinite;
-}
-
-.typing-indicator span:nth-child(2) {
-    animation-delay: 0.2s;
-}
-
-.typing-indicator span:nth-child(3) {
-    animation-delay: 0.4s;
-}
-
-/* --------------------------------------------- */
-/* SCROLL INDICATOR                             */
-/* --------------------------------------------- */
-
-@keyframes scrollDown {
-    0% {
-        transform: translateY(0);
-        opacity: 0;
-    }
-    50% {
-        transform: translateY(10px);
-        opacity: 1;
-    }
-    100% {
-        transform: translateY(20px);
-        opacity: 0;
-    }
-}
-
-.scroll-indicator {
-    animation: scrollDown 2s infinite;
-}
-
-/* --------------------------------------------- */
-/* RIPPLE EFFECT (Buttons)                      */
-/* --------------------------------------------- */
-
-@keyframes ripple {
-    0% {
-        transform: scale(0);
-        opacity: 1;
-    }
-    100% {
-        transform: scale(4);
-        opacity: 0;
-    }
-}
-
-.ripple-effect {
-    position: absolute;
-    border-radius: 50%;
-    background: rgba(255, 255, 255, 0.5);
-    animation: ripple 0.6s linear;
-}
-
-/* --------------------------------------------- */
-/* HEARTBEAT (Live Tracking)                    */
-/* --------------------------------------------- */
-
-@keyframes heartbeat {
-    0% {
-        transform: scale(1);
-    }
-    14% {
-        transform: scale(1.3);
-    }
-    28% {
-        transform: scale(1);
-    }
-    42% {
-        transform: scale(1.3);
-    }
-    70% {
-        transform: scale(1);
-    }
-}
-
-.live-badge {
-    animation: heartbeat 1.5s infinite;
 }
