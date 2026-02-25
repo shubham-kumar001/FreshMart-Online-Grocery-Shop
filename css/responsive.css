@@ -1,21 +1,20 @@
 /*
-* QUICKCART INDIA - RESPONSIVE DESIGN
-* 🇮🇳 Mobile First | 320px to 4K
+* QUICKBAZAAR INDIA - RESPONSIVE DESIGN
+* 🇮🇳 Mobile First | All Screen Sizes
 */
 
-/* --------------------------------------------- */
-/* SMALL PHONES (320px - 375px)                 */
-/* --------------------------------------------- */
-
+/* Small Phones (320px - 375px) */
 @media screen and (max-width: 375px) {
     :root {
         --font-lg: 14px;
         --font-xl: 16px;
         --font-2xl: 18px;
         --font-3xl: 20px;
+        --space-lg: 12px;
+        --space-xl: 16px;
     }
 
-    .location-details span {
+    .location-details .address-selector span {
         max-width: 120px;
     }
 
@@ -37,7 +36,12 @@
     }
 
     .product-image {
-        height: 120px;
+        height: 140px;
+    }
+
+    .hero-banner img {
+        width: 100px;
+        height: 100px;
     }
 
     .otp-box {
@@ -45,12 +49,13 @@
         height: 50px;
         font-size: var(--font-xl);
     }
+
+    .coupon-float span {
+        font-size: 10px;
+    }
 }
 
-/* --------------------------------------------- */
-/* MEDIUM PHONES (376px - 425px)                */
-/* --------------------------------------------- */
-
+/* Medium Phones (376px - 425px) */
 @media screen and (min-width: 376px) and (max-width: 425px) {
     .brands-grid {
         grid-template-columns: repeat(3, 1fr);
@@ -61,10 +66,7 @@
     }
 }
 
-/* --------------------------------------------- */
-/* LARGE PHONES (426px - 768px)                 */
-/* --------------------------------------------- */
-
+/* Large Phones (426px - 768px) */
 @media screen and (min-width: 426px) and (max-width: 768px) {
     .app-wrapper {
         max-width: 480px;
@@ -73,15 +75,17 @@
     .brands-grid {
         grid-template-columns: repeat(4, 1fr);
     }
+
+    .product-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
-/* --------------------------------------------- */
-/* TABLETS (769px - 1024px)                     */
-/* --------------------------------------------- */
-
+/* Tablets (769px - 1024px) */
 @media screen and (min-width: 769px) and (max-width: 1024px) {
     .app-wrapper {
         max-width: 720px;
+        margin: 0 auto;
     }
 
     .product-grid {
@@ -91,21 +95,21 @@
     .brands-grid {
         grid-template-columns: repeat(4, 1fr);
     }
+
+    .categories-slider {
+        justify-content: center;
+    }
 }
 
-/* --------------------------------------------- */
-/* DESKTOP (1025px+)                            */
-/* --------------------------------------------- */
-
+/* Desktop (1025px+) */
 @media screen and (min-width: 1025px) {
     .app-wrapper {
         max-width: 480px;
-        margin: 0 auto;
-        box-shadow: var(--shadow-xl);
+        margin: 20px auto;
         border-radius: var(--radius-xl);
         overflow: hidden;
-        height: 95vh;
-        margin-top: 2.5vh;
+        height: calc(100vh - 40px);
+        box-shadow: var(--shadow-xl);
     }
 
     body {
@@ -121,10 +125,7 @@
     }
 }
 
-/* --------------------------------------------- */
-/* LANDSCAPE MODE                              */
-/* --------------------------------------------- */
-
+/* Landscape Mode */
 @media screen and (orientation: landscape) and (max-height: 500px) {
     .bottom-nav {
         position: relative;
@@ -138,37 +139,92 @@
     .modal-content {
         max-height: 80vh;
     }
+
+    .loading-screen {
+        padding: var(--space-xl) 0;
+    }
+
+    .loading-content {
+        transform: scale(0.8);
+    }
 }
 
-/* --------------------------------------------- */
-/* DARK MODE SUPPORT (Coming Soon)              */
-/* --------------------------------------------- */
+/* High Resolution Screens */
+@media screen and (min-width: 1440px) {
+    .app-wrapper {
+        max-width: 480px;
+        margin: 30px auto;
+        height: calc(100vh - 60px);
+    }
+}
 
+/* Dark Mode (Coming Soon) */
 @media (prefers-color-scheme: dark) {
     /* Will be implemented in v2.0 */
 }
 
-/* --------------------------------------------- */
-/* PRINT STYLES                                 */
-/* --------------------------------------------- */
-
+/* Print Styles */
 @media print {
     .bottom-nav,
     .location-header,
     .search-section,
-    .coupon-float {
+    .coupon-float,
+    .product-add-btn,
+    .icon-btn,
+    .filter-btn {
         display: none;
+    }
+
+    .app-wrapper {
+        max-width: 100%;
+        box-shadow: none;
+    }
+
+    .product-card {
+        break-inside: avoid;
+        page-break-inside: avoid;
     }
 }
 
-/* --------------------------------------------- */
-/* ACCESSIBILITY                                */
-/* --------------------------------------------- */
-
+/* Accessibility - Reduced Motion */
 @media (prefers-reduced-motion: reduce) {
     * {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    .spinner {
+        animation: none !important;
+    }
+
+    .flash-sale {
+        animation: none !important;
+    }
+}
+
+/* Foldable Devices */
+@media (screen-spanning: single-fold-vertical) {
+    .app-wrapper {
+        max-width: calc(env(fold-left) - env(fold-right));
+    }
+}
+
+/* Notch Support */
+@supports (padding: max(0px)) {
+    .location-header,
+    .search-section,
+    .bottom-nav {
+        padding-left: max(var(--space-lg), env(safe-area-inset-left));
+        padding-right: max(var(--space-lg), env(safe-area-inset-right));
+    }
+
+    .bottom-nav {
+        padding-bottom: max(var(--space-sm), env(safe-area-inset-bottom));
+    }
+
+    .cart-drawer {
+        padding-top: env(safe-area-inset-top);
     }
 }
