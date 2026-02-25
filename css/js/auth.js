@@ -1,17 +1,14 @@
 /**
- * QUICKCART INDIA - AUTHENTICATION SYSTEM
+ * QUICKBAZAAR INDIA - AUTHENTICATION SYSTEM
  * 🇮🇳 OTP Login with Auto-Demo Mode
  */
 
-const QuickCart = window.QuickCart || {};
-
-QuickCart.auth = {
-    // Current user data
+QuickBazaar.auth = {
+    // Current user
     user: null,
     
-    // Initialize auth
+    // Initialize
     init: function() {
-        console.log('🔐 Auth module initializing...');
         this.loadUser();
         this.checkAuth();
     },
@@ -19,99 +16,48 @@ QuickCart.auth = {
     // Load user from localStorage
     loadUser: function() {
         try {
-            const savedUser = localStorage.getItem('quickcart_user');
+            const savedUser = localStorage.getItem('quickbazaar_user');
             this.user = savedUser ? JSON.parse(savedUser) : null;
-            console.log('📦 Loaded user:', this.user ? 'Yes' : 'No');
         } catch(e) {
             console.error('Error loading user:', e);
             this.user = null;
         }
     },
     
-    // Save user to localStorage
+    // Save user
     saveUser: function() {
-        localStorage.setItem('quickcart_user', JSON.stringify(this.user));
+        localStorage.setItem('quickbazaar_user', JSON.stringify(this.user));
     },
     
-    // Check if user is authenticated
+    // Check authentication
     isAuthenticated: function() {
         return this.user !== null;
     },
     
-    // Check auth status and update UI
+    // Check auth status
     checkAuth: function() {
-        this.loadUser();
-        
-        if (this.isAuthenticated()) {
-            console.log('✅ User authenticated:', this.user);
-            this.updateUIForLoggedInUser();
-            return true;
-        } else {
-            console.log('🔐 No user found - AUTO LOGIN ENABLED');
+        if (!this.isAuthenticated()) {
             this.autoLoginForDemo();
-            return false;
         }
     },
     
-    // AUTO LOGIN FOR DEMO - IMMEDIATE ACCESS
+    // Auto login for demo
     autoLoginForDemo: function() {
-        console.log('🚀 Auto-login activated...');
-        
-        // Create demo user immediately
         setTimeout(() => {
             if (!this.isAuthenticated()) {
-                console.log('📱 Creating demo user...');
                 this.createUser('9876543210');
-                
-                // Force hide loading screen
-                this.forceShowApp();
-                
-                QuickCart.utils.showNotification('Welcome to QuickCart! Demo Mode Active', 'success');
             }
-        }, 1500);
+        }, 1000);
     },
     
-    // Force show app (emergency override)
-    forceShowApp: function() {
-        console.log('🔄 Force showing app...');
-        const loadingScreen = document.getElementById('loading-screen');
-        const app = document.getElementById('app');
-        
-        if (loadingScreen) {
-            loadingScreen.style.transition = 'opacity 0.3s';
-            loadingScreen.style.opacity = '0';
-            
-            setTimeout(() => {
-                loadingScreen.style.display = 'none';
-                if (app) {
-                    app.style.display = 'block';
-                    console.log('✅ App is now visible');
-                }
-            }, 300);
-        }
-        
-        // Also try direct hide
-        setTimeout(() => {
-            const ls = document.getElementById('loading-screen');
-            const ap = document.getElementById('app');
-            if (ls) ls.style.display = 'none';
-            if (ap) ap.style.display = 'block';
-        }, 500);
-    },
-    
-    // Create new user
+    // Create demo user
     createUser: function(mobile) {
         this.user = {
             id: 'user_' + Date.now(),
             mobile: mobile,
-            name: 'QuickCart User',
+            name: 'Demo User',
             email: '',
-            isNewUser: true,
-            createdAt: new Date().toISOString(),
-            wallet: {
-                balance: 500,
-                cashback: 50
-            },
+            wallet: 500,
             addresses: [
                 {
                     id: 'addr_1',
@@ -122,67 +68,45 @@ QuickCart.auth = {
                     pincode: '400053',
                     landmark: 'Near Station',
                     isDefault: true
+                },
+                {
+                    id: 'addr_2',
+                    type: 'work',
+                    name: 'Work',
+                    address: 'WeWork, Andheri East',
+                    city: 'Mumbai',
+                    pincode: '400069',
+                    landmark: 'Near Metro',
+                    isDefault: false
                 }
             ],
-            orders: [],
-            wishlist: []
+            orders: []
         };
-        
         this.saveUser();
-        console.log('✅ Demo user created:', this.user.mobile);
-        this.updateUIForLoggedInUser();
     },
     
     // Show login modal
     showLoginModal: function() {
-        const modal = document.getElementById('login-modal');
-        if (modal) {
-            modal.classList.add('show');
-        }
-    },
-    
-    // Close modal
-    closeModal: function() {
-        const modals = document.querySelectorAll('.modal.show');
-        modals.forEach(modal => {
-            modal.classList.remove('show');
-        });
+        document.getElementById('login-modal').classList.add('show');
     },
     
     // Send OTP
     sendOTP: function() {
-        const mobileInput = document.getElementById('mobile-number');
-        const mobile = mobileInput ? mobileInput.value.trim() : '';
+        const mobile = document.getElementById('mobile-number').value;
         
-        if (!this.validateMobile(mobile)) {
-            QuickCart.utils.showNotification('Please enter valid 10-digit mobile number', 'error');
-            return false;
+        if (!mobile || mobile.length !== 10) {
+            QuickBazaar.utils.showNotification('Please enter 10-digit mobile number', 'error');
+            return;
         }
         
-        const btn = document.getElementById('send-otp-btn');
-        const originalText = btn.innerHTML;
-        btn.innerHTML = '<i class="fas fa-spinner fa-pulse"></i> Sending...';
-        btn.disabled = true;
-        
-        setTimeout(() => {
-            document.getElementById('login-modal').classList.remove('show');
-            document.getElementById('verified-number').textContent = mobile;
-            document.getElementById('otp-modal').classList.add('show');
-            
-            btn.innerHTML = originalText;
-            btn.disabled = false;
-            
-            this.startOTPTimer(30);
-            QuickCart.utils.showNotification('Demo OTP: 123456', 'info');
-        }, 1500);
+        document.getElementById('login-modal').classList.remove('show');
+        document.getElementById('verified-number').textContent = mobile;
+        document.getElementById('otp-modal').classList.add('show');
+        this.startOTPTimer(30);
+        QuickBazaar.utils.showNotification('Demo OTP: 123456', 'info');
     },
     
-    // Validate Indian mobile number
-    validateMobile: function(mobile) {
-        return /^[6-9]\d{9}$/.test(mobile);
-    },
-    
-    // Start OTP resend timer
+    // Start OTP timer
     startOTPTimer: function(seconds) {
         const timerEl = document.getElementById('timer');
         const resendBtn = document.getElementById('resend-btn');
@@ -191,10 +115,8 @@ QuickCart.auth = {
         const timer = setInterval(() => {
             timeLeft--;
             if (timerEl) timerEl.textContent = timeLeft;
-            
             if (timeLeft <= 0) {
                 clearInterval(timer);
-                if (timerEl) timerEl.textContent = '0';
                 if (resendBtn) resendBtn.disabled = false;
             }
         }, 1000);
@@ -221,70 +143,46 @@ QuickCart.auth = {
         
         const otp = otp1 + otp2 + otp3 + otp4 + otp5 + otp6;
         
-        if (otp.length !== 6) {
-            QuickCart.utils.showNotification('Please enter 6-digit OTP', 'error');
-            return false;
-        }
-        
         if (otp === '123456') {
-            const mobile = document.getElementById('verified-number')?.textContent || '9876543210';
+            const mobile = document.getElementById('verified-number').textContent;
             this.createUser(mobile);
             this.closeModal();
-            this.forceShowApp();
-            QuickCart.utils.showNotification('Login successful! Welcome to QuickCart', 'success');
+            QuickBazaar.utils.showNotification('Login successful!', 'success');
             return true;
         } else {
-            QuickCart.utils.showNotification('Invalid OTP. Demo OTP: 123456', 'error');
+            QuickBazaar.utils.showNotification('Invalid OTP. Try 123456', 'error');
             return false;
         }
     },
     
     // Resend OTP
     resendOTP: function() {
-        const btn = document.getElementById('resend-btn');
-        btn.disabled = true;
-        QuickCart.utils.showNotification('OTP resent successfully! Demo: 123456', 'success');
+        document.getElementById('resend-btn').disabled = true;
         this.startOTPTimer(30);
+        QuickBazaar.utils.showNotification('OTP resent: 123456', 'info');
     },
     
-    // Update UI for logged in user
-    updateUIForLoggedInUser: function() {
-        console.log('👤 Updating UI for logged in user');
-        this.forceShowApp();
+    // Close modal
+    closeModal: function() {
+        document.getElementById('otp-modal').classList.remove('show');
+    },
+    
+    // Show profile
+    showProfile: function() {
+        if (this.isAuthenticated()) {
+            QuickBazaar.utils.showNotification(`Logged in as +91 ${this.user.mobile}`, 'success');
+        } else {
+            this.showLoginModal();
+        }
     },
     
     // Logout
     logout: function() {
         if (confirm('Are you sure you want to logout?')) {
             this.user = null;
-            localStorage.removeItem('quickcart_user');
-            QuickCart.utils.showNotification('Logged out successfully', 'info');
-            
-            // Reload page to reset state
-            setTimeout(() => {
-                location.reload();
-            }, 1000);
-        }
-    },
-    
-    // Show profile
-    showProfile: function() {
-        if (!this.isAuthenticated()) {
-            this.showLoginModal();
-        } else {
-            QuickCart.utils.showNotification(`Logged in as +91 ${this.user.mobile}`, 'success');
+            localStorage.removeItem('quickbazaar_user');
+            QuickBazaar.utils.showNotification('Logged out', 'info');
+            setTimeout(() => location.reload(), 1000);
         }
     }
 };
-
-// Initialize auth on load
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🚀 QuickCart Auth ready');
-    if (window.QuickCart) {
-        window.QuickCart.auth = QuickCart.auth;
-        window.QuickCart.auth.init();
-    }
-});
-
-window.QuickCart = window.QuickCart || {};
-window.QuickCart.auth = QuickCart.auth;
