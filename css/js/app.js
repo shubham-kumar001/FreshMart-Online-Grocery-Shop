@@ -1,29 +1,29 @@
 /**
- * QUICKCART INDIA - MAIN APPLICATION
+ * QUICKBAZAAR INDIA - MAIN APPLICATION
  * 🇮🇳 Complete Grocery Delivery Platform
- * ⚡ Blinkit/Zepto Style 10-Minute Delivery
+ * ⚡ 10-Minute Delivery | Hackathon Ready
  */
 
-const QuickCart = window.QuickCart || {};
-
-QuickCart = {
+const QuickBazaar = {
     // App version
-    version: '1.0.0',
+    version: '2.0.0',
     
     // App state
     state: {
         initialized: false,
-        currentLocation: null,
+        currentLocation: 'Andheri West, Mumbai',
+        currentPincode: '400053',
         currentCategory: 'home',
         searchQuery: '',
-        flashSaleTimer: null
+        flashSaleTimer: null,
+        notifications: []
     },
     
     // Initialize app
     init: function() {
-        console.log('🚀 QuickCart India v' + this.version + ' initializing...');
+        console.log('🚀 QuickBazaar India v' + this.version + ' initializing...');
         
-        // Initialize modules
+        // Initialize all modules
         this.initModules();
         
         // Load initial data
@@ -32,69 +32,133 @@ QuickCart = {
         // Set up event listeners
         this.setupEventListeners();
         
-        // Start flash sale timer
+        // Start timers
         this.startFlashSaleTimer();
+        this.updateDeliveryTime();
         
         // Set initialized flag
         this.state.initialized = true;
         
-        console.log('✅ QuickCart India initialized successfully!');
+        // Hide loading screen
+        setTimeout(() => {
+            document.getElementById('loading-screen').style.opacity = '0';
+            setTimeout(() => {
+                document.getElementById('loading-screen').style.display = 'none';
+                document.getElementById('app').style.display = 'block';
+                this.utils.showNotification('Welcome to QuickBazaar! 🇮🇳', 'success');
+            }, 500);
+        }, 1500);
+        
+        console.log('✅ QuickBazaar initialized successfully!');
     },
     
     // Initialize all modules
     initModules: function() {
-        // Initialize utils first
-        if (QuickCart.utils) {
-            // Utils already loaded
+        // Auth module
+        if (this.auth) {
+            this.auth.init();
         }
         
-        // Initialize products
-        if (QuickCart.products) {
-            // Products already loaded
+        // Cart module
+        if (this.cart) {
+            this.cart.init();
         }
         
-        // Initialize auth
-        if (QuickCart.auth) {
-            QuickCart.auth.init();
-        }
+        // Products module is static
         
-        // Initialize cart
-        if (QuickCart.cart) {
-            QuickCart.cart.init();
-        }
+        // Utils module is static
         
-        // Initialize checkout
-        if (QuickCart.checkout) {
+        // Checkout module
+        if (this.checkout) {
             // Checkout ready
         }
     },
     
     // Load initial data
     loadInitialData: function() {
+        this.loadCategories();
+        this.loadBrands();
         this.loadVegetables();
         this.loadDairy();
         this.loadStaples();
-        this.loadNonVeg();
         this.loadSnacks();
-        this.loadBeverages();
-        this.loadFlashSaleProducts();
+        this.loadPersonalCare();
+        this.loadFlashProducts();
     },
     
-    // Load vegetables into grid
+    // Load categories
+    loadCategories: function() {
+        const slider = document.getElementById('categories-slider');
+        if (!slider) return;
+        
+        const categories = [
+            { icon: 'fa-carrot', color: '#2E7D32', bg: '#E8F5E9', name: 'Vegetables', hindi: 'सब्जी' },
+            { icon: 'fa-jug', color: '#FF6F00', bg: '#FFF3E0', name: 'Dairy', hindi: 'डेयरी' },
+            { icon: 'fa-seedling', color: '#6A1B9A', bg: '#F3E5F5', name: 'Staples', hindi: 'किराना' },
+            { icon: 'fa-cookie-bite', color: '#C2185B', bg: '#FFEBEE', name: 'Snacks', hindi: 'स्नैक्स' },
+            { icon: 'fa-wine-bottle', color: '#0277BD', bg: '#E1F5FE', name: 'Beverages', hindi: 'पेय' },
+            { icon: 'fa-soap', color: '#00695C', bg: '#E0F7FA', name: 'Cleaning', hindi: 'सफाई' },
+            { icon: 'fa-shower', color: '#880E4F', bg: '#FCE4EC', name: 'Personal', hindi: 'केयर' },
+            { icon: 'fa-drumstick-bite', color: '#BF360C', bg: '#FBE9E7', name: 'Non-Veg', hindi: 'नॉन-वेज' }
+        ];
+        
+        let html = '';
+        categories.forEach(cat => {
+            html += `
+                <div class="category-pill" onclick="QuickBazaar.category.load('${cat.name.toLowerCase()}')">
+                    <div class="category-icon" style="background: ${cat.bg};">
+                        <i class="fas ${cat.icon}" style="color: ${cat.color};"></i>
+                    </div>
+                    <span>${cat.name}</span>
+                    <small>${cat.hindi}</small>
+                </div>
+            `;
+        });
+        slider.innerHTML = html;
+    },
+    
+    // Load brands
+    loadBrands: function() {
+        const grid = document.getElementById('brands-grid');
+        if (!grid) return;
+        
+        const brands = [
+            { name: 'Amul', image: 'https://images.unsplash.com/photo-1621868002587-9cb6e3ee5b6b?w=200', offer: 'Up to 30%' },
+            { name: 'Tata', image: 'https://images.unsplash.com/photo-1596040033229-a9821ebd058d?w=200', offer: '20% off' },
+            { name: 'Fortune', image: 'https://images.unsplash.com/photo-1474979266404-7eaacbcd87c5?w=200', offer: '25% off' },
+            { name: 'Aashirvaad', image: 'https://images.unsplash.com/photo-1509440159596-0249088772ff?w=200', offer: '15% off' },
+            { name: 'Britannia', image: 'https://images.unsplash.com/photo-1587240971770-d47beeaae5fe?w=200', offer: 'BOGO' },
+            { name: 'Parle', image: 'https://images.unsplash.com/photo-1590080874088-eecbb95f6c1b?w=200', offer: '₹10' }
+        ];
+        
+        let html = '';
+        brands.forEach(brand => {
+            html += `
+                <div class="brand-card" onclick="QuickBazaar.brand.load('${brand.name}')">
+                    <img src="${brand.image}" alt="${brand.name}" loading="lazy">
+                    <span>${brand.name}</span>
+                    <small>${brand.offer}</small>
+                </div>
+            `;
+        });
+        grid.innerHTML = html;
+    },
+    
+    // Load vegetables
     loadVegetables: function() {
         const grid = document.getElementById('vegetables-grid');
         if (!grid) return;
         
-        const products = QuickCart.products.vegetables.slice(0, 4);
+        const products = this.products.vegetables.slice(0, 4);
         grid.innerHTML = this.renderProductGrid(products);
     },
     
-    // Load dairy products
+    // Load dairy
     loadDairy: function() {
         const grid = document.getElementById('dairy-grid');
         if (!grid) return;
         
-        const products = QuickCart.products.dairy.slice(0, 4);
+        const products = this.products.dairy.slice(0, 4);
         grid.innerHTML = this.renderProductGrid(products);
     },
     
@@ -103,16 +167,7 @@ QuickCart = {
         const grid = document.getElementById('staples-grid');
         if (!grid) return;
         
-        const products = QuickCart.products.staples.slice(0, 4);
-        grid.innerHTML = this.renderProductGrid(products);
-    },
-    
-    // Load non-veg products
-    loadNonVeg: function() {
-        const grid = document.getElementById('nonveg-grid');
-        if (!grid) return;
-        
-        const products = QuickCart.products.nonveg.slice(0, 4);
+        const products = this.products.staples.slice(0, 4);
         grid.innerHTML = this.renderProductGrid(products);
     },
     
@@ -121,70 +176,26 @@ QuickCart = {
         const grid = document.getElementById('snacks-grid');
         if (!grid) return;
         
-        const products = QuickCart.products.snacks.slice(0, 4);
+        const products = this.products.snacks.slice(0, 4);
         grid.innerHTML = this.renderProductGrid(products);
     },
     
-    // Load beverages
-    loadBeverages: function() {
-        const grid = document.getElementById('beverages-grid');
+    // Load personal care
+    loadPersonalCare: function() {
+        const grid = document.getElementById('personal-grid');
         if (!grid) return;
         
-        const products = QuickCart.products.beverages.slice(0, 4);
+        const products = this.products.personal.slice(0, 4);
         grid.innerHTML = this.renderProductGrid(products);
     },
     
-    // Load flash sale products
-    loadFlashSaleProducts: function() {
+    // Load flash products
+    loadFlashProducts: function() {
         const container = document.getElementById('flash-products');
         if (!container) return;
         
-        const products = QuickCart.products.getDiscounted(20).slice(0, 6);
-        
-        let html = '';
-        products.forEach(product => {
-            html += `
-                <div class="swiper-slide">
-                    <div class="product-card" onclick="QuickCart.product.show('${product.id}')">
-                        <div class="product-image">
-                            <img src="${product.image}" alt="${product.name}" loading="lazy">
-                            <span class="product-badge">${product.discount}% OFF</span>
-                        </div>
-                        <div class="product-info">
-                            <p class="product-brand">${product.brand}</p>
-                            <p class="product-name">${product.name}</p>
-                            <p class="product-weight">${product.weight}</p>
-                            <div class="product-rating">
-                                <span class="rating-stars">★★★★</span>
-                                <span class="rating-count">${product.rating}</span>
-                            </div>
-                            <div class="product-price">
-                                <span class="current-price">₹${product.price}</span>
-                                <span class="original-price">₹${product.originalPrice}</span>
-                                <span class="discount">${product.discount}% off</span>
-                            </div>
-                            <button class="product-add-btn" onclick="event.stopPropagation(); QuickCart.cart.addItem('${product.id}')">
-                                <i class="fas fa-plus"></i> Add
-                            </button>
-                        </div>
-                    </div>
-                </div>
-            `;
-        });
-        
-        container.innerHTML = html;
-        
-        // Initialize Swiper after content is loaded
-        setTimeout(() => {
-            if (typeof Swiper !== 'undefined') {
-                new Swiper('.flashSwiper', {
-                    slidesPerView: 2.2,
-                    spaceBetween: 12,
-                    freeMode: true,
-                    pagination: false
-                });
-            }
-        }, 100);
+        const products = this.products.getDiscounted(20).slice(0, 4);
+        container.innerHTML = this.renderProductGrid(products);
     },
     
     // Render product grid
@@ -195,13 +206,18 @@ QuickCart = {
         
         let html = '';
         products.forEach(product => {
+            const inWishlist = this.wishlist && this.wishlist.items && 
+                              this.wishlist.items.includes(product.id);
+            
             html += `
-                <div class="product-card" onclick="QuickCart.product.show('${product.id}')">
+                <div class="product-card" onclick="QuickBazaar.product.show('${product.id}')">
                     <div class="product-image">
                         <img src="${product.image}" alt="${product.name}" loading="lazy">
-                        ${product.discount > 0 ? `<span class="product-badge">${product.discount}% OFF</span>` : ''}
-                        <button class="product-wishlist" onclick="event.stopPropagation(); QuickCart.wishlist.toggle('${product.id}')">
-                            <i class="far fa-heart"></i>
+                        ${product.discount > 0 ? 
+                            `<span class="product-badge">${product.discount}% OFF</span>` : ''}
+                        <button class="product-wishlist ${inWishlist ? 'active' : ''}" 
+                                onclick="event.stopPropagation(); QuickBazaar.wishlist.toggle('${product.id}')">
+                            <i class="${inWishlist ? 'fas' : 'far'} fa-heart"></i>
                         </button>
                     </div>
                     <div class="product-info">
@@ -216,40 +232,39 @@ QuickCart = {
                             <span class="current-price">₹${product.price}</span>
                             ${product.originalPrice > product.price ? 
                                 `<span class="original-price">₹${product.originalPrice}</span>
-                                 <span class="discount">${product.discount}% off</span>` : 
-                                ''
-                            }
+                                 <span class="discount">${product.discount}% off</span>` : ''}
                         </div>
-                        <button class="product-add-btn" onclick="event.stopPropagation(); QuickCart.cart.addItem('${product.id}')">
+                        <button class="product-add-btn" 
+                                onclick="event.stopPropagation(); QuickBazaar.cart.addItem('${product.id}')">
                             <i class="fas fa-plus"></i> Add
                         </button>
                     </div>
                 </div>
             `;
         });
-        
         return html;
     },
     
     // Setup event listeners
     setupEventListeners: function() {
-        // Search input with debounce
+        // Search with debounce
         const searchInput = document.getElementById('search-input');
         if (searchInput) {
-            const debouncedSearch = QuickCart.utils.debounce(this.handleSearch.bind(this), 500);
+            const debouncedSearch = this.utils.debounce(this.handleSearch.bind(this), 500);
             searchInput.addEventListener('input', debouncedSearch);
         }
         
         // Close modals on outside click
-        window.addEventListener('click', function(event) {
+        window.addEventListener('click', (event) => {
             if (event.target.classList.contains('modal')) {
-                event.target.classList.remove('show');
+                this.modal.close();
             }
         });
         
         // Handle back button (mobile)
-        window.addEventListener('popstate', function() {
-            QuickCart.cart.close();
+        window.addEventListener('popstate', () => {
+            this.cart.close();
+            this.modal.close();
         });
     },
     
@@ -259,15 +274,20 @@ QuickCart = {
         this.state.searchQuery = query;
         
         if (query.length > 2) {
-            const results = QuickCart.products.search(query);
-            this.showSearchResults(results);
+            const results = this.products.search(query);
+            this.utils.showNotification(`Found ${results.length} products`, 'info');
         }
     },
     
-    // Show search results
-    showSearchResults: function(results) {
-        // Implement search results display
-        console.log('Search results:', results.length);
+    // Update delivery time
+    updateDeliveryTime: function() {
+        const timerEl = document.getElementById('delivery-time');
+        if (!timerEl) return;
+        
+        setInterval(() => {
+            const minutes = Math.floor(Math.random() * 5) + 8; // 8-12 minutes
+            timerEl.textContent = minutes;
+        }, 10000);
     },
     
     // Start flash sale timer
@@ -297,157 +317,138 @@ QuickCart = {
         }, 1000);
     },
     
-    // Product view
+    // Product module
     product: {
         show: function(productId) {
-            const product = QuickCart.products.getById(productId);
+            const product = QuickBazaar.products.getById(productId);
             if (product) {
-                // Show product details modal
-                QuickCart.utils.showNotification(product.name, 'info');
+                QuickBazaar.utils.showNotification(`${product.name} - ₹${product.price}`, 'info');
             }
         }
     },
     
-    // Category navigation
+    // Category module
     category: {
         load: function(categoryId) {
-            QuickCart.utils.showNotification(`Loading ${categoryId}...`, 'info');
-            // Implement category view
+            QuickBazaar.utils.showNotification(`Loading ${categoryId}...`, 'info');
         }
     },
     
-    // Brand navigation
+    // Brand module
     brand: {
         load: function(brandName) {
-            const products = QuickCart.products.getByBrand(brandName);
-            QuickCart.utils.showNotification(`${brandName} - ${products.length} products`, 'info');
+            const products = QuickBazaar.products.getByBrand(brandName);
+            QuickBazaar.utils.showNotification(`${brandName} - ${products.length} products`, 'info');
         }
     },
     
-    // Wishlist
+    // Wishlist module
     wishlist: {
         items: [],
+        
+        init: function() {
+            this.load();
+        },
+        
+        load: function() {
+            const saved = localStorage.getItem('quickbazaar_wishlist');
+            this.items = saved ? JSON.parse(saved) : [];
+            this.updateCount();
+        },
+        
+        save: function() {
+            localStorage.setItem('quickbazaar_wishlist', JSON.stringify(this.items));
+            this.updateCount();
+        },
         
         toggle: function(productId) {
             const index = this.items.indexOf(productId);
             if (index === -1) {
                 this.items.push(productId);
-                QuickCart.utils.showNotification('Added to wishlist', 'success');
+                QuickBazaar.utils.showNotification('Added to wishlist', 'success');
+                this.addAnimation('wishlist-active');
             } else {
                 this.items.splice(index, 1);
-                QuickCart.utils.showNotification('Removed from wishlist', 'info');
+                QuickBazaar.utils.showNotification('Removed from wishlist', 'info');
             }
-            
-            // Update count
-            document.getElementById('wishlist-count').textContent = this.items.length;
+            this.save();
+            QuickBazaar.loadInitialData(); // Refresh views
+        },
+        
+        addAnimation: function(className) {
+            const btn = event.target.closest('.product-wishlist');
+            if (btn) {
+                btn.classList.add(className);
+                setTimeout(() => btn.classList.remove(className), 600);
+            }
+        },
+        
+        updateCount: function() {
+            const countEl = document.getElementById('wishlist-count');
+            if (countEl) {
+                countEl.textContent = this.items.length;
+            }
         },
         
         show: function() {
-            QuickCart.utils.showNotification(`Wishlist: ${this.items.length} items`, 'info');
+            QuickBazaar.utils.showNotification(`Wishlist: ${this.items.length} items`, 'info');
         }
     },
     
-    // Location management
+    // Location module
     location: {
         showSelector: function() {
             document.getElementById('location-modal').classList.add('show');
         },
         
-        closeModal: function() {
-            document.getElementById('location-modal').classList.remove('show');
-        },
-        
-        select: function(addressType) {
-            QuickCart.utils.showNotification(`Selected: ${addressType}`, 'success');
-            this.closeModal();
+        select: function(type) {
+            QuickBazaar.utils.showNotification(`Selected: ${type}`, 'success');
+            this.close();
         },
         
         detectCurrent: function() {
-            QuickCart.utils.showNotification('Detecting location...', 'info');
-            
+            QuickBazaar.utils.showNotification('Detecting location...', 'info');
             setTimeout(() => {
-                document.getElementById('current-address').textContent = 'Andheri West, Mumbai - 400053';
+                document.getElementById('current-address').textContent = 'Andheri West, Mumbai';
                 document.getElementById('current-pincode').textContent = '400053';
-                this.closeModal();
-                QuickCart.utils.showNotification('Location updated!', 'success');
+                this.close();
+                QuickBazaar.utils.showNotification('Location updated!', 'success');
             }, 1500);
         },
         
-        checkPincode: function() {
-            const pincode = document.getElementById('pincode-input').value;
-            
-            if (QuickCart.utils.validatePincode(pincode)) {
-                if (QuickCart.utils.isPincodeServiceable(pincode)) {
-                    QuickCart.utils.showNotification('Pincode serviceable! 10-min delivery', 'success');
-                } else {
-                    QuickCart.utils.showNotification('Currently not serviceable', 'error');
-                }
-            } else {
-                QuickCart.utils.showNotification('Invalid pincode', 'error');
-            }
+        close: function() {
+            document.getElementById('location-modal').classList.remove('show');
         }
     },
     
-    // Coupons
+    // Coupons module
     coupons: {
         apply: function(code) {
-            if (QuickCart.checkout) {
-                QuickCart.checkout.applyCoupon(code);
-                document.getElementById('couponFloat').style.display = 'none';
-            }
-        },
-        
-        applyCheckout: function() {
-            if (QuickCart.checkout) {
-                QuickCart.checkout.applyCheckoutCoupon();
-            }
-        },
-        
-        select: function(code) {
-            if (QuickCart.checkout) {
-                QuickCart.checkout.selectCoupon(code);
+            if (QuickBazaar.checkout) {
+                QuickBazaar.checkout.applyCoupon(code);
+                document.getElementById('coupon-float').style.display = 'none';
             }
         }
     },
     
-    // Navigation
+    // Navigation module
     navigation: {
-        go: function(page) {
-            QuickCart.utils.showNotification(`Loading ${page}...`, 'info');
-            
+        go: function(page, element) {
             // Update active state
             document.querySelectorAll('.nav-item').forEach(item => {
                 item.classList.remove('active');
             });
+            element.classList.add('active');
             
-            event.currentTarget.classList.add('active');
-        }
-    },
-    
-    // Filter
-    filter: {
-        toggle: function() {
-            QuickCart.utils.showNotification('Filters coming soon!', 'info');
-        }
-    },
-    
-    // Order tracking
-    tracking: {
-        close: function() {
-            document.getElementById('tracking-modal').classList.remove('show');
-        }
-    },
-    
-    // Order management
-    order: {
-        track: function() {
-            if (QuickCart.checkout) {
-                QuickCart.checkout.track();
+            if (page === 'home') {
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                QuickBazaar.utils.showNotification(`${page} page coming soon!`, 'info');
             }
         }
     },
     
-    // Modal management
+    // Modal module
     modal: {
         close: function() {
             document.querySelectorAll('.modal.show').forEach(modal => {
@@ -457,11 +458,11 @@ QuickCart = {
     }
 };
 
-// Initialize app when DOM is ready
-document.addEventListener('DOMContentLoaded', function() {
-    window.QuickCart = QuickCart;
-    QuickCart.init();
-});
+// Initialize wishlist
+QuickBazaar.wishlist.init();
 
-// Export
-window.QuickCart = QuickCart;
+// Initialize app on DOM ready
+document.addEventListener('DOMContentLoaded', function() {
+    window.QuickBazaar = QuickBazaar;
+    QuickBazaar.init();
+});
